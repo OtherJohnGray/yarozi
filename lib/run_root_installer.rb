@@ -1,3 +1,3 @@
-include ./lib/root_installer.rb
+require './lib/root_installer.rb'
 
 RootInstaller.new.run

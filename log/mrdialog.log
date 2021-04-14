@@ -51,3 +51,16 @@ Do you wish to continue?
 
 
 " 18 80
+D, [2021-04-14T14:12:52.434915 #52156] DEBUG -- : Command:
+/usr/bin/dialog --backtitle "YAROZI - Yet Another Root On ZFS installer" --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "
+
+This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it.
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
