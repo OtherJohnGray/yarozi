@@ -1,0 +1,120 @@
+# Logfile created on 2021-04-13 14:07:46 +1000 by logger.rb/v1.4.2
+D, [2021-04-13T14:07:46.710485 #3356132] DEBUG -- : Command:
+/usr/bin/dialog --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+Do you wish to continue?
+
+
+" 50 20
+D, [2021-04-13T14:12:21.714493 #3357463] DEBUG -- : Command:
+/usr/bin/dialog --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
+D, [2021-04-13T14:12:41.618614 #3357537] DEBUG -- : Command:
+/usr/bin/dialog --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
+D, [2021-04-13T14:12:46.666260 #3357630] DEBUG -- : Command:
+/usr/bin/dialog --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
+D, [2021-04-13T14:13:03.010205 #3357855] DEBUG -- : Command:
+/usr/bin/dialog --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "
+
+This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
+D, [2021-04-13T14:14:23.566271 #3358201] DEBUG -- : Command:
+/usr/bin/dialog --backtitle "Root on ZFS installer" --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "
+
+This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
+D, [2021-04-13T14:26:31.919121 #3360051] DEBUG -- : Command:
+/usr/bin/dialog --backtitle "Root on ZFS installer" --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "
+
+This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
+D, [2021-04-13T14:27:06.269894 #3360266] DEBUG -- : Command:
+/usr/bin/dialog --backtitle "Root on ZFS installer" --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "
+
+This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
+D, [2021-04-13T14:27:15.413830 #3360363] DEBUG -- : Command:
+/usr/bin/dialog --backtitle "Root on ZFS installer" --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "
+
+This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
+D, [2021-04-13T17:48:26.771644 #5516] DEBUG -- : Command:
+/usr/bin/dialog --backtitle "Root on ZFS installer" --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "
+
+This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80

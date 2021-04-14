@@ -1,0 +1,53 @@
+# Logfile created on 2021-04-14 09:56:10 +1000 by logger.rb/v1.4.2
+D, [2021-04-14T09:56:10.965459 #9718] DEBUG -- : Command:
+/usr/bin/dialog --backtitle "Root on ZFS installer" --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "
+
+This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
+D, [2021-04-14T09:58:31.861583 #10205] DEBUG -- : Command:
+/usr/bin/dialog --backtitle "Root on ZFS installer" --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "
+
+This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
+D, [2021-04-14T12:44:16.835757 #33088] DEBUG -- : Command:
+/usr/bin/dialog --backtitle "Root on ZFS installer" --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "
+
+This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
+D, [2021-04-14T13:16:33.258232 #40103] DEBUG -- : Command:
+/usr/bin/dialog --backtitle "Root on ZFS installer" --title "***************** W A R N I N G ! ! ! *****************" --clear  "--yesno" "
+
+This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it. 
+
+IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
+
+Please do not run this on a machine that has any existing data or operating systems that you want to keep.
+
+Do you wish to continue?
+
+
+" 18 80
