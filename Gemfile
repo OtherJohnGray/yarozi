@@ -1,1 +1,2 @@
 gem 'mrdialog'
+gem 'zeitwerk'

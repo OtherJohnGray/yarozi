@@ -1,7 +1,4 @@
-require 'mrdialog'
-require './lib/disk.rb'
-
-class RootInstaller
+class Task::RootInstaller
 
   def initialize
     
@@ -17,8 +14,9 @@ class RootInstaller
   def show_warning()
     text = <<~EOF
 
+      ************************** W A R N I N G ! ! ! **************************
 
-      This installer is intended to be run on a "new" machine to install an Ubuntu root filesystem on a ZFS pool, and to set up the machine to boot into it.
+      This installer is intended to create an Ubuntu ZFS root filesystem on an EMPTY machine.
 
       IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
 
@@ -26,6 +24,7 @@ class RootInstaller
 
       Do you wish to continue?
 
+      ************************** W A R N I N G ! ! ! **************************
  
     EOF
     dialog = MRDialog.new
@@ -34,7 +33,7 @@ class RootInstaller
     dialog.title = "***************** W A R N I N G ! ! ! *****************"
     dialog.backtitle = "YAROZI - Yet Another Root On ZFS installer"
 
-    exit 1 unless dialog.yesno(text,18,80)
+    exit 1  unless dialog.yesno(text,18,80)
   end
 
 end

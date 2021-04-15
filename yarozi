@@ -1,18 +1,25 @@
 #! /bin/bash
 
-[ $(id -u) -eq 0 ] || echo "You need to run this script as a root user."
-(which apt >/dev/null 2>&1) || echo "only runs debian derivatives"
+# set the script directory as the working directory
+cd "$(dirname "$(readlink -f "$0")")"
 
+# check user and distro
+[ $(id -u) -eq 0 ] || { echo "You need to run this script as a root user."; exit 1; }
+(which apt >/dev/null 2>&1) || { echo "only runs debian derivatives"; exit 1; }
 
-
+# confirm installation
 read -p "This script requires hwinfo, Dialog, and Ruby, which it will automatically install if required. Do you wish to continue? [Y|n]  " continue
 [[ $continue =~ [nN] ]] && (echo "exiting..."; exit 1)
-(which hwinfo >/dev/null 2>&1) || (apt install hwinfo --yes && echo "hwinfo installed OK" || ( echo "hwinfo install failed"; exit 1 )  )
+
+# check for required apt packages
 (which dialog >/dev/null 2>&1) || (apt install dialog --yes && echo "dialog installed OK" || ( echo "dialog install failed"; exit 1 )  )
+(which hwinfo >/dev/null 2>&1) || (apt install hwinfo --yes && echo "hwinfo installed OK" || ( echo "hwinfo install failed"; exit 1 )  )
 (which ruby >/dev/null 2>&1) || (apt install ruby --yes && echo "ruby installed OK" || ( echo "ruby failed to install"; exit 1) )
-[[ $(gem list -i mrdialog) =~ ^true$ ]] || (gem install mrdialog && echo "mrdialog rubygem installed OK" || ( echo "mrdialog rubygem failed to install"; exit 1) )
 
-ruby ./lib/run_root_installer.rb
+# check for required gems
+gem install bundler
+bundle install
 
-
+# run installer
+ruby ./installer.rb
 
