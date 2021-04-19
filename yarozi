@@ -16,6 +16,9 @@ read -p "This script requires hwinfo, Dialog, and Ruby, which it will automatica
 (which hwinfo >/dev/null 2>&1) || (apt install hwinfo --yes && echo "hwinfo installed OK" || ( echo "hwinfo install failed"; exit 1 )  )
 (which ruby >/dev/null 2>&1) || (apt install ruby --yes && echo "ruby installed OK" || ( echo "ruby failed to install"; exit 1) )
 
+# create an empty log dir
+mkdir log 2>/dev/null
+
 # check for required gems
 (gem list -i "^bundler$" > /dev/null 2>&1) || gem install bundler 
 bundle install
