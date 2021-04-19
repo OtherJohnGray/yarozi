@@ -17,7 +17,9 @@ read -p "This script requires hwinfo, Dialog, and Ruby, which it will automatica
 (which ruby >/dev/null 2>&1) || (apt install ruby --yes && echo "ruby installed OK" || ( echo "ruby failed to install"; exit 1) )
 
 # check for required gems
-(gem list -i "^bundler$") || gem install bundler 
+#(gem list -i "^mrdialog$" > /dev/null 2>&1) || gem install mrdialog 
+#(gem list -i "^zeitwerk$" > /dev/null 2>&1) || gem install mrdialog 
+(gem list -i "^bundler$" > /dev/null 2>&1) || gem install bundler 
 bundle install
 
 # run installer
