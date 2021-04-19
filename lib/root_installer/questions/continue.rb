@@ -1,22 +1,13 @@
-class Task::RootInstaller
+class RootInstaller::Questions::Continue < Question
 
-  def initialize
-    
-  end
+  attr_reader :answer
 
-
-  def run
-    show_warning
-    Disk.all
-  end
-
-
-  def show_warning()
-    text = <<~EOF
+  def text
+    <<~EOF
 
       ************************** W A R N I N G ! ! ! **************************
 
-      This installer is intended to create an Ubuntu ZFS root filesystem on an EMPTY machine.
+      This installer is intended to create a Debian ZFS root filesystem on an EMPTY machine.
 
       IT MAY OVERWRITE ANY DATA OR BOOTLOADERS THAT EXIST ON THIS MACHINE!!!
 
@@ -27,14 +18,16 @@ class Task::RootInstaller
       ************************** W A R N I N G ! ! ! **************************
  
     EOF
+  end
+
+  def ask
     dialog = MRDialog.new
     dialog.logger = Logger.new("./log/mrdialog.log")
     dialog.clear = true
     dialog.title = "***************** W A R N I N G ! ! ! *****************"
     dialog.backtitle = "YAROZI - Yet Another Root On ZFS installer"
-
-    exit 1  unless dialog.yesno(text,18,80)
+    exit 1 unless dialog.yesno(text,18,80)
   end
 
-end
 
+end

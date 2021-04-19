@@ -8,4 +8,4 @@ loader.push_dir('./lib')
 loader.setup # ready!
 
 # start the root installer
-Task::RootInstaller.new.run
+RootInstaller::Installer.new.start

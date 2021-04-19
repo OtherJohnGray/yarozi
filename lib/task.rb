@@ -1,19 +1,22 @@
 class Task
 
-  attr_reader :questions, :subtasks
-
-  def initialize
-    decisions = []
-    subtasks = []
+  def questions 
+    @questions ||= []
   end
 
-  def complete
-    questions.each do |q|
-      q.ask
-    end
-    subtasks.each do |st|
-      st.perform
-    end
+  def pretasks
+    @pretasks  ||= []
+  end
+
+  def posttasks
+    @posttasks ||= []
+  end
+
+  def start
+    questions.each {|q|  q.ask    }
+    pretasks.each  {|pt| pt.start }
+    perform
+    posttasks.each {|pt| pt.start }
   end
 
   def perform

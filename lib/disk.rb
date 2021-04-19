@@ -1,34 +1,47 @@
 class Disk
 
-  attr_accessor :model_name, :serial, :vendor, :device, :driver, :by_serial, :by_uuid, :by_path, :sectors, :sector_size, :capacity_gb, :capacity_bytes
-
-  def self.disks
-    @disks ||= []
-  end
+  attr_accessor :model_name, :serial, :vendor, :device, :driver, :by_serial, :by_uuid, 
+                :by_path, :sectors, :sector_size, :capacity_gb, :capacity_bytes, :rotation
 
   def self.all
-    load
+    @disks ||= load
   end
 
   def self.reload
-    load
+    @disks = load
   end
 
   def self.load
+    disks = []
     disk_hwinfo().each do |info|
       puts info.inspect
       puts
       disks << info.to_disk 
-      puts disks[-1].inspect
+      puts disks[-1].inspect + ", type=#{disks[-1].type}"
       puts
       puts
     end
     disks
   end
 
+  def hdd?
+    rotation
+  end
+
+  def ssd?
+    !rotation
+  end
+
+  def type
+    rotation ? "hdd" : "ssd"
+  end
+
+
+
   def self.disk_hwinfo
     `hwinfo --disk`.split("\n\n").map {|info| HWInfo.new(info) }
   end
+
 
 
 
@@ -56,6 +69,7 @@ class Disk
         d.sectors = sectors
         d.capacity_gb = capacity_gb
         d.capacity_bytes = capacity_bytes
+        d.rotation = (`lsblk -d -n -o rota /dev/#{device}`).include? "1"
       end
     end    
 
