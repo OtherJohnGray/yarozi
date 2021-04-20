@@ -2,7 +2,7 @@ class Logging
 
 
   def level
-    @level ||= ( ENV["YAROZI_LOG_LEVEL"] || "ERROR" )
+    @level ||= Logger.const_get( ENV["YAROZI_LOG_LEVEL"] || "ERROR" )
   end
 
   def logger
@@ -15,8 +15,7 @@ class Logging
 
   %w(debug info warn error critical).each do |methodname|
     define_method(methodname.to_sym) do |message|
-      if level > 
-      logger.send level.to_sym, message
+      logger.send methodname.to_sym, message unless Logger.const_get(methodname) < level
     end
   end
 
