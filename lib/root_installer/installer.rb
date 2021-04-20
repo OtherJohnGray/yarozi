@@ -6,7 +6,7 @@ class RootInstaller::Installer < Task
   end
 
   def perform
-    Disk.all
+    #p Disk.all
   end
 
 

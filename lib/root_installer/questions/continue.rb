@@ -26,6 +26,8 @@ class RootInstaller::Questions::Continue < Question
     dialog.clear = true
     dialog.title = "***************** W A R N I N G ! ! ! *****************"
     dialog.backtitle = "YAROZI - Yet Another Root On ZFS installer"
+    dialog.yes_label = "continue\\ and\\ erase\\ data"
+    dialog.no_label ="exit\\ without\\ changes"
     exit 1 unless dialog.yesno(text,18,80)
   end
 

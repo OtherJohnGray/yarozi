@@ -3,6 +3,18 @@ class Disk
   attr_accessor :model_name, :serial, :vendor, :device, :driver, :by_serial, :by_uuid, 
                 :by_path, :sectors, :sector_size, :capacity_gb, :capacity_bytes, :rotation
 
+  def to_s
+    "#{capacity_gb} GB #{connection} #{type} #{by_serial.delete_prefix '/dev/disk/by-id/'} as #{device}"
+  end
+
+  def self.to_strings
+    all.map{|d| d.to_s}.sort
+  end
+
+  def self.to_string_list
+    to_strings.join("\n")
+  end
+
   def self.all
     @disks ||= load
   end
@@ -14,12 +26,12 @@ class Disk
   def self.load
     disks = []
     disk_hwinfo().each do |info|
-      puts info.inspect
-      puts
+#      puts info.inspect
+#      puts
       disks << info.to_disk 
-      puts disks[-1].inspect + ", type=#{disks[-1].type}"
-      puts
-      puts
+#      puts disks[-1].inspect + ", type=#{disks[-1].type}"
+#      puts
+#      puts
     end
     disks
   end
@@ -32,11 +44,13 @@ class Disk
     !rotation
   end
 
+  def connection
+    driver == "ahci" ? "sata" : driver
+  end
+
   def type
     rotation ? "hdd" : "ssd"
   end
-
-
 
   def self.disk_hwinfo
     `hwinfo --disk`.split("\n\n").map {|info| HWInfo.new(info) }
@@ -98,11 +112,11 @@ class Disk
     end
 
     def by_uuid
-      device_files.select {|str| /by-id\/wwn/ =~ str}.first
+      device_files.select {|str| /by-id\/(wwn|nvme-eui)/ =~ str}.first
     end
 
     def by_serial
-      device_files.select {|str| /by-id/ =~ str}.reject {|str| /by-id\/wwn/ =~ str}.first
+      device_files.select {|str| /by-id/ =~ str}.reject {|str| /by-id\/(wwn|nvme-eui)/ =~ str}.first
     end
 
     def sector_size
