@@ -131,7 +131,7 @@ class Disk
     end
 
     def device_files
-      @device_files ||= self["Device Files"].split(", ")
+      @device_files ||= self["Device Files"] ? self["Device Files"].split(", ") : []
     end
 
   end
