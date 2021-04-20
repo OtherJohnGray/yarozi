@@ -12,16 +12,10 @@ class RootInstaller::Questions::DiskOverview < Question
   end
 
   def ask
-    dialog = MRDialog.new
-    dialog.logger = Logger.new("./log/mrdialog.log")
-    dialog.clear = true
     dialog.title = "Introduction and Disk Overview"
     dialog.backtitle = "YAROZI - Yet Another Root On ZFS installer"
     dialog.ok_label = "continue\\ and\\ select\\ disks"
-#    dialog.msgbox(text + "\n\n" + Disk.to_string_list,30,80)
     message = text + "\n\n" + Disk.to_string_list
-# puts message.inspect
-# exit 1
     dialog.msgbox(message,30,80)
   end
 

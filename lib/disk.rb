@@ -4,7 +4,7 @@ class Disk
                 :by_path, :sectors, :sector_size, :capacity_gb, :capacity_bytes, :rotation
 
   def to_s
-    "#{capacity_gb} GB #{connection} #{type} #{by_serial.delete_prefix '/dev/disk/by-id/'} as #{device}"
+    "#{capacity_gb} GB #{connection} #{type} #{by_serial.delete_prefix '/dev/disk/by-id/'} with #{sector_size} byte sectors as #{device}"
   end
 
   def self.to_strings
@@ -53,7 +53,12 @@ class Disk
   end
 
   def self.disk_hwinfo
-    `hwinfo --disk`.split("\n\n").map {|info| HWInfo.new(info) }
+    get_hwinfo.split("\n\n").map {|info| HWInfo.new(info) }
+  end
+
+  # for test stubbing
+  def get_hwinfo
+    `hwinfo --disk`
   end
 
 

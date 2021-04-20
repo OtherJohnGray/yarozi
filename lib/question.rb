@@ -16,4 +16,16 @@ class Question
     raise "subclasses of Question must implement the ask() method"
   end
 
+  # allows test stubbing
+  def quit(code)
+    exit code
+  end
+
+  # allows test stubbing
+  def dialog
+    dialog ||= MRDialog.new
+    dialog.logger = Logger.new("./log/mrdialog.log")
+    dialog.clear = true
+  end
+
 end

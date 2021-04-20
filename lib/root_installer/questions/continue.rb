@@ -21,14 +21,11 @@ class RootInstaller::Questions::Continue < Question
   end
 
   def ask
-    dialog = MRDialog.new
-    dialog.logger = Logger.new("./log/mrdialog.log")
-    dialog.clear = true
     dialog.title = "***************** W A R N I N G ! ! ! *****************"
     dialog.backtitle = "YAROZI - Yet Another Root On ZFS installer"
     dialog.yes_label = "continue\\ and\\ erase\\ data"
     dialog.no_label ="exit\\ without\\ changes"
-    exit 1 unless dialog.yesno(text,18,80)
+    quit 1 unless dialog.yesno(text,18,80)
   end
 
 
