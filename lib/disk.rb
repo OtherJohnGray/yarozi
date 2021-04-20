@@ -57,7 +57,7 @@ class Disk
   end
 
   # for test stubbing
-  def get_hwinfo
+  def self.get_hwinfo
     `hwinfo --disk`
   end
 
