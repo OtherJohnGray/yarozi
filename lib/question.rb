@@ -26,6 +26,7 @@ class Question
     dialog ||= MRDialog.new
     dialog.logger = Logger.new("./log/mrdialog.log")
     dialog.clear = true
+    dialog
   end
 
 end

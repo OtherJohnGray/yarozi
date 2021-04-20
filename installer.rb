@@ -7,5 +7,9 @@ loader = Zeitwerk::Loader.new
 loader.push_dir('./lib')
 loader.setup # ready!
 
+# Start logging
+Logging.start
+
+
 # start the root installer
 RootInstaller::Installer.new.start

@@ -25,13 +25,15 @@ class Disk
 
   def self.load
     disks = []
+      log.debug "****** DISK INFO ********"
+      log.debug "    "
     disk_hwinfo().each do |info|
-#      puts info.inspect
-#      puts
+      log.debug info.inspect
+      log.debug "    "
       disks << info.to_disk 
-#      puts disks[-1].inspect + ", type=#{disks[-1].type}"
-#      puts
-#      puts
+      log.debug disks[-1].inspect + ", type=#{disks[-1].type}"
+      log.debug "-----------------------------------------"
+      log.debug "    "
     end
     disks
   end
