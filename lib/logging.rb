@@ -25,7 +25,6 @@ end
 
 
 def self.start
-
   Object.class_eval { 
     def log
       Thread.current.thread_variable_set("log", Logging.new) unless Thread.current.thread_variable?("log")
