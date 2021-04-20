@@ -8,7 +8,7 @@ class Disk
   end
 
   def self.to_strings
-    all.map{|d| d.to_s}.sort
+    all.select{|d| d.by_serial}.map{|d| d.to_s}.sort
   end
 
   def self.to_string_list
