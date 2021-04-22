@@ -29,4 +29,20 @@ class Question
     dialog
   end
 
+  def cols
+    `tput cols`.to_i
+  end
+
+  def rows
+    `tput lines`.to_i
+  end
+
+  def dcols
+    cols - 10
+  end
+
+  def drows
+    rows - 5
+  end
+
 end
