@@ -8,7 +8,7 @@ loader.push_dir('./lib')
 loader.setup # ready!
 
 # Start logging
-Logging.start
+Logging.setup
 
 
 # start the root installer
