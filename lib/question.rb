@@ -24,7 +24,7 @@ class Question
   # allows test stubbing
   def dialog
     dialog ||= MRDialog.new
-    dialog.logger = Logger.new("./log/mrdialog.log")
+    dialog.logger = log
     dialog.clear = true
     dialog
   end
