@@ -23,10 +23,12 @@ class Question
 
   # allows test stubbing
   def dialog
-    dialog ||= MRDialog.new
-    dialog.logger = log
-    dialog.clear = true
-    dialog
+    @dialog ||= (
+      dlg = MRDialog.new
+      dlg.logger = log
+      dlg.clear = true
+      dlg
+    )
   end
 
   def cols
