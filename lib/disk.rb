@@ -1,14 +1,14 @@
 class Disk
 
   attr_accessor :model_name, :serial, :vendor, :device, :driver, :by_serial, :by_uuid, 
-                :by_path, :sectors, :sector_size, :capacity_gb, :capacity_bytes, :rotation
+                :by_path, :sectors, :sector_size, :capacity_gb, :capacity_bytes
 
   def to_s
-    "#{capacity_gb} GB #{connection} #{type} #{by_serial.delete_prefix '/dev/disk/by-id/'} with #{sector_size} byte sectors as #{device}"
+    "#{capacity_gb} GB #{connection} #{type} #{id} with #{sector_size} byte sectors as #{device}"
   end
 
   def self.to_strings
-    all.select(&:by_serial).map(&:to_s).sort
+    all.select(&:by_serial).sort_by{|d| [d.connection_sort_order, d.type_sort_order, 1000000000/d.capacity_gb]}.map(&:to_s)
   end
 
   def self.to_string_list
@@ -38,6 +38,14 @@ class Disk
     disks
   end
 
+  def id
+    by_serial ? by_serial.delete_prefix('/dev/disk/by-id/') : ""
+  end
+
+  def uuid
+    by_uuid ? by_uuid.delete_prefix('/dev/disk/by-id/') : ""
+  end
+
   def hdd?
     rotation
   end
@@ -50,8 +58,29 @@ class Disk
     driver == "ahci" ? "sata" : driver
   end
 
+  def connection_sort_order
+    case driver
+      when 'nvme'
+        0
+      when 'ahci'
+        1
+      when 'usb'
+        2
+      else
+        3
+    end 
+  end
+
+  def rotation
+    (`lsblk -d -n -o rota /dev/#{device}`).include? "1"    
+  end
+
   def type
     rotation ? "hdd" : "ssd"
+  end
+
+  def type_sort_order
+    rotation ? 1 : 0
   end
 
   def self.disk_hwinfo
@@ -90,7 +119,6 @@ class Disk
         d.sectors = sectors
         d.capacity_gb = capacity_gb
         d.capacity_bytes = capacity_bytes
-        d.rotation = (`lsblk -d -n -o rota /dev/#{device}`).include? "1"
       end
     end    
 
