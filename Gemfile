@@ -5,5 +5,6 @@ gem 'zeitwerk'
 
 gem 'minitest'
 gem 'minitest-fork_executor'
-gem 'mocha'
+gem "minitest-stub_any_instance"
+# gem 'mocha'
 gem 'rake'

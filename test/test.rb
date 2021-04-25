@@ -1,5 +1,6 @@
 require 'minitest/autorun'
-require 'mocha/minitest'
+# require 'mocha/minitest'
+require 'minitest/stub_any_instance'
 require 'bundler'
 Bundler.require
 
@@ -33,15 +34,12 @@ class Test < Minitest::Test
 
 
   def with_disks(disks_file)
-    # Disk.any_instance.stubs(:rotation).returns Proc.new {puts "id is #{id}"}
-    Disk.alias_method :old_rotation, :rotation
-    Disk.define_method :rotation, Proc.new { /^ata-ST/ =~ id }
-    Disk.expects(:get_hwinfo).returns IO.read(disks_file)
-    Disk.reload
-    yield
-    Disk.undef_method :rotation
-    Disk.alias_method :rotation, :old_rotation
-    Disk.undef_method :old_rotation
+    Disk.stub_any_instance(:rotation, Proc.new{ /^ata-ST/ =~ id } ) do
+      Disk.stub :get_hwinfo, IO.read(disks_file) do
+        Disk.reload
+        yield
+      end
+    end
   end
 
 
