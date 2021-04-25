@@ -27,6 +27,7 @@ class Question
       dlg = MRDialog.new
       dlg.logger = log
       dlg.clear = true
+      dlg.dialog_options = "--no-collapse"
       dlg
     )
   end

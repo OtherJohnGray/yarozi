@@ -4,11 +4,11 @@ class Disk
                 :by_path, :sectors, :sector_size, :capacity_gb, :capacity_bytes
 
   def to_s
-    "#{capacity_gb} GB #{connection} #{type} #{id} with #{sector_size} byte sectors as #{device}"
+    "#{sprintf('%6d', capacity_gb)} GB #{sprintf('%4s', connection)} #{type} #{id} with #{sector_size} byte sectors as #{device}"
   end
 
   def self.to_strings
-    all.select(&:by_serial).sort_by{|d| [d.connection_sort_order, d.type_sort_order, 1000000000/d.capacity_gb]}.map(&:to_s)
+    all.select(&:by_serial).sort_by{|d| d.type_sort_order * 100000000 + d.connection_sort_order * 10000000 + d.capacity_gb}.map(&:to_s)
   end
 
   def self.to_string_list
@@ -55,19 +55,32 @@ class Disk
   end
 
   def connection
-    driver == "ahci" ? "sata" : driver
+    case driver
+      when 'nvme', 'usb'
+        driver  
+      when "ahci"
+        "sata"
+      else
+        if /^nvme/ =~ id 
+          'nvme'
+        elsif /^ata/ =~ id
+          'sata'  
+        else 
+          '???'
+        end
+    end
   end
 
   def connection_sort_order
-    case driver
+    case connection
       when 'nvme'
-        0
-      when 'ahci'
         1
-      when 'usb'
+      when 'sata'
         2
-      else
+      when 'usb'
         3
+      else
+        4
     end 
   end
 
@@ -76,11 +89,11 @@ class Disk
   end
 
   def type
-    rotation ? "hdd" : "ssd"
+    rotation ? "HDD" : "SSD"
   end
 
   def type_sort_order
-    rotation ? 1 : 0
+    rotation ? 2 : 1
   end
 
   def self.disk_hwinfo
