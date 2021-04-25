@@ -1,4 +1,6 @@
 require "rake/testtask"
+require "minitest"
+require "mocha/minitest"
 
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"

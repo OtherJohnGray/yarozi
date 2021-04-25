@@ -1,0 +1,171 @@
+21: SCSI 900.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: SPTk.xj5vzZcU9GA
+  Parent ID: YmUS.P5xDBYy0Vw7
+  SysFS ID: /class/block/sdf
+  SysFS BusID: 9:0:0:0
+  SysFS Device Link: /devices/pci0000:00/0000:00:1c.3/0000:04:00.0/usb4/4-1/4-1.3/4-1.3.4/4-1.3.4:1.0/host9/target9:0:0/9:0:0:0
+  Hardware Class: disk
+  Model: "Seagate Expansion Desk"
+  Vendor: usb 0x0bc2 "Seagate"
+  Device: usb 0x3322 "Expansion Desk"
+  Revision: "9401"
+  Serial ID: "NAAARFRY"
+  Driver: "usb-storage", "sd"
+  Driver Modules: "usb_storage"
+  Device File: /dev/sdf (/dev/sg5)
+  Device Files: /dev/sdf, /dev/disk/by-id/ata-ST4000DM004-2CV104_ZFN2NBB7, /dev/disk/by-path/pci-0000:04:00.0-usb-0:1.3.4:1.0-scsi-0:0:0:0, /dev/disk/by-id/wwn-0x5000c500c36ec49e
+  Device Number: block 8:80-8:95 (char 21:5)
+  Geometry (Logical): CHS 486401/255/63
+  Size: 7814037167 sectors a 512 bytes
+  Capacity: 3726 GB (4000787029504 bytes)
+  Module Alias: "usb:v0BC2p3322d0100dc00dsc00dp00ic08isc06ip50in00"
+  Driver Info #0:
+    Driver Status: uas is active
+    Driver Activation Cmd: "modprobe uas"
+  Driver Info #1:
+    Driver Status: usb_storage is active
+    Driver Activation Cmd: "modprobe usb_storage"
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #19 (USB Controller)
+
+22: SCSI 700.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: EEKG.1TL1b2fYbh4
+  Parent ID: YmUS.P5xDBYy0Vw7
+  SysFS ID: /class/block/sdd
+  SysFS BusID: 7:0:0:0
+  SysFS Device Link: /devices/pci0000:00/0000:00:1c.3/0000:04:00.0/usb4/4-1/4-1.2/4-1.2:1.0/host7/target7:0:0/7:0:0:0
+  Hardware Class: disk
+  Model: "Seagate Expansion Desk"
+  Vendor: usb 0x0bc2 "Seagate"
+  Device: usb 0x3322 "Expansion Desk"
+  Revision: "9401"
+  Serial ID: "NAAARH4K"
+  Driver: "usb-storage", "sd"
+  Driver Modules: "usb_storage"
+  Device File: /dev/sdd (/dev/sg3)
+  Device Files: /dev/sdd, /dev/disk/by-id/wwn-0x5000c500c36e3981, /dev/disk/by-path/pci-0000:04:00.0-usb-0:1.2:1.0-scsi-0:0:0:0, /dev/disk/by-id/ata-ST4000DM004-2CV104_ZFN2NCTY
+  Device Number: block 8:48-8:63 (char 21:3)
+  Geometry (Logical): CHS 486401/255/63
+  Size: 7814037167 sectors a 512 bytes
+  Capacity: 3726 GB (4000787029504 bytes)
+  Module Alias: "usb:v0BC2p3322d0100dc00dsc00dp00ic08isc06ip50in00"
+  Driver Info #0:
+    Driver Status: uas is active
+    Driver Activation Cmd: "modprobe uas"
+  Driver Info #1:
+    Driver Status: usb_storage is active
+    Driver Activation Cmd: "modprobe usb_storage"
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #19 (USB Controller)
+
+23: IDE 200.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: WZeP.pmZGU2L6SzA
+  Parent ID: w7Y8.97Zz9F5CG4A
+  SysFS ID: /class/block/sdb
+  SysFS BusID: 2:0:0:0
+  SysFS Device Link: /devices/pci0000:00/0000:00:1f.2/ata3/host2/target2:0:0/2:0:0:0
+  Hardware Class: disk
+  Model: "Samsung SSD 850"
+  Vendor: "Samsung"
+  Device: "SSD 850"
+  Revision: "2B6Q"
+  Serial ID: "S250NXAG709909M"
+  Driver: "ahci", "sd"
+  Driver Modules: "ahci"
+  Device File: /dev/sdb
+  Device Files: /dev/sdb, /dev/disk/by-id/ata-Samsung_SSD_850_PRO_512GB_S250NXAG709909M, /dev/disk/by-id/wwn-0x50025388400690bd, /dev/disk/by-uuid/10714688049150431405, /dev/disk/by-path/pci-0000:00:1f.2-ata-3
+  Device Number: block 8:16-8:31
+  Geometry (Logical): CHS 62260/255/63
+  Size: 1000215216 sectors a 512 bytes
+  Capacity: 476 GB (512110190592 bytes)
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #3 (SATA controller)
+
+24: SCSI 800.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: a8DP.N7h9KCZNQjC
+  Parent ID: YmUS.P5xDBYy0Vw7
+  SysFS ID: /class/block/sde
+  SysFS BusID: 8:0:0:0
+  SysFS Device Link: /devices/pci0000:00/0000:00:1c.3/0000:04:00.0/usb4/4-1/4-1.3/4-1.3.2/4-1.3.2:1.0/host8/target8:0:0/8:0:0:0
+  Hardware Class: disk
+  Model: "Seagate Expansion Desk"
+  Vendor: usb 0x0bc2 "Seagate"
+  Device: usb 0x3322 "Expansion Desk"
+  Revision: "9401"
+  Serial ID: "NAAARG7G"
+  Driver: "usb-storage", "sd"
+  Driver Modules: "usb_storage"
+  Device File: /dev/sde (/dev/sg4)
+  Device Files: /dev/sde, /dev/disk/by-id/ata-ST4000DM004-2CV104_ZFN2MJF8, /dev/disk/by-path/pci-0000:04:00.0-usb-0:1.3.2:1.0-scsi-0:0:0:0, /dev/disk/by-id/wwn-0x5000c500c36078eb
+  Device Number: block 8:64-8:79 (char 21:4)
+  Geometry (Logical): CHS 486401/255/63
+  Size: 7814037167 sectors a 512 bytes
+  Capacity: 3726 GB (4000787029504 bytes)
+  Module Alias: "usb:v0BC2p3322d0100dc00dsc00dp00ic08isc06ip50in00"
+  Driver Info #0:
+    Driver Status: uas is active
+    Driver Activation Cmd: "modprobe uas"
+  Driver Info #1:
+    Driver Status: usb_storage is active
+    Driver Activation Cmd: "modprobe usb_storage"
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #19 (USB Controller)
+
+25: SCSI 600.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: o5i5.eIOw4mxW9y6
+  Parent ID: YmUS.P5xDBYy0Vw7
+  SysFS ID: /class/block/sdc
+  SysFS BusID: 6:0:0:0
+  SysFS Device Link: /devices/pci0000:00/0000:00:1c.3/0000:04:00.0/usb4/4-1/4-1.1/4-1.1:1.0/host6/target6:0:0/6:0:0:0
+  Hardware Class: disk
+  Model: "Seagate Expansion Desk"
+  Vendor: usb 0x0bc2 "Seagate"
+  Device: usb 0x3322 "Expansion Desk"
+  Revision: "9401"
+  Serial ID: "NAAARH2T"
+  Driver: "usb-storage", "sd"
+  Driver Modules: "usb_storage"
+  Device File: /dev/sdc (/dev/sg2)
+  Device Files: /dev/sdc, /dev/disk/by-id/wwn-0x5000c500c361b883, /dev/disk/by-path/pci-0000:04:00.0-usb-0:1.1:1.0-scsi-0:0:0:0, /dev/disk/by-id/ata-ST4000DM004-2CV104_ZFN2MEE9
+  Device Number: block 8:32-8:47 (char 21:2)
+  Geometry (Logical): CHS 486401/255/63
+  Size: 7814037167 sectors a 512 bytes
+  Capacity: 3726 GB (4000787029504 bytes)
+  Module Alias: "usb:v0BC2p3322d0100dc00dsc00dp00ic08isc06ip50in00"
+  Driver Info #0:
+    Driver Status: uas is active
+    Driver Activation Cmd: "modprobe uas"
+  Driver Info #1:
+    Driver Status: usb_storage is active
+    Driver Activation Cmd: "modprobe usb_storage"
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #19 (USB Controller)
+
+26: IDE 00.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: 3OOL.yMD11hoIom5
+  Parent ID: w7Y8.97Zz9F5CG4A
+  SysFS ID: /class/block/sda
+  SysFS BusID: 0:0:0:0
+  SysFS Device Link: /devices/pci0000:00/0000:00:1f.2/ata1/host0/target0:0:0/0:0:0:0
+  Hardware Class: disk
+  Model: "INTEL SSDSC2CW06"
+  Vendor: "INTEL"
+  Device: "SSDSC2CW06"
+  Revision: "400i"
+  Serial ID: "CVCV153409K0060AGN"
+  Driver: "ahci", "sd"
+  Driver Modules: "ahci"
+  Device File: /dev/sda
+  Device Files: /dev/sda, /dev/disk/by-id/wwn-0x5001517bb27cef1d, /dev/disk/by-id/ata-INTEL_SSDSC2CW060A3_CVCV153409K0060AGN, /dev/disk/by-path/pci-0000:00:1f.2-ata-1
+  Device Number: block 8:0-8:15
+  Geometry (Logical): CHS 7297/255/63
+  Size: 117231408 sectors a 512 bytes
+  Capacity: 55 GB (60022480896 bytes)
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #3 (SATA controller)

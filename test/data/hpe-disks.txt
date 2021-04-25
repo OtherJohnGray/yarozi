@@ -1,0 +1,181 @@
+127: PCI 00.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: wLCS.p6Rh3HJD4B9
+  Parent ID: 2kIT.ICYfDYz9ml4
+  SysFS ID: /class/block/nvme0n1
+  SysFS BusID: nvme1
+  SysFS Device Link: /devices/pci0000:10/0000:10:02.0/0000:12:00.0/nvme/nvme1
+  Hardware Class: disk
+  Model: "Kingston Technology Company Disk"
+  Vendor: pci 0x2646 "Kingston Technology Company, Inc."
+  Device: pci 0x2262 
+  SubVendor: pci 0x2646 "Kingston Technology Company, Inc."
+  SubDevice: pci 0x2262 
+  Driver: "nvme"
+  Driver Modules: "nvme"
+  Device File: /dev/nvme0n1
+  Device Files: /dev/nvme0n1, /dev/disk/by-id/nvme-eui.0026b7683d3ef855, /dev/disk/by-path/pci-0000:12:00.0-nvme-1, /dev/disk/by-id/nvme-KINGSTON_SKC2500M8500G_50026B7683D3EF85
+  Device Number: block 259:0
+  Geometry (Logical): CHS 476940/64/32
+  Size: 976773168 sectors a 512 bytes
+  Capacity: 465 GB (500107862016 bytes)
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #60 (Non-Volatile memory controller)
+
+128: PCI 00.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: WKgy.p6Rh3HJD4B9
+  Parent ID: GEJY.ICYfDYz9ml4
+  SysFS ID: /class/block/nvme3n1
+  SysFS BusID: nvme2
+  SysFS Device Link: /devices/pci0000:60/0000:60:00.0/0000:61:00.0/nvme/nvme2
+  Hardware Class: disk
+  Model: "Kingston Technology Company Disk"
+  Vendor: pci 0x2646 "Kingston Technology Company, Inc."
+  Device: pci 0x2262 
+  SubVendor: pci 0x2646 "Kingston Technology Company, Inc."
+  SubDevice: pci 0x2262 
+  Driver: "nvme"
+  Driver Modules: "nvme"
+  Device File: /dev/nvme3n1
+  Device Files: /dev/nvme3n1, /dev/disk/by-id/nvme-eui.0026b7683d3f7645, /dev/disk/by-id/nvme-KINGSTON_SKC2500M8500G_50026B7683D3F764, /dev/disk/by-path/pci-0000:61:00.0-nvme-1
+  Device Number: block 259:9
+  Geometry (Logical): CHS 476940/64/32
+  Size: 976773168 sectors a 512 bytes
+  Capacity: 465 GB (500107862016 bytes)
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #126 (Non-Volatile memory controller)
+
+129: IDE 700.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: WZeP.5lKXN4EOaaD
+  Parent ID: abAj.PyLa8jWzhTD
+  SysFS ID: /class/block/sdb
+  SysFS BusID: 7:0:0:0
+  SysFS Device Link: /devices/pci0000:00/0000:00:17.0/ata8/host7/target7:0:0/7:0:0:0
+  Hardware Class: disk
+  Model: "ST8000VN004-2M21"
+  Device: "ST8000VN004-2M21"
+  Revision: "SC60"
+  Serial ID: "WKD3276X"
+  Driver: "ahci", "sd"
+  Driver Modules: "ahci", "sd_mod"
+  Device File: /dev/sdb
+  Device Files: /dev/sdb, /dev/disk/by-id/ata-ST8000VN004-2M2101_WKD3276X, /dev/disk/by-id/wwn-0x5000c500d48b17db, /dev/disk/by-path/pci-0000:00:17.0-ata-2
+  Device Number: block 8:16-8:31
+  Geometry (Logical): CHS 972801/255/63
+  Size: 15628053168 sectors a 512 bytes
+  Capacity: 7452 GB (8001563222016 bytes)
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #4 (RAID bus controller)
+
+130: PCI 00.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: f+A7.p6Rh3HJD4B9
+  Parent ID: x4Wh.ICYfDYz9ml4
+  SysFS ID: /class/block/nvme2n1
+  SysFS BusID: nvme3
+  SysFS Device Link: /devices/pci0000:60/0000:60:01.0/0000:62:00.0/nvme/nvme3
+  Hardware Class: disk
+  Model: "Kingston Technology Company Disk"
+  Vendor: pci 0x2646 "Kingston Technology Company, Inc."
+  Device: pci 0x2262 
+  SubVendor: pci 0x2646 "Kingston Technology Company, Inc."
+  SubDevice: pci 0x2262 
+  Driver: "nvme"
+  Driver Modules: "nvme"
+  Device File: /dev/nvme2n1
+  Device Files: /dev/nvme2n1, /dev/disk/by-id/nvme-eui.0026b7683d3efcc5, /dev/disk/by-path/pci-0000:62:00.0-nvme-1, /dev/disk/by-id/nvme-KINGSTON_SKC2500M8500G_50026B7683D3EFCC
+  Device Number: block 259:8
+  Geometry (Logical): CHS 476940/64/32
+  Size: 976773168 sectors a 512 bytes
+  Capacity: 465 GB (500107862016 bytes)
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #107 (Non-Volatile memory controller)
+
+131: PCI 00.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: F_ed.p6Rh3HJD4B9
+  Parent ID: dxiq.ICYfDYz9ml4
+  SysFS ID: /class/block/nvme5n1
+  SysFS BusID: nvme4
+  SysFS Device Link: /devices/pci0000:60/0000:60:02.0/0000:63:00.0/nvme/nvme4
+  Hardware Class: disk
+  Model: "Kingston Technology Company Disk"
+  Vendor: pci 0x2646 "Kingston Technology Company, Inc."
+  Device: pci 0x2262 
+  SubVendor: pci 0x2646 "Kingston Technology Company, Inc."
+  SubDevice: pci 0x2262 
+  Driver: "nvme"
+  Driver Modules: "nvme"
+  Device File: /dev/nvme5n1
+  Device Files: /dev/nvme5n1, /dev/disk/by-id/nvme-KINGSTON_SKC2500M8500G_50026B7683D3EF7C, /dev/disk/by-path/pci-0000:63:00.0-nvme-1, /dev/disk/by-id/nvme-eui.0026b7683d3ef7c5
+  Device Number: block 259:10
+  Geometry (Logical): CHS 476940/64/32
+  Size: 976773168 sectors a 512 bytes
+  Capacity: 465 GB (500107862016 bytes)
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #87 (Non-Volatile memory controller)
+
+132: None 00.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: QHth.Fxp0d3BezAE
+  SysFS ID: /class/block/nvme1n1
+  SysFS BusID: nvme-subsys1
+  SysFS Device Link: /devices/virtual/nvme-subsystem/nvme-subsys1
+  Hardware Class: disk
+  Model: "Disk"
+  Device File: /dev/nvme1n1
+  Device Files: /dev/nvme1n1, /dev/disk/by-id/nvme-eui.34594e304e7003760025384500000003, /dev/disk/by-id/nvme-SAMSUNG_MZWLJ1T9HBJR-00007_S4YNNE0N700376
+  Device Number: block 259:5
+  Geometry (Logical): CHS 1831420/64/32
+  Size: 3750748848 sectors a 512 bytes
+  Capacity: 1788 GB (1920383410176 bytes)
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+133: IDE 600.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: 3OOL.zYs_GBqX+M1
+  Parent ID: abAj.PyLa8jWzhTD
+  SysFS ID: /class/block/sda
+  SysFS BusID: 6:0:0:0
+  SysFS Device Link: /devices/pci0000:00/0000:00:17.0/ata7/host6/target6:0:0/6:0:0:0
+  Hardware Class: disk
+  Model: "ST8000VN004-2M21"
+  Device: "ST8000VN004-2M21"
+  Revision: "SC60"
+  Serial ID: "WRD06Q04"
+  Driver: "ahci", "sd"
+  Driver Modules: "ahci", "sd_mod"
+  Device File: /dev/sda
+  Device Files: /dev/sda, /dev/disk/by-id/ata-ST8000VN004-2M2101_WRD06Q04, /dev/disk/by-path/pci-0000:00:17.0-ata-1, /dev/disk/by-id/wwn-0x5000c500d48a95e8
+  Device Number: block 8:0-8:15
+  Geometry (Logical): CHS 972801/255/63
+  Size: 15628053168 sectors a 512 bytes
+  Capacity: 7452 GB (8001563222016 bytes)
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #4 (RAID bus controller)
+
+134: PCI 00.0: 10600 Disk
+  [Created at block.245]
+  Unique ID: Nf9o.p6Rh3HJD4B9
+  Parent ID: Iovz.ICYfDYz9ml4
+  SysFS ID: /class/block/nvme4n1
+  SysFS BusID: nvme5
+  SysFS Device Link: /devices/pci0000:60/0000:60:03.0/0000:64:00.0/nvme/nvme5
+  Hardware Class: disk
+  Model: "Kingston Technology Company Disk"
+  Vendor: pci 0x2646 "Kingston Technology Company, Inc."
+  Device: pci 0x2262 
+  SubVendor: pci 0x2646 "Kingston Technology Company, Inc."
+  SubDevice: pci 0x2262 
+  Driver: "nvme"
+  Driver Modules: "nvme"
+  Device File: /dev/nvme4n1
+  Device Files: /dev/nvme4n1, /dev/disk/by-id/nvme-KINGSTON_SKC2500M8500G_50026B7683D3F1B8, /dev/disk/by-path/pci-0000:64:00.0-nvme-1, /dev/disk/by-id/nvme-eui.0026b7683d3f1b85
+  Device Number: block 259:11
+  Geometry (Logical): CHS 476940/64/32
+  Size: 976773168 sectors a 512 bytes
+  Capacity: 465 GB (500107862016 bytes)
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+  Attached to: #73 (Non-Volatile memory controller)
