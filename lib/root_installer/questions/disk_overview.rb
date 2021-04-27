@@ -17,7 +17,7 @@ class RootInstaller::Questions::DiskOverview < Question
     dialog.backtitle = "YAROZI - Yet Another Root On ZFS installer"
     dialog.ok_label = "continue\\ and\\ select\\ disks"
     message = text + Disk.to_string_list
-    dialog.msgbox(message)
+    dialog.msgbox(message,0,150)
   end
 
 
