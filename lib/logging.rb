@@ -7,7 +7,7 @@ class Logging
 
   def logger
     @logger ||= (
-      l = Logger.new("log/#{Process.pid}-#{Thread.current.inspect}.log")
+      l = Logger.new("log/#{Process.pid}-#{Thread.current.inspect.delete_suffix(' run>').tr('#<Thread:','')}.log")
       l.level = level
       l
     )

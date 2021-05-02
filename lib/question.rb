@@ -6,7 +6,7 @@ class Question
     HPAD = 10
 
     def msgbox(text="Text Goes Here", height=0, width=0, vpad=VPAD, hpad=HPAD)
-      log.debug "calling msgbox with height of #{height}, width of #{width}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
+      log.debug "Question::Dialog.msgbox: calling msgbox with height of #{height}, width of #{width}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
       super(text, drows( height, vpad ), dcols( width, hpad ))
     end
 
@@ -20,13 +20,13 @@ class Question
 
     def drows(height, vpad)
       result = height > 0 && height < Question::Dialog.rows - vpad ? height : Question::Dialog.rows - vpad
-      log.debug "calling drows with height #{height} and vpad #{vpad} and Question::Dialog.rows of #{Question::Dialog.rows} returned #{result}"
+      log.debug "Question::Dialog.drows: calling drows with height #{height} and vpad #{vpad} and Question::Dialog.rows of #{Question::Dialog.rows} returned #{result}"
       result
     end
 
     def dcols(width, hpad)
       result = width  > 0 && width  < Question::Dialog.cols - hpad ? width  : Question::Dialog.cols - hpad
-      log.debug "calling dcols with width #{width} and hpad #{hpad} and Question::Dialog.cols of #{Question::Dialog.cols} returned #{result}"
+      log.debug "Question::Dialog.dcolsq: calling dcols with width #{width} and hpad #{hpad} and Question::Dialog.cols of #{Question::Dialog.cols} returned #{result}"
       result
     end
 
