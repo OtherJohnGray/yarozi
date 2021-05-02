@@ -9,22 +9,22 @@ class Question
       super(text, drows( height, vpad ), dcols( width, hpad ))
     end
 
-    def rows
+    def self.rows
       @rows ||= `tput lines`.to_i
     end
 
-    def cols
+    def self.cols
       @cols ||= `tput cols`.to_i
     end
 
     def drows(height, vpad)
-      log.debug "calling drows with height #{height} and vpad #{vpad}"
-      height > 0 && height < rows - vpad ? height : rows - vpad
+      log.debug "calling drows with height #{height} and vpad #{vpad} and Question::Dialog.rows of #{Question::Dialog.rows}"
+      height > 0 && height < Question::Dialog.rows - vpad ? height : Question::Dialog.rows - vpad
     end
 
     def dcols(width, hpad)
-      log.debug "calling dcols with width #{width} and hpad #{hpad}"
-      width  > 0 && width  < cols - hpad ? width  : cols - hpad
+      log.debug "calling dcols with width #{width} and hpad #{hpad} and Question::Dialog.cols of #{Question::Dialog.cols}"
+      width  > 0 && width  < Question::Dialog.cols - hpad ? width  : Question::Dialog.cols - hpad
     end
 
   end

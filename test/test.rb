@@ -50,6 +50,13 @@ class Test < Minitest::Test
     end
   end
 
+  def with_screen(rows, cols)
+    Question::Dialog.stub :rows, rows do
+      Question::Dialog.stub :cols, cols do
+        yield
+      end
+    end
+  end
 
 end
 
