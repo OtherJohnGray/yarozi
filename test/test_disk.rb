@@ -1,16 +1,7 @@
 require 'test'
-require 'disk'
-
-# class Disk
-
-#   def rotation
-#     /^ata/ =~ id
-#   end
-
-# end
 
 
-class DiskTest < Test
+class TestDisk < Test
   
 
   def test_rescue_disks

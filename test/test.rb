@@ -1,9 +1,7 @@
 require 'minitest/autorun'
-# require 'mocha/minitest'
 require 'minitest/stub_any_instance'
 require 'bundler'
 Bundler.require
-
 
 loader = Zeitwerk::Loader.new
 loader.push_dir('./lib')
@@ -14,6 +12,8 @@ Logging.setup
 Minitest.parallel_executor = Minitest::ForkExecutor.new
 
 class Test < Minitest::Test
+
+# Disk mocking
 
   RESCUE_DISKS = 'test/data/rescue-disks.txt'
   HPE_DISKS = 'test/data/hpe-disks.txt'
@@ -39,6 +39,14 @@ class Test < Minitest::Test
         Disk.reload
         yield
       end
+    end
+  end
+
+# Screen mocking
+
+  def with_msgbox
+    MRDialog.stub_any_instance(:msgbox, Proc.new{|*args| args} ) do
+      yield
     end
   end
 
