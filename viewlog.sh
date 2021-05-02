@@ -12,4 +12,17 @@ then
   exit
 fi
 
+if [ ! "$(ls -A /tmp)" ] 
+then 
+  echo " "
+  echo " "
+  echo "log directory is empty, there are no logs to view. To create log files, set the YAROZI_LOG_LEVEL shell variable to CRITICAL, ERROR, WARN, INFO, or DEBUG and then run the application or tests, e.g."
+  echo " "
+  echo "export YAROZI_LOG_LEVEL=DEBUG"
+  echo "rake"
+  echo " "
+  echo " "
+  exit
+fi
+
 less "log/$(ls -ltr log | grep '.log' | tr -s ' ' | cut -f9 -d' ' | tail -$1 | head -n1 )"
