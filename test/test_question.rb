@@ -15,15 +15,17 @@ class TestQuestion < Test
 
   def test_msgbox
     with_msgbox do
-      d = get_dialog
-      d.title = "Introduction and Disk Overview"
-      d.backtitle = "YAROZI - Yet Another Root On ZFS installer"
-      d.ok_label = "continue\\ and\\ select\\ disks"
+      with_screen(60,200) do
+        d = get_dialog
+        d.title = "Introduction and Disk Overview"
+        d.backtitle = "YAROZI - Yet Another Root On ZFS installer"
+        d.ok_label = "continue\\ and\\ select\\ disks"
 
-      assert_equal d.title, "Introduction and Disk Overview"
-      assert_equal d.backtitle, "YAROZI - Yet Another Root On ZFS installer"
-      assert_equal d.ok_label, "continue\\ and\\ select\\ disks"
-      assert_equal d.msgbox("this is a test dialog",50,150), ["this is a test dialog", 50, 150]
+        assert_equal d.title, "Introduction and Disk Overview"
+        assert_equal d.backtitle, "YAROZI - Yet Another Root On ZFS installer"
+        assert_equal d.ok_label, "continue\\ and\\ select\\ disks"
+        assert_equal d.msgbox("this is a test dialog",50,150), ["this is a test dialog", 50, 150]
+      end
     end
   end
 
