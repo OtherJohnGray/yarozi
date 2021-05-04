@@ -15,7 +15,7 @@ class TestDiskOverview < Test
       assert_equal "Introduction and Disk Overview", overview.dialog.title
       assert_equal "YAROZI - Yet Another Root On ZFS installer", overview.dialog.backtitle
       assert_equal "continue\\ and\\ select\\ disks", overview.dialog.ok_label
-      compare_to_saved result.to_s, "_with_#{set}_disks"
+      compare_to_saved result.to_s, set
     end
   end
 

@@ -1,2 +1,0 @@
-  1863 GB sata HDD ata-ST2000NM0033-9ZM175_Z1X0TX8R with 512 byte sectors as sdb
-  1863 GB sata HDD ata-ST2000NM0033-9ZM175_Z1X0TY02 with 512 byte sectors as sda
