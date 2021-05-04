@@ -2,7 +2,7 @@ require 'test'
 
 
 class TestDisk < Test
-  
+
 
   def test_rescue_disks
     rescue_disks  do 
