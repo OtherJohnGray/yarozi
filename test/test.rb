@@ -21,9 +21,15 @@ class Test < Minitest::Test
       Disk.stub_any_instance(:rotation, Proc.new{ /^ata-ST/ =~ id } ) do
         Disk.stub :get_hwinfo, IO.read("test/data/#{set}-disks.txt") do
           Disk.reload
-          block.call
+          block.call set
         end
       end
+    end
+  end
+
+  def all_disk_sets(&block)
+    DISK_SETS.each do |set|
+      method("#{set}_disks".to_sym).call &block
     end
   end
 
@@ -43,8 +49,8 @@ class Test < Minitest::Test
     end
   end
 
-  def compare_to_saved(newval)
-    filename = "test/data" + caller_locations[0].path[/test(.+?)\.rb/, 1] + "." + caller_locations[0].base_label + ".txt"
+  def compare_to_saved(newval, qualifier="")
+    filename = "test/data" + caller_locations[0].path[/test(.+?)\.rb/, 1] + "." + caller_locations[0].base_label + qualifier + ".txt"
     IO.write filename, newval unless File.exist? filename
     assert_equal IO.read(filename), newval
   end
