@@ -39,6 +39,14 @@ class TestQuestion < Test
         d = get_dialog
         assert_equal d.msgbox("this is a test dialog",50,150), ["this is a test dialog", 50, 150]
       end
+      with_screen(24,80) do
+        d = get_dialog
+        assert_equal d.msgbox("this is a test dialog",0,0,8,20), ["this is a test dialog", 16, 60]
+      end
+      with_screen(24,80) do
+        d = get_dialog
+        assert_equal d.msgbox("this is a test dialog",22,75,1,1), ["this is a test dialog", 22, 75]
+      end
     end
   end
 

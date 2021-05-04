@@ -12,7 +12,7 @@ then
   exit
 fi
 
-if [ ! "$(ls -A log)" ] 
+if [ ! "$(ls -A log)" ]  
 then 
   echo " "
   echo " "
