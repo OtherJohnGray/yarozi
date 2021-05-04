@@ -4,7 +4,7 @@ require 'test'
 class TestQuestion < Test
   
   def get_dialog
-    dialog = Question.new(nil).dialog
+    Question.new(nil).dialog
   end
 
 
