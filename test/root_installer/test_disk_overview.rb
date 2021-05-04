@@ -4,7 +4,7 @@ require 'test'
 class TestDiskOverview < Test
   
   def test_dialog
-    all_disk_sets do |set|
+    with_disk_sets do |set|
       overview = RootInstaller::Questions::DiskOverview.new(nil)
       result = nil
       with_screen 40, 200 do
@@ -20,7 +20,7 @@ class TestDiskOverview < Test
   end
 
   def test_ok
-    all_disk_sets do |set|
+    with_disk_sets do |set|
       with_dialog :msgbox, true do
         assert_not_quit do
           RootInstaller::Questions::DiskOverview.new(nil).ask

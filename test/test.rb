@@ -27,7 +27,7 @@ class Test < Minitest::Test
     end
   end
 
-  def all_disk_sets(&block)
+  def with_disk_sets(&block)
     DISK_SETS.each do |set|
       method("#{set}_disks".to_sym).call &block
     end
