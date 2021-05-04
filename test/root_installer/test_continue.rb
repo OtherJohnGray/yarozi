@@ -4,13 +4,19 @@ require 'test'
 class TestQuestion < Test
   
   def test_continue_text
+    continue = RootInstaller::Questions::Continue.new(nil)
     result = nil
     with_screen 40, 200 do
       with_dialog :yesno, Proc.new{|*args| result = args} do
-        RootInstaller::Questions::Continue.new(nil).ask
+        continue.ask
       end
     end
     compare_to_saved result.to_s
+    d = continue.dialog
+    assert_equal "WARNING", d.title
+    assert_equal "YAROZI - Yet Another Root On ZFS installer", d.backtitle
+    assert_equal "continue\\ and\\ erase\\ data", d.yes_label
+    assert_equal "exit\\ without\\ changes", d.no_label
   end
 
   def test_continue_no
@@ -28,7 +34,6 @@ class TestQuestion < Test
       end
     end
   end
-
 
 
 
