@@ -1,7 +1,7 @@
 require 'test'
 
 
-class TestQuestion < Test
+class TestContinue < Test
   
   def test_continue_text
     continue = RootInstaller::Questions::Continue.new(nil)
