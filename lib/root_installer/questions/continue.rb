@@ -1,7 +1,5 @@
 class RootInstaller::Questions::Continue < Question
 
-  attr_reader :answer
-
   def text
     <<~EOF
 

@@ -44,8 +44,8 @@ class Test < Minitest::Test
 
 # Screen mocking
 
-  def with_msgbox
-    MRDialog.stub_any_instance(:msgbox, Proc.new{|*args| args} ) do
+  def with_dialog(type, retval = Proc.new{|*args| args} )
+    MRDialog.stub_any_instance(type, retval ) do
       yield
     end
   end
@@ -56,6 +56,28 @@ class Test < Minitest::Test
         yield
       end
     end
+  end
+
+  def compare_to_saved(newval)
+    filename = "test/data" + caller_locations[0].path[/test(.+?)\.rb/, 1] + "." + caller_locations[0].base_label + ".txt"
+    IO.write filename, newval unless File.exist? filename
+    assert_equal IO.read(filename), newval
+  end
+
+  def assert_quit(code)
+    result = nil
+    Question.stub_any_instance :quit, Proc.new{|errcode| result = errcode } do
+      yield
+    end
+    assert_equal code, result
+  end
+
+  def assert_not_quit
+    result = nil
+    Question.stub_any_instance :quit, Proc.new{|errcode| result = errcode } do
+      yield
+    end
+    assert_nil result
   end
 
 end
