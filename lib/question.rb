@@ -57,13 +57,16 @@ class Question
 
   # allows test stubbing
   def dialog
-    @dialog ||= (
-      dlg = Dialog.new
-      dlg.logger = log
-      dlg.clear = true
-      dlg.dialog_options = "--no-collapse"
-      dlg
-    )
+    @dialog ||= new_dialog
+  end
+
+  def new_dialog
+    Dialog.new.tap do |d|
+      d.logger = log
+      d.clear = true
+      d.dialog_options = "--no-collapse"
+      d.backtitle = "YAROZI - Yet Another Root On ZFS installer"
+    end
   end
 
 end

@@ -9,12 +9,12 @@ cd "$(dirname "$(readlink -f "$0")")"
 
 # confirm installation
 read -p "This script requires hwinfo, Dialog, and Ruby, which it will automatically install if required. Do you wish to continue? [Y|n]  " continue
-[[ $continue =~ [nN] ]] && (echo "exiting..."; exit 1)
+[[ $continue =~ [nN] ]] && { echo "exiting..."; exit 1; }
 
 # check for required apt packages
-(which dialog >/dev/null 2>&1) || (apt install dialog --yes && echo "dialog installed OK" || ( echo "dialog install failed"; exit 1 )  )
-(which hwinfo >/dev/null 2>&1) || (apt install hwinfo --yes && echo "hwinfo installed OK" || ( echo "hwinfo install failed"; exit 1 )  )
-(which ruby >/dev/null 2>&1) || (apt install ruby --yes && echo "ruby installed OK" || ( echo "ruby failed to install"; exit 1) )
+(which dialog >/dev/null 2>&1) || { apt install dialog --yes && echo "dialog installed OK" || { echo "dialog install failed";  exit 1; } }
+(which hwinfo >/dev/null 2>&1) || { apt install hwinfo --yes && echo "hwinfo installed OK" || { echo "hwinfo install failed";  exit 1; } }
+(which ruby   >/dev/null 2>&1) || { apt install ruby   --yes && echo "ruby installed OK"   || { echo "ruby failed to install"; exit 1; } }
 
 # create an empty log dir
 mkdir log 2>/dev/null
