@@ -11,7 +11,7 @@ class TestContinue < Test
         continue.ask
       end
     end
-    compare_to_saved result.to_s
+    assert_equal fetch_or_save(result.to_s), result.to_s
     d = continue.dialog
     assert_equal "WARNING", d.title
     assert_equal "YAROZI - Yet Another Root On ZFS installer", d.backtitle

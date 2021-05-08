@@ -49,11 +49,15 @@ class Test < Minitest::Test
     end
   end
 
-  def compare_to_saved(newval, qualifier="")
+  def fetch_or_save(newval, qualifier="")
     qualifier = "_with_#{qualifier}_disks" if DISK_SETS.include? qualifier
     filename = "test/data" + caller_locations[0].path[/test(.+?)\.rb/, 1] + "." + caller_locations[0].base_label + qualifier + ".txt"
-    IO.write filename, newval unless File.exist? filename
-    assert_equal IO.read(filename), newval
+    if File.exist? filename
+      IO.read(filename)
+    else
+      IO.write filename, newval
+      newval
+    end
   end
 
   def assert_quit(code)
