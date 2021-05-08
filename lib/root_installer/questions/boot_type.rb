@@ -33,6 +33,7 @@ class RootInstaller::Questions::BootType < Question
       d.title = "Boot Type"
       d.msgbox("\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured.", 8, 50)
     end
+    ask_efi_partition
   end
 
   def ask_efi_partition
