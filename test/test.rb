@@ -13,7 +13,7 @@ Minitest.parallel_executor = Minitest::ForkExecutor.new
 
 class Test < Minitest::Test
 
-  DISK_SETS = %w(rescue hpe usb)
+  DISK_SETS = %w(hdd mixed usb largesector)
 
   # Disk mocking
   DISK_SETS.each do |set|

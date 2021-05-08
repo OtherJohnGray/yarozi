@@ -8,7 +8,7 @@ class Disk
   end
 
   def self.to_strings
-    all.select(&:by_serial).sort_by{|d| d.type_sort_order * 100000000 + d.connection_sort_order * 10000000 + d.capacity_gb}.map(&:to_s)
+    all.sort_by{|d| d.type_sort_order * 100000000 + d.connection_sort_order * 10000000 + d.capacity_gb}.map(&:to_s)
   end
 
   def self.to_string_list
@@ -35,7 +35,7 @@ class Disk
       log.debug "-----------------------------------------"
       log.debug "    "
     end
-    disks
+    disks.select(&:by_serial)
   end
 
   def id
