@@ -1,0 +1,5 @@
+* text=auto
+*.rb text
+*.txt text
+*.png binary
+*.jpg binary
