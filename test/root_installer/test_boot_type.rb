@@ -21,7 +21,7 @@ class TestBootType < Test
       end  
     end
   end
-asdf
+
 
 
   # def test_dialog
