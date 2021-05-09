@@ -1,0 +1,8 @@
+   465 GB nvme SSD nvme-KINGSTON_SKC2500M8500G_50026B7683D3EF85 with 512 byte sectors as nvme0n1
+   465 GB nvme SSD nvme-KINGSTON_SKC2500M8500G_50026B7683D3F764 with 512 byte sectors as nvme3n1
+   465 GB nvme SSD nvme-KINGSTON_SKC2500M8500G_50026B7683D3EFCC with 512 byte sectors as nvme2n1
+   465 GB nvme SSD nvme-KINGSTON_SKC2500M8500G_50026B7683D3EF7C with 512 byte sectors as nvme5n1
+   465 GB nvme SSD nvme-KINGSTON_SKC2500M8500G_50026B7683D3F1B8 with 512 byte sectors as nvme4n1
+  1788 GB nvme SSD nvme-SAMSUNG_MZWLJ1T9HBJR-00007_S4YNNE0N700376 with 512 byte sectors as nvme1n1
+  7452 GB sata HDD ata-ST8000VN004-2M2101_WKD3276X with 512 byte sectors as sdb
+  7452 GB sata HDD ata-ST8000VN004-2M2101_WRD06Q04 with 512 byte sectors as sda

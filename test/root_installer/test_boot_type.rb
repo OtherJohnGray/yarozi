@@ -18,7 +18,7 @@ class TestBootType < Test
             assert_equal fetch_or_save(result.to_s), result.to_s
           end
         end
-      end
+      end  
     end
   end
 
