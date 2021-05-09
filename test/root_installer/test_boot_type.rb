@@ -26,7 +26,9 @@ class TestBootType < Test
       with_dialog :yesno, true do
         with_dialog :msgbox, true do
           assert_not_quit do
-            RootInstaller::Questions::BootType.new(nil).ask
+            RootInstaller::Questions::BootType.stub(:efi_support?, true ) do
+              RootInstaller::Questions::BootType.new(nil).ask
+            end
           end
         end
       end
