@@ -1,0 +1,1 @@
+["\\nThis machine only has 4Kn type disks, so it will be configured for UEFI boot.", 8, 50]

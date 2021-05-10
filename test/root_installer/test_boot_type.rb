@@ -6,7 +6,7 @@ class TestBootType < Test
     largesector_disks do
       result = nil
       with_screen 40, 200 do
-        with_dialog :msgbox do
+        with_dialog :msgbox, Proc.new{|*args| result = args} do
           RootInstaller::Questions::BootType.stub(:efi_support?, true ) do
             q = RootInstaller::Questions::BootType.new(nil)
             q.ask
