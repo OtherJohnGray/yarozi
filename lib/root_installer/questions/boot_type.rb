@@ -4,11 +4,11 @@ class RootInstaller::Questions::BootType < Question
               :mbr_advisory_dialog, :mbr_error_dialog, :efi_partition_dialog
 
   def ask
-    self.class.efi_support? ? ask_efi : ask_legacy
+    efi_support? ? ask_efi : ask_legacy
   end
 
-  def self.efi_support?
-    @efi_support ||= File.directory?("/sys/firmware/efi")
+  def efi_support?
+    File.directory?("/sys/firmware/efi")
   end
 
   def ask_efi
