@@ -16,7 +16,6 @@ class TestBootType < Test
               assert_instance_of Question::Dialog, q.efi_choice_dialog
               assert_equal "Boot Type", q.efi_choice_dialog.title
               assert_equal "YAROZI - Yet Another Root On ZFS installer", q.efi_choice_dialog.backtitle
-              assert_nil   q.efi_choice_dialog.ok_label
               assert_equal "EFI\\ Boot", q.efi_choice_dialog.yes_label
               assert_equal "Legacy\\ MBR\\ Boot", q.efi_choice_dialog.no_label
               assert_equal fetch_or_save(result.to_s), result.to_s

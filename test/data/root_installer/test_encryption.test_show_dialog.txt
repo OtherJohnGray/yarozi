@@ -1,0 +1,1 @@
+["please select encryption type for the root dataset:", [["None", "root dataset will not be encrypted"], ["ZFS", "root dataset will be encrypted with ZFS native encryption"], ["LUKS", "Each partition that underlies the root dataset will be encrypted with LUKS"]], 35, 190, 3]
