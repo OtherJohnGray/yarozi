@@ -151,7 +151,7 @@
   Device Files: /dev/sda, /dev/disk/by-id/ata-ST8000VN004-2M2101_WRD06Q04, /dev/disk/by-path/pci-0000:00:17.0-ata-1, /dev/disk/by-id/wwn-0x5000c500d48a95e8
   Device Number: block 8:0-8:15
   Geometry (Logical): CHS 972801/255/63
-  Size: 15628053168 sectors a 512 bytes
+  Size: 3907013292 sectors a 4096 bytes
   Capacity: 7452 GB (8001563222016 bytes)
   Config Status: cfg=new, avail=yes, need=no, active=unknown
   Attached to: #4 (RAID bus controller)

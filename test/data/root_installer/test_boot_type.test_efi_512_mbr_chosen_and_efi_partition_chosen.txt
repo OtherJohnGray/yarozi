@@ -1,0 +1,1 @@
+[["\\nThis machine supports both EFI and legacy MBR booting. What boot type would you like?", 8, 50], ["\\nLegacy MBR Boot has been selected. Would you also like to create an unused EFI partition in case you need UEFI boot in future?", 9, 50]]

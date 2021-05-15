@@ -36,6 +36,7 @@ class RootInstaller::Questions::BootType < Question
       @mbr_advisory_dialog = new_dialog
       @mbr_advisory_dialog.title = "Boot Type"
       @mbr_advisory_dialog.msgbox("\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured.", 8, 50)
+      @boot_type = :mbr
       ask_efi_partition
     else
       @mbr_error_dialog = new_dialog
