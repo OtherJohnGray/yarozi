@@ -122,6 +122,74 @@ class TestBootType < Test
 
   # ask_legacy tests
 
+  def test_not_efi_512_efi_partition_chosen
+    mixed_disks do
+      with_screen 40, 200 do
+        result = []
+        with_dialog :msgbox, Proc.new{|*args| result << args} do
+          with_dialog :yesno, Proc.new{|*args| result << args} do
+            assert_not_quit do
+              q = RootInstaller::Questions::BootType.new(nil)
+              q.stub(:efi_support?, false) do
+                q.ask
+                # check efi_choice_dialog
+                assert_instance_of Question::Dialog, q.mbr_advisory_dialog
+                assert_equal "Boot Type", q.mbr_advisory_dialog.title
+                assert_equal "YAROZI - Yet Another Root On ZFS installer", q.mbr_advisory_dialog.backtitle
+                assert_nil   q.mbr_advisory_dialog.ok_label
+                assert_equal fetch_or_save(result.to_s), result.to_s
+                assert_equal :mbr, q.boot_type
+                # check efi_partition_dialog
+                assert_instance_of Question::Dialog, q.efi_partition_dialog
+                assert_equal "Create EFI Partition for future use?", q.efi_partition_dialog.title
+                assert_equal "YAROZI - Yet Another Root On ZFS installer", q.efi_partition_dialog.backtitle
+                assert_nil q.efi_partition_dialog.yes_label
+                assert_nil q.efi_partition_dialog.no_label
+                assert_equal fetch_or_save(result.to_s), result.to_s
+                assert q.efi_partition
+              end
+            end
+          end
+        end
+      end  
+    end
+  end
+
+
+  def test_not_efi_512_efi_partition_not_chosen
+    mixed_disks do
+      with_screen 40, 200 do
+        result = []
+        with_dialog :msgbox, Proc.new{|*args| result << args} do
+          with_dialog :yesno, Proc.new{|*args| result << args; false} do
+            assert_not_quit do
+              q = RootInstaller::Questions::BootType.new(nil)
+              q.stub(:efi_support?, false) do
+                q.ask
+                # check efi_choice_dialog
+                assert_instance_of Question::Dialog, q.mbr_advisory_dialog
+                assert_equal "Boot Type", q.mbr_advisory_dialog.title
+                assert_equal "YAROZI - Yet Another Root On ZFS installer", q.mbr_advisory_dialog.backtitle
+                assert_nil   q.mbr_advisory_dialog.ok_label
+                assert_equal fetch_or_save(result.to_s), result.to_s
+                assert_equal :mbr, q.boot_type
+                # check efi_partition_dialog
+                assert_instance_of Question::Dialog, q.efi_partition_dialog
+                assert_equal "Create EFI Partition for future use?", q.efi_partition_dialog.title
+                assert_equal "YAROZI - Yet Another Root On ZFS installer", q.efi_partition_dialog.backtitle
+                assert_nil q.efi_partition_dialog.yes_label
+                assert_nil q.efi_partition_dialog.no_label
+                assert_equal fetch_or_save(result.to_s), result.to_s
+                assert !q.efi_partition
+              end
+            end
+          end
+        end
+      end  
+    end
+  end
+
+
   def test_not_efi_4k
     largesector_disks do
       result = nil
