@@ -13,10 +13,10 @@ class Task
   end
 
   def start
-    questions.each {|q|  q.ask    }
-    pretasks.each  {|pt| pt.start }
+    questions.each {|q|  q.resolve }
+    pretasks.each  {|pt| pt.start  }
     perform
-    posttasks.each {|pt| pt.start }
+    posttasks.each {|pt| pt.start  }
   end
 
   def perform

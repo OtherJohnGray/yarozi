@@ -1,5 +1,7 @@
 class Question
 
+  attr_reader :task
+
   class Dialog < MRDialog
 
     VPAD = 5
@@ -47,6 +49,17 @@ class Question
 
   def initialize(task) 
     @task = task
+  end
+
+  def resolve
+    ask
+    follow_on_questions.each do |f|
+      f.ask
+    end
+  end
+
+  def follow_on_questions
+    @follow_on_questions ||= []
   end
 
   def pretasks
