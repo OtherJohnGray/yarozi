@@ -1,7 +1,5 @@
 class RootInstaller::Questions::DiskOverview < Question
 
-  attr_reader :answer
-
   def text
     <<~EOF
     

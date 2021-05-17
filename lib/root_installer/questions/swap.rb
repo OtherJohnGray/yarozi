@@ -1,7 +1,5 @@
 class RootInstaller::Questions::Swap < Question
 
-  attr_accessor :configure_swap
-
   def text
     <<~EOF
 
@@ -20,7 +18,7 @@ class RootInstaller::Questions::Swap < Question
     dialog.title = "SWAP"
     dialog.yes_label = %{"Create encrypted LUKS swap"}
     dialog.no_label = %{"Do NOT create swap"}
-    @configure_swap = dialog.yesno(text,25,76)
+    task.set :configure_swap, dialog.yesno(text,25,76)
   end
 
 

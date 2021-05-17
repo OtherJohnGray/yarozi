@@ -1,7 +1,5 @@
 class RootInstaller::Questions::GzipLevel < Question
 
-  attr_accessor :configure_swap
-
   def text
     <<~EOF
 

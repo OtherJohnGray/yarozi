@@ -1,7 +1,5 @@
 class RootInstaller::Questions::ZstdFastLevel < Question
 
-  attr_accessor :configure_swap
-
   def text
     <<~EOF
 

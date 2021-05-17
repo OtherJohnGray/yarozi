@@ -1,7 +1,5 @@
 class RootInstaller::Questions::Encryption < Question
 
-    attr_reader :root_encryption_type
-
     def ask
       dialog.title = "Root Dataset Encryption"
       dialog.nocancel = true
@@ -27,7 +25,7 @@ class RootInstaller::Questions::Encryption < Question
       width = 76
       menu_height = 3
       
-      @root_encryption_type = dialog.menu(text, items, height, width, menu_height)
+      task.set :root_encryption_type, dialog.menu(text, items, height, width, menu_height)
     end
 
 
