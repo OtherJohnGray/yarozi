@@ -1,8 +1,11 @@
 class RootInstaller::Questions::Compression < Question
 
-    def ask
+    def display
       dialog.title = "Root Dataset Compression"
-      dialog.nocancel = true
+      dialog.extra_button = true
+      dialog.extra_label = "next"
+      dialog.ok_label = "back"
+      dialog.default_button = "extra"
       text = <<~TEXT
 
         This installer can configure compression for your root dataset. 
@@ -25,7 +28,10 @@ class RootInstaller::Questions::Compression < Question
       width = 76
       menu_height = 6
       
-      task.set :root_compression_type, dialog.menu(text, items, height, width, menu_height)
+      @result = dialog.menu(text, items, height, width, menu_height)
+    end
+
+    def process
       case task.root_compression_type
       when "gzip"
         follow_on_questions << RootInstaller::Questions::GzipLevel.new( task )

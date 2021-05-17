@@ -1,6 +1,5 @@
 require 'test'
 
-
 class TestQuestion < Test
   
   def get_dialog

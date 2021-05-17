@@ -1,8 +1,15 @@
 class Question
 
-  attr_reader :task
+  attr_accessor :list
+  attr_reader :task, :subquestions
+
+  @subquestions = QuestionList.new
+
 
   class Dialog < MRDialog
+
+    attr_accessor :default_button
+    attr_reader :selected_button
 
     VPAD = 5
     HPAD = 10
@@ -43,6 +50,51 @@ class Question
       result
     end
 
+    # override MRDialog methods
+
+    if @default_button
+      ostring += "--default-button #{@default_button} "
+    end
+
+
+    def menu(text="Text Goes Here", items=nil, height=0, width=0, listheight=0)
+      tmp = Tempfile.new('tmp')
+  
+      itemlist = String.new
+  
+      for item in items
+        itemlist += "\"" + item[0].to_s + "\" \"" + item[1].to_s +  "\" "
+  
+        if @itemhelp
+          itemlist += "\"" + item[2].to_s + "\" "
+        end
+      end
+  
+      command = option_string() + "--menu \"" + text.to_s +
+                "\" " + height.to_i.to_s + " " + width.to_i.to_s +
+                " " + listheight.to_i.to_s + " " + itemlist + "2> " +
+                tmp.path
+  
+      log_debug("Command:\n#{command}")
+      success = system(command)
+      @exit_code = $?.exitstatus
+  
+      if @exit_code != 1
+        @selected_button = ( @exit_code == 0 ? :ok : :extra ) 
+        selected_string = tmp.readline
+        tmp.close!
+        return selected_string
+      else
+        @selected_button = :cancel
+        tmp.close!
+        return false
+      end
+      
+    end
+  
+
+
+
   end
 
 
@@ -58,20 +110,10 @@ class Question
     end
   end
 
-  def follow_on_questions
-    @follow_on_questions ||= []
-  end
-
-  def pretasks
-    @task.pretasks
-  end
-
-  def posttasks
-    @task.posttasks
-  end
-
   def ask
-    raise "subclasses of Question must implement the ask() method"
+    display
+    puts "result is #{@result}"
+    puts "selected_button = #{dialog.selected_button}"
   end
 
   # allows test stubbing
