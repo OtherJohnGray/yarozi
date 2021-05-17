@@ -1,7 +1,5 @@
 class RootInstaller::Questions::Compression < Question
 
-    attr_reader :root_compression_type
-
     def ask
       dialog.title = "Root Dataset Compression"
       dialog.nocancel = true
@@ -27,8 +25,8 @@ class RootInstaller::Questions::Compression < Question
       width = 76
       menu_height = 6
       
-      @root_compression_type = dialog.menu(text, items, height, width, menu_height)
-      case @root_compression_type
+      task.set :root_compression_type, dialog.menu(text, items, height, width, menu_height)
+      case task.root_compression_type
       when "gzip"
         follow_on_questions << RootInstaller::Questions::GzipLevel.new( task )
       when "zstd"

@@ -1,7 +1,6 @@
 class RootInstaller::Questions::BootType < Question
 
-  attr_reader :boot_type, :efi_partition, :efi_choice_dialog, :efi_advisory_dialog, 
-              :mbr_advisory_dialog, :mbr_error_dialog, :efi_partition_dialog
+  attr_reader :efi_choice_dialog, :efi_advisory_dialog, :mbr_advisory_dialog, :mbr_error_dialog, :efi_partition_dialog
 
   def ask
     efi_support? ? ask_efi : ask_legacy
@@ -18,16 +17,16 @@ class RootInstaller::Questions::BootType < Question
       @efi_choice_dialog.yes_label = "EFI\\ Boot"
       @efi_choice_dialog.no_label = "Legacy\\ MBR\\ Boot"
       if @efi_choice_dialog.yesno("\\nThis machine supports both EFI and legacy MBR booting. What boot type would you like?", 8, 50)
-        @boot_type = :efi
+        task.set :boot_type, :efi
       else
-        @boot_type = :mbr
+        task.set :boot_type, :mbr
         ask_efi_partition
       end
     else
       @efi_advisory_dialog = new_dialog
       @efi_advisory_dialog.title = "Boot Type"
       @efi_advisory_dialog.msgbox("\\nThis machine only has 4Kn type disks, so it will be configured for UEFI boot.", 8, 50)
-      @boot_type = :efi
+      task.set :boot_type, :efi
     end
   end
 
@@ -36,7 +35,7 @@ class RootInstaller::Questions::BootType < Question
       @mbr_advisory_dialog = new_dialog
       @mbr_advisory_dialog.title = "Boot Type"
       @mbr_advisory_dialog.msgbox("\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured.", 8, 50)
-      @boot_type = :mbr
+      task.set :boot_type, :mbr
       ask_efi_partition
     else
       @mbr_error_dialog = new_dialog
@@ -49,7 +48,7 @@ class RootInstaller::Questions::BootType < Question
   def ask_efi_partition
     @efi_partition_dialog = new_dialog
     @efi_partition_dialog.title = "Create EFI Partition for future use?"
-    @efi_partition = @efi_partition_dialog.yesno("\\nLegacy MBR Boot has been selected. Would you also like to create an unused EFI partition in case you need UEFI boot in future?", 9, 50)
+    task.set :efi_partition, @efi_partition_dialog.yesno("\\nLegacy MBR Boot has been selected. Would you also like to create an unused EFI partition in case you need UEFI boot in future?", 9, 50)
   end
 
 

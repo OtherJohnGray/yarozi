@@ -23,5 +23,9 @@ class Task
     raise "subclasses of Task must implement a perform method"
   end
 
+  def set(name, value)
+    self.define_singleton_method name, ->{ value }
+  end
+
 
 end

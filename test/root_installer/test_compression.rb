@@ -15,7 +15,7 @@ class TestCompression < Test
           assert_equal "YAROZI - Yet Another Root On ZFS installer", q.dialog.backtitle
           assert_nil   q.dialog.ok_label
           assert_equal fetch_or_save(result.to_s), result.to_s
-          assert_equal "lz4", q.root_compression_type
+          assert_equal "lz4", task.root_compression_type
           assert q.follow_on_questions.empty?
         end
       end  
@@ -35,7 +35,7 @@ class TestCompression < Test
           assert_equal "YAROZI - Yet Another Root On ZFS installer", q.dialog.backtitle
           assert_nil   q.dialog.ok_label
           assert_equal fetch_or_save(result.to_s), result.to_s
-          assert_equal "gzip", q.root_compression_type
+          assert_equal "gzip", task.root_compression_type
           assert_equal 1, q.follow_on_questions.length
           assert_instance_of RootInstaller::Questions::GzipLevel, q.follow_on_questions.first
         end
@@ -56,7 +56,7 @@ class TestCompression < Test
           assert_equal "YAROZI - Yet Another Root On ZFS installer", q.dialog.backtitle
           assert_nil   q.dialog.ok_label
           assert_equal fetch_or_save(result.to_s), result.to_s
-          assert_equal "zstd", q.root_compression_type
+          assert_equal "zstd", task.root_compression_type
           assert_equal 1, q.follow_on_questions.length
           assert_instance_of RootInstaller::Questions::ZstdLevel, q.follow_on_questions.first
         end
@@ -77,7 +77,7 @@ class TestCompression < Test
           assert_equal "YAROZI - Yet Another Root On ZFS installer", q.dialog.backtitle
           assert_nil   q.dialog.ok_label
           assert_equal fetch_or_save(result.to_s), result.to_s
-          assert_equal "zstd-fast", q.root_compression_type
+          assert_equal "zstd-fast", task.root_compression_type
           assert_equal 1, q.follow_on_questions.length
           assert_instance_of RootInstaller::Questions::ZstdFastLevel, q.follow_on_questions.first
         end
