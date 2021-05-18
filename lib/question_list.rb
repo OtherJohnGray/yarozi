@@ -18,18 +18,16 @@ class QuestionList < Forwardable
   def ask
     i = 0
     while i < @questions.length do
-      @questions[i].subquestions = QuestionList.new
+      @questions[i].reset
       @questions[i].ask
-puts "result is #{@result}"
-puts "selected_button = #{dialog.selected_button}"
-      case @questions[i].dialog.selected_button
-      when "ok"
+      case @questions[i].button
+      when "back"
         if i > 0
           i -= 1
         else
           return false
         end
-      when "extra"
+      when "next"
         @questions[i].respond
         i += 1 if @questions[i].subquestions.ask
       when "cancel"

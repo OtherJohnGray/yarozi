@@ -10,7 +10,7 @@ class Question
 
     VPAD = 5
     HPAD = 10
-
+ß
     def msgbox(text="Text Goes Here", height=0, width=0, vpad=VPAD, hpad=HPAD)
       log.debug "Question::Dialog.msgbox: calling msgbox with height of #{height}, width of #{width}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
       super(text, drows( height, vpad ), dcols( width, hpad ))
@@ -89,26 +89,17 @@ class Question
       
     end
   
-
-
-
   end
 
 
 
   def initialize(task) 
     @task = task
+    @dialog = new_dialog
   end
 
-  def resolve
-    ask
-    follow_on_questions.each do |f|
-      f.ask
-    end
-  end
-
-  def dialog
-    @dialog ||= new_dialog
+  def reset 
+    @questions = QuestionList.new(self)
   end
 
   def new_dialog
@@ -124,5 +115,15 @@ class Question
     end
   end
 
+  def button
+    case dialog.selected_button
+    when "ok"
+      "back"
+    when "cancel"
+      "cancel"
+    else
+      "next"
+    end
+  end
 
 end

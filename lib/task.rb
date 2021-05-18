@@ -1,22 +1,17 @@
 class Task
 
-  def questions 
-    @questions ||= QuestionList.new
-  end
+  attr_accessor :questions, :pretasks, :posttasks
 
-  def pretasks
-    @pretasks  ||= []
-  end
-
-  def posttasks
-    @posttasks ||= []
-  end
+  @questions = QuestionList.new
+  @pretasks  = []
+  @posttasks = []
+  
 
   def start
-    questions.each {|q|  q.resolve }
-    pretasks.each  {|pt| pt.start  }
+    @questions.ask
+    @pretasks.each  {|t| t.start  }
     perform
-    posttasks.each {|pt| pt.start  }
+    @posttasks.each {|t| t.start  }
   end
 
   def perform
