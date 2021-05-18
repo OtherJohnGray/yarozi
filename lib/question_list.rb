@@ -20,7 +20,7 @@ class QuestionList < Forwardable
     while i < @questions.length do
       @questions[i].reset
       @questions[i].ask
-      case @questions[i].button
+      case @questions[i].clicked
       when "back"
         if i > 0
           i -= 1
