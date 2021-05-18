@@ -1,7 +1,7 @@
 class Task
 
   def questions 
-    @questions ||= []
+    @questions ||= QuestionList.new
   end
 
   def pretasks

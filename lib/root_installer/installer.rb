@@ -1,14 +1,14 @@
 class RootInstaller::Installer < Task
 
   def initialize
-    questions << ( @continue = RootInstaller::Questions::Continue.new(self) )
-    questions << ( @disks = RootInstaller::Questions::DiskOverview.new(self) )
-    questions << ( @disks = RootInstaller::Questions::BootType.new(self) )
-    questions << ( @disks = RootInstaller::Questions::Encryption.new(self) )
-    questions << ( @disks = RootInstaller::Questions::Swap.new(self) )
-    questions << ( @disks = RootInstaller::Questions::Compression.new(self) )
-    # questions << ( @disks = RootInstaller::Questions::Partitions.new(self) )
-    # questions << ( @disks = RootInstaller::Questions::InstallDetails.new(self) )
+    questions.append RootInstaller::Questions::Continue.new(self)
+    # questions.append RootInstaller::Questions::DiskOverview.new(self)
+    # questions.append RootInstaller::Questions::BootType.new(self)
+    # questions.append RootInstaller::Questions::Encryption.new(self)
+    # questions.append RootInstaller::Questions::Swap.new(self)
+    # questions.append RootInstaller::Questions::Compression.new(self)
+    # questions.append RootInstaller::Questions::Partitions.new(self)
+    # questions.append RootInstaller::Questions::InstallDetails.new(self)
   end
 
   def perform

@@ -1,10 +1,7 @@
 class Question
 
-  attr_accessor :list
-  attr_reader :task, :subquestions
-
-  @subquestions = QuestionList.new
-
+  attr_accessor :list, :subquestions
+  attr_reader :task
 
   class Dialog < MRDialog
 
@@ -110,18 +107,6 @@ class Question
     end
   end
 
-  def ask
-    display
-    puts "result is #{@result}"
-    puts "selected_button = #{dialog.selected_button}"
-  end
-
-  # allows test stubbing
-  def quit(code)
-    exit code
-  end
-
-  # allows test stubbing
   def dialog
     @dialog ||= new_dialog
   end
@@ -132,7 +117,12 @@ class Question
       d.clear = true
       d.dialog_options = "--no-collapse"
       d.backtitle = "YAROZI - Yet Another Root On ZFS installer"
+      d.extra_button = true
+      d.extra_label = "next"
+      d.ok_label = "back"
+      d.default_button = "extra"
     end
   end
+
 
 end
