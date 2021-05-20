@@ -3,13 +3,13 @@ class Question
   attr_accessor :list, :subquestions
   attr_reader :task, :dialog
 
-  def initialize(task) 
+  def initialize(task=nil) 
     @task = task
     @dialog = new_dialog
   end
 
   def reset 
-    @questions = QuestionList.new(self)
+    @subquestions = QuestionList.new(self)
   end
 
   def new_dialog

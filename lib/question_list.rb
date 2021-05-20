@@ -1,5 +1,8 @@
 # Owns responsability for back/next/exit logic
-class QuestionList < Forwardable
+class QuestionList
+  extend Forwardable
+
+  def_delegators :@questions, :length
 
   def initialize(superquestion=nil)
     @superquestion = superquestion

@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require 'minitest/stub_any_instance'
 require 'bundler'
+require 'forwardable'
 Bundler.require
 
 loader = Zeitwerk::Loader.new

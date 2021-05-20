@@ -44,5 +44,27 @@ class TestQuestion < Test
     end
   end
 
+  def test_reset
+    q = Question.new
+    q.subquestions = QuestionList.new
+    q.subquestions.append Question.new
+    q.reset
+    assert_equal 0, q.subquestions.length
+  end
+
+  def test_clicked
+    q = Question.new
+    d = q.dialog
+    d.instance_variable_set :@selected_button, "ok"
+    assert_equal "back", q.clicked
+    d.instance_variable_set :@selected_button, "extra"
+    assert_equal "next", q.clicked
+    d.instance_variable_set :@selected_button, "cancel"
+    assert_equal "cancel", q.clicked
+    d.instance_variable_set :@selected_button, "yes" 
+    assert_equal "next", q.clicked
+    d.instance_variable_set :@selected_button, "no"
+    assert_equal "next", q.clicked
+  end
 
 end
