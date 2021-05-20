@@ -1,7 +1,7 @@
 class Question
 
   attr_accessor :list, :subquestions
-  attr_reader :task
+  attr_reader :task, :dialog
 
   def initialize(task) 
     @task = task

@@ -1,21 +1,16 @@
 require 'test'
 
 class TestQuestion < Test
-  
-  def get_dialog
-    Question.new(nil).dialog
-  end
 
-
-  def test_proxy_class
-    assert get_dialog.class == Question::Dialog
+  def test_class
+    assert Question.new(nil).dialog.class == Dialog
   end
 
 
   def test_msgbox
     with_dialog :msgbox do
       with_screen 60, 200 do
-        d = get_dialog
+        d = Question.new(nil).dialog
         d.title = "Introduction and Disk Overview"
         d.backtitle = "YAROZI - Yet Another Root On ZFS installer"
         d.ok_label = "continue\\ and\\ select\\ disks"
@@ -31,19 +26,19 @@ class TestQuestion < Test
   def test_sizing
     with_dialog :msgbox do
       with_screen 24, 80 do
-        d = get_dialog
+        d = Question.new(nil).dialog
         assert_equal d.msgbox("this is a test dialog",50,150), ["this is a test dialog", 19, 70]
       end
       with_screen 60, 200 do
-        d = get_dialog
+        d = Question.new(nil).dialog
         assert_equal d.msgbox("this is a test dialog",50,150), ["this is a test dialog", 50, 150]
       end
       with_screen 24, 80 do
-        d = get_dialog
+        d = Question.new(nil).dialog
         assert_equal d.msgbox("this is a test dialog",0,0,8,20), ["this is a test dialog", 16, 60]
       end
       with_screen 24, 80 do
-        d = get_dialog
+        d = Question.new(nil).dialog
         assert_equal d.msgbox("this is a test dialog",22,75,1,1), ["this is a test dialog", 22, 75]
       end
     end
