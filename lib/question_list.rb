@@ -35,7 +35,7 @@ class QuestionList
         @questions[i].respond
         i += 1 if @questions[i].subquestions.ask
       when "cancel"
-        quit 1 if Question.new.dialog.yesno("Exit installer without making any changes?",8,76)
+        quit 1 if Dialog.new.yesno("Exit installer without making any changes?",5,46)
       else
         # some other kind of dialog, ignore it and move on to the next question.
         i += 1

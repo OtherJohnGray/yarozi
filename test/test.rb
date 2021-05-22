@@ -61,21 +61,14 @@ class Test < Minitest::Test
     end
   end
 
-  def assert_quit(code)
-    result = nil
-    Question.stub_any_instance :quit, Proc.new{|errcode| result = errcode } do
+  def quit_code
+    code = nil
+    QuestionList.stub_any_instance :quit, Proc.new{|errcode| code = errcode } do
       yield
     end
-    assert_equal code, result
+    code
   end
 
-  def assert_not_quit
-    result = nil
-    Question.stub_any_instance :quit, Proc.new{|errcode| result = errcode } do
-      yield
-    end
-    assert_nil result
-  end
 
 end
 

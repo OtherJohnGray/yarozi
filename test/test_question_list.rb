@@ -149,4 +149,32 @@ class TestQuestionList < Test
     assert_equal 0, l.questions[0].subquestions[1].responds
   end
 
+  def test_f_quit
+    l = QuestionList.new
+    l.append TestQuestion.new( "next" )
+    l.append TestQuestion.new( "cancel" )
+    with_dialog :yesno, true do
+      assert_equal 1, (quit_code { l.ask })
+    end
+    assert_equal 0, l.questions[0].clicks.length
+    assert_equal 1, l.questions[0].asks
+    assert_equal 1, l.questions[0].responds
+    assert_equal 2, l.questions[1].asks
+    assert_equal 0, l.questions[1].responds
+  end
+
+  def test_f_quit_f
+    l = QuestionList.new
+    l.append TestQuestion.new( "next" )
+    l.append TestQuestion.new( "cancel", "next" )
+    with_dialog :yesno, false do
+      assert_nil (quit_code { assert l.ask })
+    end
+    assert_equal 0, l.questions[0].clicks.length
+    assert_equal 1, l.questions[0].asks
+    assert_equal 1, l.questions[0].responds
+    assert_equal 2, l.questions[1].asks
+    assert_equal 1, l.questions[1].responds
+  end
+
 end
