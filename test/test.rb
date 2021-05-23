@@ -37,7 +37,7 @@ class Test < Minitest::Test
 # Screen mocking
 
   def with_dialog(type, retval = Proc.new{|*args| args} )
-    MRDialog.stub_any_instance(type, retval ) do
+    Dialog.stub_any_instance(type, retval ) do
       yield
     end
   end

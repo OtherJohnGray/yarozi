@@ -1,8 +1,7 @@
 class RootInstaller::Questions::Encryption < Question
 
     def ask
-      dialog.title = "Root Dataset Encryption"
-      dialog.nocancel = true
+      wizard.title = "Root Dataset Encryption"
       text = <<~TEXT
         This installer can set up encryption for your root dataset in three different ways.
 
@@ -25,7 +24,12 @@ class RootInstaller::Questions::Encryption < Question
       width = 76
       menu_height = 3
       
-      task.set :root_encryption_type, dialog.menu(text, items, height, width, menu_height)
+      @choice = wizard.menu(text, items, height, width, menu_height)
+    end
+
+
+    def respond
+      task.set :root_encryption_type, @choice
     end
 
 
