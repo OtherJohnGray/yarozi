@@ -14,11 +14,34 @@ class RootInstaller::Questions::Check < Question
     EOF
   end
 
-  def ask
-    dialog.title = "ERROR - Install environment not booted via UEFI"
-    dialog.yes_label = "continue\\ and\\ erase\\ data"
-    dialog.no_label = "exit\\ without\\ changes"
-    list.quit 1 unless dialog.yesno(text,18,80)
+  def ask 
+    unless has_512k? || efi_support?
+      dialog = Dialog.new
+      dialog.title = "ERROR - Install environment not booted via UEFI"
+      dialog.ok_label = "exit\\ without\\ changes"
+      dialog.msgbox(text + Disk.to_string_list,40,120)
+      self.quit
+    end
+  end
+
+  def quit
+    exit 1
+  end
+
+  def clicked
+    "next"
+  end
+
+  def respond
+    # noop
+  end
+
+  def efi_support?
+    File.directory?("/sys/firmware/efi")
+  end
+
+  def has_512k?
+    Disk.all.any? {|d| d.sector_size == 512}
   end
 
 
