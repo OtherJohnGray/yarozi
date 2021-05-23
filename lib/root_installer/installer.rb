@@ -1,6 +1,7 @@
 class RootInstaller::Installer < Task
 
   def initialize
+    super
     questions.append RootInstaller::Questions::Check.new(self)
     questions.append RootInstaller::Questions::Continue.new(self)
     # questions.append RootInstaller::Questions::DiskOverview.new(self)

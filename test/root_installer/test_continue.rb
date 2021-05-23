@@ -16,6 +16,7 @@ class TestContinue < Test
     assert_equal "YAROZI - Yet Another Root On ZFS installer", continue.dialog.backtitle
     assert_equal "continue\\ and\\ erase\\ data", continue.dialog.yes_label
     assert_equal "exit\\ without\\ changes", continue.dialog.no_label
+    assert_respond_to continue, :respond
   end
 
   def test_continue_no

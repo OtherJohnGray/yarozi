@@ -29,5 +29,7 @@ class RootInstaller::Questions::Continue < Question
     exit 1
   end
 
-
+  def respond
+    #noop
+  end
 end

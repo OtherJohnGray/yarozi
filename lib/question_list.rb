@@ -1,3 +1,5 @@
+require 'forwardable'
+
 # Owns responsability for back/next/exit logic
 class QuestionList
   extend Forwardable

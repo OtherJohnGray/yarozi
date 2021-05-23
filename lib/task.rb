@@ -2,9 +2,11 @@ class Task
 
   attr_accessor :questions, :pretasks, :posttasks
 
-  @questions = QuestionList.new
-  @pretasks  = []
-  @posttasks = []
+  def initialize
+    @questions = QuestionList.new
+    @pretasks  = []
+    @posttasks = []
+  end
   
 
   def start

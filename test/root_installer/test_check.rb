@@ -9,6 +9,7 @@ class TestCheck < Test
         check.stub :quit, Proc.new{ @quit = 1 } do
           check.ask
           assert_nil check.instance_variable_get(:@quit)
+          assert_respond_to check, :respond
         end
       end
     end
