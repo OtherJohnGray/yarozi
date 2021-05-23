@@ -12,25 +12,30 @@ class TestContinue < Test
       end
     end
     assert_equal fetch_or_save(result.to_s), result.to_s
-    d = continue.dialog
-    assert_equal "WARNING", d.title
-    assert_equal "YAROZI - Yet Another Root On ZFS installer", d.backtitle
-    assert_equal "continue\\ and\\ erase\\ data", d.yes_label
-    assert_equal "exit\\ without\\ changes", d.no_label
+    assert_equal "WARNING", continue.dialog.title
+    assert_equal "YAROZI - Yet Another Root On ZFS installer", continue.dialog.backtitle
+    assert_equal "continue\\ and\\ erase\\ data", continue.dialog.yes_label
+    assert_equal "exit\\ without\\ changes", continue.dialog.no_label
   end
 
   def test_continue_no
+    quits = nil
     with_dialog :yesno, false do
-      assert_quit(1) do
-        RootInstaller::Questions::Continue.new(nil).ask
+      q = RootInstaller::Questions::Continue.new(nil)
+      q.stub :quit, Proc.new{ quits = 1 } do
+        q.ask
+        assert_equal 1, quits
       end
     end
   end
 
   def test_continue_yes
+    quits = nil
     with_dialog :yesno, true do
-      assert_not_quit do
-        RootInstaller::Questions::Continue.new(nil).ask
+      q = RootInstaller::Questions::Continue.new(nil)
+      q.stub :quit, Proc.new{ quits = 1 } do
+        q.ask
+        assert_nil quits
       end
     end
   end

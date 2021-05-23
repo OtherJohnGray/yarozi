@@ -22,7 +22,11 @@ class RootInstaller::Questions::Continue < Question
     dialog.title = "WARNING"
     dialog.yes_label = "continue\\ and\\ erase\\ data"
     dialog.no_label = "exit\\ without\\ changes"
-    list.quit 1 unless dialog.yesno(text,18,80)
+    quit unless dialog.yesno(text,18,80)
+  end
+
+  def quit
+    exit 1
   end
 
 
