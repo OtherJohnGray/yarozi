@@ -25,11 +25,4 @@ class RootInstaller::Questions::Continue < Question
     quit unless dialog.yesno(text,18,80)
   end
 
-  def quit
-    exit 1
-  end
-
-  def respond
-    #noop
-  end
 end

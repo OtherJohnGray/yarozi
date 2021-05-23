@@ -12,6 +12,18 @@ class Question
     @subquestions = QuestionList.new(self)
   end
 
+  def ask
+    #noop
+  end
+
+  def respond
+    #noop
+  end
+
+  def quit
+    exit 1
+  end
+
   def wizard
     @wizard ||= new_wizard
   end

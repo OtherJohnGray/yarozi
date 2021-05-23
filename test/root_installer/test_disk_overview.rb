@@ -19,14 +19,4 @@ class TestDiskOverview < Test
     end
   end
 
-  def test_ok
-    with_disk_sets do |set|
-      with_dialog :msgbox, true do
-        assert_not_quit do
-          RootInstaller::Questions::DiskOverview.new(nil).ask
-        end
-      end
-    end
-  end
-
 end

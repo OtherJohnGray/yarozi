@@ -23,16 +23,8 @@ class RootInstaller::Questions::Check < Question
     end
   end
 
-  def quit
-    exit 1
-  end
-
   def clicked
     "next"
-  end
-
-  def respond
-    # noop
   end
 
   def efi_support?
