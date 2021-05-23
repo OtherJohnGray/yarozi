@@ -1,16 +1,32 @@
 class Question
 
   attr_accessor :list
-  attr_reader :task, :dialog, :subquestions
+  attr_reader :task, :subquestions
 
   def initialize(task=nil) 
     @task = task
-    @dialog = new_dialog
     reset
   end
 
   def reset 
     @subquestions = QuestionList.new(self)
+  end
+
+  def wizard
+    @wizard ||= new_wizard
+  end
+
+  def new_wizard
+    new_dialog.tap do |d|
+      d.extra_button = true
+      d.extra_label = "next"
+      d.ok_label = "back"
+      d.default_button = "extra"
+    end
+  end
+
+  def dialog
+    @dialog ||= new_dialog
   end
 
   def new_dialog
@@ -19,10 +35,6 @@ class Question
       d.clear = true
       d.dialog_options = "--no-collapse"
       d.backtitle = "YAROZI - Yet Another Root On ZFS installer"
-      d.extra_button = true
-      d.extra_label = "next"
-      d.ok_label = "back"
-      d.default_button = "extra"
     end
   end
 

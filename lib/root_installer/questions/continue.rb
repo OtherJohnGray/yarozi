@@ -19,6 +19,7 @@ class RootInstaller::Questions::Continue < Question
   end
 
   def ask
+    Dialog = Dialog.new
     dialog.title = "WARNING"
     dialog.yes_label = "continue\\ and\\ erase\\ data"
     dialog.no_label = "exit\\ without\\ changes"

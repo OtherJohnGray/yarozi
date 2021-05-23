@@ -16,7 +16,6 @@ class RootInstaller::Questions::Check < Question
 
   def ask 
     unless has_512k? || efi_support?
-      dialog = Dialog.new
       dialog.title = "ERROR - Install environment not booted via UEFI"
       dialog.ok_label = "exit\\ without\\ changes"
       dialog.msgbox(text + Disk.to_string_list,40,120)

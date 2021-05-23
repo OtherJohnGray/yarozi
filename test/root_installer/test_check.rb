@@ -36,6 +36,10 @@ class TestCheck < Test
           check.stub :quit, Proc.new{ quits = 1 } do
             check.ask
             assert_equal 1, quits
+            assert_instance_of Dialog, check.dialog
+            assert_equal "ERROR - Install environment not booted via UEFI", check.dialog.title
+            assert_equal "YAROZI - Yet Another Root On ZFS installer", check.dialog.backtitle
+            assert_equal "exit\\ without\\ changes", check.dialog.ok_label
             assert_equal fetch_or_save(result.to_s), result.to_s
           end
         end
