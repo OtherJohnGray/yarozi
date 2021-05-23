@@ -7,7 +7,7 @@ class TestEncryption < Test
       result = nil
       task = Task.new
       with_screen 46, 200 do
-        with_dialog :menu, Proc.new{|*args| result = args; "ZFS"} do
+        # with_dialog :menu, Proc.new{|*args| result = args; "ZFS"} do
           q = RootInstaller::Questions::Encryption.new(task)
           q.ask
           assert_instance_of Dialog, q.wizard
@@ -15,7 +15,7 @@ class TestEncryption < Test
           assert_equal "YAROZI - Yet Another Root On ZFS installer", q.wizard.backtitle
           assert_equal fetch_or_save(result.to_s), result.to_s
           assert_equal "ZFS", q.instance_variable_get(:@choice)
-        end
+        # end
       end  
     end  
   end

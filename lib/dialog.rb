@@ -43,11 +43,13 @@ class Dialog < MRDialog
   end
 
   # override MRDialog methods
-
-  if @default_button
-    ostring += "--default-button #{@default_button} "
+  def option_string
+    ostring = super
+    if @default_button
+      ostring += "--default-button #{@default_button} "
+    end
+    ostring
   end
-
 
   def menu(text="Text Goes Here", items=nil, height=0, width=0, listheight=0)
     tmp = Tempfile.new('tmp')
