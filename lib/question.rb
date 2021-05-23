@@ -34,6 +34,7 @@ class Question
       d.extra_label = "next"
       d.ok_label = "back"
       d.default_button = "extra"
+      d.notags = true
     end
   end
 

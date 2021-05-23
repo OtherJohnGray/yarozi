@@ -15,9 +15,9 @@ class RootInstaller::Questions::Encryption < Question
       TEXT
 
       items = [
-        ["None", "root dataset will not be encrypted"],
-        ["ZFS", "root dataset will be encrypted with ZFS native encryption"],
-        ["LUKS", "root dataset partitions will be encrypted with LUKS"]
+        ["None", "Do not encrypt root dataset"],
+        ["ZFS", "Encrypt root dataset with ZFS native encryption"],
+        ["LUKS", "Encrypt root dataset with LUKS"]
       ]
 
       height = 34

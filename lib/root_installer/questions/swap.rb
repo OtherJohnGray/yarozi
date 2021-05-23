@@ -15,10 +15,24 @@ class RootInstaller::Questions::Swap < Question
   end
 
   def ask
-    dialog.title = "SWAP"
-    dialog.yes_label = %{"Create encrypted LUKS swap"}
-    dialog.no_label = %{"Do NOT create swap"}
-    task.set :configure_swap, dialog.yesno(text,25,76)
+    wizard.title = "SWAP"
+    wizard.yes_label = %{"Create encrypted LUKS swap"}
+    wizard.no_label = %{"Do NOT create swap"}
+
+    items = [
+      ["none", "Do NOT create swap"],
+      ["luks", "Create encrypted LUKS swap"]
+    ]
+
+    height = 30
+    width = 76
+    menu_height = 2
+    
+    @choice = wizard.menu(text, items, height, width, menu_height)
+  end
+
+  def respond
+    task.set :configure_swap, @choice
   end
 
 
