@@ -1,60 +1,126 @@
 class RootInstaller::Questions::BootType < Question
 
-  attr_reader :efi_choice_dialog, :efi_advisory_dialog, :mbr_advisory_dialog, :mbr_error_dialog, :efi_partition_dialog
-
   def ask
-    efi_support? ? ask_efi : ask_legacy
+    if efi_support?
+      if has_512k?
+        subquestions.append AskEfi.new(task)
+      else
+        subquestions.append AdviseEfi.new(task)
+      end
+    else
+      if has_512k?
+        subquestions.append AdviseMbr.new(task)
+      else
+        subquestions.append AdviseError.new(task)
+      end
+    end
   end
 
   def efi_support?
     File.directory?("/sys/firmware/efi")
   end
 
-  def ask_efi
-    if has_512k
-      @efi_choice_dialog = new_dialog
-      @efi_choice_dialog.title = "Boot Type"
-      @efi_choice_dialog.yes_label = "EFI\\ Boot"
-      @efi_choice_dialog.no_label = "Legacy\\ MBR\\ Boot"
-      if @efi_choice_dialog.yesno("\\nThis machine supports both EFI and legacy MBR booting. What boot type would you like?", 8, 50)
-        task.set :boot_type, :efi
-      else
-        task.set :boot_type, :mbr
-        ask_efi_partition
-      end
-    else
-      @efi_advisory_dialog = new_dialog
-      @efi_advisory_dialog.title = "Boot Type"
-      @efi_advisory_dialog.msgbox("\\nThis machine only has 4Kn type disks, so it will be configured for UEFI boot.", 8, 50)
-      task.set :boot_type, :efi
-    end
+  def has_512k?
+    Disk.all.any? {|d| d.sector_size == 512}
   end
 
-  def ask_legacy
-    if has_512k
-      @mbr_advisory_dialog = new_dialog
-      @mbr_advisory_dialog.title = "Boot Type"
-      @mbr_advisory_dialog.msgbox("\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured.", 8, 50)
-      task.set :boot_type, :mbr
-      ask_efi_partition
-    else
+
+  class AskEfi < Question
+
+    def ask
+      wizard.title = "Boot Type"
+      items = [
+        ["efi", "EFI Boot"],
+        ["mbr", "Legacy MBR Boot"]
+      ]
+      height = 11
+      width = 50
+      menu_height = 2
+      text = "\\nThis machine supports both EFI and legacy MBR booting. What boot type would you like?"
+      @choice = wizard.menu(text, items, height, width, menu_height)
+    end
+
+    def respond 
+      task.set :boot_type, @choice
+      subquestions.append AskEfiPartition.new(task) if "mbr".eql? @choice
+    end
+
+  end
+
+
+  class AdviseEfi < Question
+    
+    def ask
+      wizard.title = "Boot Type"
+      items = []
+      height = 11
+      width = 50
+      menu_height = 0
+      text = "\\nThis machine only has 4Kn type disks, so it will be configured for UEFI boot."
+      wizard.menu(text, items, height, width, menu_height)
+    end
+
+    def respond 
+      task.set :boot_type, "efi"
+    end
+
+  end
+
+
+  class AdviseMbr < Question
+    
+    def ask
+      wizard.title = "Boot Type"
+      items = []
+      height = 11
+      width = 50
+      menu_height = 0
+      text = "\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured."
+      @choice = wizard.menu(text, items, height, width, menu_height)
+    end
+
+    def respond 
+      task.set :boot_type, "mbr"
+      subquestions.append AskEfiPartition.new(task)
+    end
+
+  end
+
+
+  class AdviseError < Question
+    
+    def ask
       @mbr_error_dialog = new_dialog
       @mbr_error_dialog.title = "Boot Type"
       @mbr_error_dialog.msgbox("\\nThis machine does not support UEFI booting, But none of its disks seem to have 512K sectors that support legacy MBR Boot. This installer cannot work on this machine. Please see \\n\\nhttps://openzfs.github.io/openzfs-docs/Getting%20Started/Debian/index.html#root-on-zfs \\n\\nfor manual install instructions.", 14, 70)
       quit
     end
-  end
 
-  def ask_efi_partition
-    @efi_partition_dialog = new_dialog
-    @efi_partition_dialog.title = "Create EFI Partition for future use?"
-    task.set :efi_partition, @efi_partition_dialog.yesno("\\nLegacy MBR Boot has been selected. Would you also like to create an unused EFI partition in case you need UEFI boot in future?", 9, 50)
   end
 
 
-  def has_512k
-    Disk.all.any? {|d| d.sector_size == 512}
+  class AskEfiPartition < Question
+
+    def ask
+      wizard.title = "Boot Type"
+      items = [
+        ["efi", "EFI Boot"],
+        ["mbr", "Legacy MBR Boot"]
+      ]
+      height = 11
+      width = 50
+      menu_height = 2
+      text = "\\nThis machine supports both EFI and legacy MBR booting. What boot type would you like?"
+      @choice = wizard.menu(text, items, height, width, menu_height)
+    end
+
+    def respond 
+      task.set :boot_type, @choice
+      subquestions.append AskEfiPartition.new(task) if "mbr".eql? @choice
+    end
+
   end
 
+  
 
 end

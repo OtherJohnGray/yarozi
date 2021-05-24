@@ -16,14 +16,10 @@ class RootInstaller::Questions::Swap < Question
 
   def ask
     wizard.title = "SWAP"
-    wizard.yes_label = %{"Create encrypted LUKS swap"}
-    wizard.no_label = %{"Do NOT create swap"}
-
     items = [
       ["none", "Do NOT create swap"],
       ["luks", "Create encrypted LUKS swap"]
     ]
-
     height = 30
     width = 76
     menu_height = 2
