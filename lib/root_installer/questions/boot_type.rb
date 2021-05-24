@@ -102,21 +102,20 @@ class RootInstaller::Questions::BootType < Question
   class AskEfiPartition < Question
 
     def ask
-      wizard.title = "Boot Type"
+      wizard.title = "Create EFI Partition for future use?"
       items = [
-        ["efi", "EFI Boot"],
-        ["mbr", "Legacy MBR Boot"]
+        ["no", "Do not create EFI partition"],
+        ["yes", "Create an un-used EFI partition in case it's needed in future"]
       ]
       height = 11
       width = 50
       menu_height = 2
-      text = "\\nThis machine supports both EFI and legacy MBR booting. What boot type would you like?"
+      text = "\\nLegacy MBR Boot has been selected. Would you also like to create an unused EFI partition in case you need UEFI boot in future?"
       @choice = wizard.menu(text, items, height, width, menu_height)
     end
 
     def respond 
-      task.set :boot_type, @choice
-      subquestions.append AskEfiPartition.new(task) if "mbr".eql? @choice
+      task.set :efi_partition, @choice
     end
 
   end
