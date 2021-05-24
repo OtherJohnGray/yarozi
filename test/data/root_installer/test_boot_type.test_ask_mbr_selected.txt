@@ -1,0 +1,1 @@
+["\\nThis machine supports both EFI and legacy MBR booting. What boot type would you like?", [["efi", "EFI Boot"], ["mbr", "Legacy MBR Boot"]], 11, 50, 2]

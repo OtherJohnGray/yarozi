@@ -1,1 +1,0 @@
-[["\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured.", 8, 50], ["\\nLegacy MBR Boot has been selected. Would you also like to create an unused EFI partition in case you need UEFI boot in future?", 9, 50]]

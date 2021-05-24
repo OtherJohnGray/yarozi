@@ -1,1 +1,0 @@
-["\\nThis machine supports both EFI and legacy MBR booting. What boot type would you like?", 8, 50]
