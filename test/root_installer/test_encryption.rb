@@ -25,12 +25,10 @@ class TestEncryption < Test
       result = nil
       task = Task.new
       with_screen 46, 200 do
-        with_dialog :menu, Proc.new{|*args| result = args; "ZFS"} do
-          q = RootInstaller::Questions::Encryption.new(task)
-          q.instance_variable_set :@choice, "ZFS"
-          q.respond
-          assert_equal "ZFS", task.root_encryption_type
-        end
+        q = RootInstaller::Questions::Encryption.new(task)
+        q.instance_variable_set :@choice, "ZFS"
+        q.respond
+        assert_equal "ZFS", task.root_encryption_type
       end  
     end  
   end

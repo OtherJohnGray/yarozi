@@ -2,6 +2,7 @@ require 'minitest/autorun'
 require 'minitest/stub_any_instance'
 require 'bundler'
 require 'forwardable'
+require 'm_r_dialog'
 Bundler.require
 
 loader = Zeitwerk::Loader.new
@@ -37,7 +38,8 @@ class Test < Minitest::Test
 # Screen mocking
 
   def with_dialog(type, retval = Proc.new{|*args| args} )
-    Dialog.stub_any_instance(type, retval ) do
+puts "stubbing mrdialog #{type}"  
+    MRDialog.stub_any_instance(type, retval ) do
       yield
     end
   end

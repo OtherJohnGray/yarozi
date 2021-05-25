@@ -1,5 +1,6 @@
-class Logging
+require 'logger'
 
+class Logging
 
   def level
     @level ||= Logger.const_get( ENV["YAROZI_LOG_LEVEL"] || "ERROR" )

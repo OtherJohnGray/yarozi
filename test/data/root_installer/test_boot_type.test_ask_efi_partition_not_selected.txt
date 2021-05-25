@@ -1,1 +1,1 @@
-["\\nLegacy MBR Boot has been selected. Would you also like to create an unused EFI partition in case you need UEFI boot in future?", [["no", "Do not create EFI partition"], ["yes", "Create an un-used EFI partition in case it's needed in future"]], 11, 50, 2]
+["\\nLegacy MBR Boot has been selected. Would you also like to create an unused EFI partition in case you need UEFI boot in future?", [["no", "Do not create EFI partition"], ["yes", "Create an un-used EFI partition in case it's needed in future"]], 12, 68, 2]
