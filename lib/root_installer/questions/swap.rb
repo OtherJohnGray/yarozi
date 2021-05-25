@@ -24,7 +24,7 @@ class RootInstaller::Questions::Swap < Question
     width = 76
     menu_height = 2
     
-    @choice = wizard.menu(text, items, height, width, menu_height)
+    @choice = wizard.ask(text, items, height, width, menu_height)
   end
 
   def respond

@@ -7,7 +7,7 @@ class TestEncryption < Test
       result = nil
       task = Task.new
       with_screen 46, 200 do
-        with_dialog :menubox, Proc.new{|*args| result = args; "ZFS"} do
+        with_dialog :menu, Proc.new{|*args| result = args; "ZFS"} do
           q = RootInstaller::Questions::Encryption.new(task)
           q.ask
           assert_instance_of Dialog, q.wizard
@@ -24,12 +24,10 @@ class TestEncryption < Test
     mixed_disks do
       result = nil
       task = Task.new
-      with_screen 46, 200 do
-        q = RootInstaller::Questions::Encryption.new(task)
-        q.instance_variable_set :@choice, "ZFS"
-        q.respond
-        assert_equal "ZFS", task.root_encryption_type
-      end  
+      q = RootInstaller::Questions::Encryption.new(task)
+      q.instance_variable_set :@choice, "ZFS"
+      q.respond
+      assert_equal "ZFS", task.root_encryption_type
     end  
   end
 

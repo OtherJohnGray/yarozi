@@ -24,7 +24,7 @@ class RootInstaller::Questions::Encryption < Question
       width = 76
       menu_height = 3
       
-      @choice = wizard.menubox(text, items, height, width, menu_height)
+      @choice = wizard.ask(text, items, height, width, menu_height)
     end
 
 
