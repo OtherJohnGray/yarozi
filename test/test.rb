@@ -64,7 +64,9 @@ class Test < Minitest::Test
   def quit_code
     code = nil
     QuestionList.stub_any_instance :quit, Proc.new{|errcode| code = errcode } do
-      yield
+      Question.stub_any_instance :quit, Proc.new{ code = 1 } do
+        yield
+      end
     end
     code
   end

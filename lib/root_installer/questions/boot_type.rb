@@ -90,9 +90,8 @@ class RootInstaller::Questions::BootType < Question
   class AdviseError < Question
     
     def ask
-      @mbr_error_dialog = new_dialog
-      @mbr_error_dialog.title = "Boot Type"
-      @mbr_error_dialog.msgbox("\\nThis machine does not support UEFI booting, But none of its disks seem to have 512K sectors that support legacy MBR Boot. This installer cannot work on this machine. Please see \\n\\nhttps://openzfs.github.io/openzfs-docs/Getting%20Started/Debian/index.html#root-on-zfs \\n\\nfor manual install instructions.", 14, 70)
+      dialog.title = "Boot Type"
+      dialog.msgbox("\\nThis machine does not support UEFI booting, But none of its disks seem to have 512K sectors that support legacy MBR Boot. This installer cannot work on this machine. Please see \\n\\nhttps://openzfs.github.io/openzfs-docs/Getting%20Started/Debian/index.html#root-on-zfs \\n\\nfor manual install instructions.", 14, 70)
       quit
     end
 

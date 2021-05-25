@@ -1,0 +1,1 @@
+["\\nThis machine does not support UEFI booting, But none of its disks seem to have 512K sectors that support legacy MBR Boot. This installer cannot work on this machine. Please see \\n\\nhttps://openzfs.github.io/openzfs-docs/Getting%20Started/Debian/index.html#root-on-zfs \\n\\nfor manual install instructions.", 14, 70]
