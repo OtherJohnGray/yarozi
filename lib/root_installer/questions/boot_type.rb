@@ -37,7 +37,7 @@ class RootInstaller::Questions::BootType < Question
       width = 50
       menu_height = 2
       text = "\\nThis machine supports both EFI and legacy MBR booting. What boot type would you like?"
-      @choice = wizard.menu(text, items, height, width, menu_height)
+      @choice = wizard.ask(text, items, height, width, menu_height)
     end
 
     def respond 
@@ -52,7 +52,7 @@ class RootInstaller::Questions::BootType < Question
     
     def ask
       wizard.title = "Boot Type"
-      wizard.yesno("\\nThis machine only has 4Kn type disks, so it will be configured for UEFI boot.", 8, 50)
+      wizard.advise("\\nThis machine only has 4Kn type disks, so it will be configured for UEFI boot.", 8, 50)
     end
 
     def respond 
@@ -66,7 +66,7 @@ class RootInstaller::Questions::BootType < Question
     
     def ask
       wizard.title = "Boot Type"
-      @choice = wizard.yesno("\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured.", 8, 50)
+      @choice = wizard.advise("\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured.", 8, 50)
     end
 
     def respond 
@@ -81,7 +81,7 @@ class RootInstaller::Questions::BootType < Question
     
     def ask
       dialog.title = "Boot Type"
-      dialog.msgbox("\\nThis machine does not support UEFI booting, But none of its disks seem to have 512K sectors that support legacy MBR Boot. This installer cannot work on this machine. Please see \\n\\nhttps://openzfs.github.io/openzfs-docs/Getting%20Started/Debian/index.html#root-on-zfs \\n\\nfor manual install instructions.", 14, 70)
+      dialog.alert("\\nThis machine does not support UEFI booting, But none of its disks seem to have 512K sectors that support legacy MBR Boot. This installer cannot work on this machine. Please see \\n\\nhttps://openzfs.github.io/openzfs-docs/Getting%20Started/Debian/index.html#root-on-zfs \\n\\nfor manual install instructions.", 14, 70)
       quit
     end
 
@@ -100,7 +100,7 @@ class RootInstaller::Questions::BootType < Question
       width = 68
       menu_height = 2
       text = "\\nLegacy MBR Boot has been selected. Would you also like to create an unused EFI partition in case you need UEFI boot in future?"
-      @choice = wizard.menu(text, items, height, width, menu_height)
+      @choice = wizard.ask(text, items, height, width, menu_height)
     end
 
     def respond 

@@ -6,17 +6,17 @@ class Dialog < MRDialog
   VPAD = 5
   HPAD = 10
 
-  def message_box(text="Text Goes Here", height=0, width=0, vpad=VPAD, hpad=HPAD)
+  def alert(text="Text Goes Here", height=0, width=0, vpad=VPAD, hpad=HPAD)
     log.debug "Dialog.msgbox: calling msgbox with height of #{height}, width of #{width}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
-    super(text, drows( height, vpad ), dcols( width, hpad ))
+    msgbox(text, drows( height, vpad ), dcols( width, hpad ))
   end
 
-  def yes_no_box(text="Text Goes Here", height=0, width=0, vpad=VPAD, hpad=HPAD)
+  def advise(text="Text Goes Here", height=0, width=0, vpad=VPAD, hpad=HPAD)
     log.debug "Dialog.yesno: calling yesno with height of #{height}, width of #{width}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
-    super(text, drows( height, vpad ), dcols( width, hpad ))
+    yesno(text, drows( height, vpad ), dcols( width, hpad ))
   end
 
-  def menu_box(text="Text Goes Here", items=[], height=0, width=0, menu_height=0, vpad=VPAD, hpad=HPAD)
+  def ask(text="Text Goes Here", items=[], height=0, width=0, menu_height=0, vpad=VPAD, hpad=HPAD)
     log.debug "Dialog.menu: calling yesno with height of #{height}, width of #{width}, menu_height of #{menu_height}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
     menu(text, items, drows( height, vpad ), dcols( width, hpad ), menu_height)
   end

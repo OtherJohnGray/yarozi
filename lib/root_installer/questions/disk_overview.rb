@@ -14,7 +14,7 @@ class RootInstaller::Questions::DiskOverview < Question
     dialog.title = "Introduction and Disk Overview"
     dialog.ok_label = "continue\\ and\\ select\\ disks"
     message = text + Disk.to_string_list
-    dialog.msgbox(message,0,150)
+    dialog.alert(message,0,150)
   end
 
 
