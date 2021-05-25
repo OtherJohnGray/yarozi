@@ -33,6 +33,8 @@ class Question
       d.extra_button = true
       d.extra_label = "next"
       d.ok_label = "back"
+      d.yes_label = "back"
+      d.no_label = "cancel"
       d.default_button = "extra"
       d.notags = true
     end
@@ -53,9 +55,9 @@ class Question
 
   def clicked
     case dialog.selected_button
-    when "ok"
+    when "ok", "yes"
       "back"
-    when "cancel"
+    when "cancel", "no"
       "cancel"
     else
       "next"

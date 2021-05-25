@@ -1,1 +1,1 @@
-["\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured.", [], 11, 50, 0]
+["\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured.", 8, 50]

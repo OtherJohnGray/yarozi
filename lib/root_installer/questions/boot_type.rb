@@ -52,12 +52,7 @@ class RootInstaller::Questions::BootType < Question
     
     def ask
       wizard.title = "Boot Type"
-      items = []
-      height = 11
-      width = 50
-      menu_height = 0
-      text = "\\nThis machine only has 4Kn type disks, so it will be configured for UEFI boot."
-      wizard.menu(text, items, height, width, menu_height)
+      wizard.yesno("\\nThis machine only has 4Kn type disks, so it will be configured for UEFI boot.", 8, 50)
     end
 
     def respond 
@@ -71,12 +66,7 @@ class RootInstaller::Questions::BootType < Question
     
     def ask
       wizard.title = "Boot Type"
-      items = []
-      height = 11
-      width = 50
-      menu_height = 0
-      text = "\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured."
-      @choice = wizard.menu(text, items, height, width, menu_height)
+      @choice = wizard.yesno("\\nThis machine does not support UEFI booting, so legacy MBR booting will be configured.", 8, 50)
     end
 
     def respond 
@@ -106,8 +96,8 @@ class RootInstaller::Questions::BootType < Question
         ["no", "Do not create EFI partition"],
         ["yes", "Create an un-used EFI partition in case it's needed in future"]
       ]
-      height = 11
-      width = 50
+      height = 12
+      width = 68
       menu_height = 2
       text = "\\nLegacy MBR Boot has been selected. Would you also like to create an unused EFI partition in case you need UEFI boot in future?"
       @choice = wizard.menu(text, items, height, width, menu_height)

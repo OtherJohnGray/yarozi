@@ -61,7 +61,7 @@ class TestAdviseEfi < Test
     mixed_disks do
       with_screen 40, 200 do
         result = nil
-        with_dialog :menu, Proc.new{|*args| result = args} do
+        with_dialog :yesno, Proc.new{|*args| result = args} do
           q = RootInstaller::Questions::BootType::AdviseEfi.new(nil)
           q.ask
           assert_equal "Boot Type", q.wizard.title
@@ -88,7 +88,7 @@ class TestAdviseMbr < Test
     mixed_disks do
       with_screen 40, 200 do
         result = nil
-        with_dialog :menu, Proc.new{|*args| result = args} do
+        with_dialog :yesno, Proc.new{|*args| result = args} do
           q = RootInstaller::Questions::BootType::AdviseMbr.new(nil)
           q.ask
           assert_equal "Boot Type", q.wizard.title
