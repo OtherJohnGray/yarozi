@@ -7,7 +7,7 @@ class TestEncryption < Test
       result = nil
       task = Task.new
       with_screen 46, 200 do
-        with_dialog :menu, Proc.new{|*args| result = args; "ZFS"} do
+        with_dialog :menubox, Proc.new{|*args| result = args; "ZFS"} do
           q = RootInstaller::Questions::Encryption.new(task)
           q.ask
           assert_instance_of Dialog, q.wizard
