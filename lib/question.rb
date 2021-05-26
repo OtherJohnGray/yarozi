@@ -54,7 +54,7 @@ class Question
   end
 
   def clicked
-    case dialog.selected_button
+    case wizard.selected_button
     when "ok", "yes"
       "back"
     when "cancel", "no"

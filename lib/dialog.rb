@@ -70,7 +70,7 @@ class Dialog < MRDialog
               tmp.path
 
     log_debug("Command:\n#{command}")
-    success = system(command)
+    @success = system(command)
     @exit_code = $?.exitstatus
 
     if @exit_code != 1
@@ -84,6 +84,39 @@ class Dialog < MRDialog
       return false
     end
     
+  end
+
+  def yesno(text="Please enter some text", height=0, width=0)
+    #    command = option_string() + "--inputbox \"" + text.to_s +
+    #                "\" " + height.to_i.to_s + " " + width.to_i.to_s
+    
+    command = ""
+    command << option_string();
+    command << " "
+    command << '"'
+    command << "--yesno"
+    command << '"'
+    command << " "
+    command << '"'
+    command << text
+    command << '"'
+    command << " "
+    command << height.to_s
+    command << " "
+    command << width.to_s
+
+
+    log_debug("Command:\n#{command}")
+    @success = system(command)
+    @exit_code = $?.exitstatus
+    if @exit_code != 1
+      @selected_button = ( @exit_code == 0 ? :ok : :extra ) 
+      true
+    else
+      @selected_button = :cancel
+      tmp.close!
+      false
+    end
   end
 
 end

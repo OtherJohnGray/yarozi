@@ -95,7 +95,7 @@ class TestQuestion < Test
 
   def test_clicked
     q = Question.new
-    d = q.dialog
+    d = q.wizard
     d.instance_variable_set :@selected_button, "ok"
     assert_equal "back", q.clicked
     d.instance_variable_set :@selected_button, "extra"
