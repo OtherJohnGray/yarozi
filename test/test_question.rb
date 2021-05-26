@@ -93,19 +93,5 @@ class TestQuestion < Test
     assert_equal 0, q.subquestions.length
   end
 
-  def test_clicked
-    q = Question.new
-    d = q.wizard
-    d.instance_variable_set :@selected_button, "ok"
-    assert_equal "back", q.clicked
-    d.instance_variable_set :@selected_button, "extra"
-    assert_equal "next", q.clicked
-    d.instance_variable_set :@selected_button, "cancel"
-    assert_equal "cancel", q.clicked
-    d.instance_variable_set :@selected_button, "yes" 
-    assert_equal "back", q.clicked
-    d.instance_variable_set :@selected_button, "no"
-    assert_equal "cancel", q.clicked
-  end
 
 end
