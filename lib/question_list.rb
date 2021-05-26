@@ -24,25 +24,34 @@ class QuestionList
   def ask
     i = 0
     while i < @questions.length do
+      log.info "resetting question #{i}"
       @questions[i].reset
+      log.info "asking question #{i}"
       @questions[i].ask
       case @questions[i].clicked
       when "back"
         if i > 0
+          log.info "going back..."
           i -= 1
         else
+          log.info "returning false from question list"
           return false
         end
       when "next"
+        log.info "calling respond on question #{i}"
         @questions[i].respond
+        log.info "starting questions #{i}'s subquestions..."
         i += 1 if @questions[i].subquestions.ask
       when "cancel"
+        log.info "cancelling from question #{i}"
         quit 1 if Dialog.new.yesno("Exit installer without making any changes?",5,46)
       else
+        log.info "got unknown response from question #{i}, advancing to next question"
         # some other kind of dialog, ignore it and move on to the next question.
         i += 1
       end      
     end
+    log.info "finished question list, returning true..."
     true
   end
 

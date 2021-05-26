@@ -74,12 +74,12 @@ class Dialog < MRDialog
     @exit_code = $?.exitstatus
 
     if @exit_code != 1
-      @selected_button = ( @exit_code == 0 ? :ok : :extra ) 
+      @selected_button = ( @exit_code == 0 ? "back" : "next" ) 
       selected_string = tmp.readline
       tmp.close!
       return selected_string
     else
-      @selected_button = :cancel
+      @selected_button = "cancel"
       tmp.close!
       return false
     end
@@ -110,11 +110,10 @@ class Dialog < MRDialog
     @success = system(command)
     @exit_code = $?.exitstatus
     if @exit_code != 1
-      @selected_button = ( @exit_code == 0 ? :ok : :extra ) 
+      @selected_button = ( @exit_code == 0 ? "back" : "next" ) 
       true
     else
-      @selected_button = :cancel
-      tmp.close!
+      @selected_button = "cancel"
       false
     end
   end

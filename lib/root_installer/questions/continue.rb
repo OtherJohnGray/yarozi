@@ -25,4 +25,8 @@ class RootInstaller::Questions::Continue < Question
     quit unless dialog.advise(text,18,80)
   end
 
+  def clicked
+    "next"
+  end
+
 end

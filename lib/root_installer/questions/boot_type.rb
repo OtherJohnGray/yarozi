@@ -1,26 +1,26 @@
-class RootInstaller::Questions::BootType < Question
+class RootInstaller::Questions::BootType
 
-  def ask
+  def self.generate(task)
     if efi_support?
       if has_512k?
-        subquestions.append AskEfi.new(task)
+        AskEfi.new(task)
       else
-        subquestions.append AdviseEfi.new(task)
+        AdviseEfi.new(task)
       end
     else
       if has_512k?
-        subquestions.append AdviseMbr.new(task)
+        AdviseMbr.new(task)
       else
-        subquestions.append AdviseError.new(task)
+        AdviseError.new(task)
       end
     end
   end
 
-  def efi_support?
+  def self.efi_support?
     File.directory?("/sys/firmware/efi")
   end
 
-  def has_512k?
+  def self.has_512k?
     Disk.all.any? {|d| d.sector_size == 512}
   end
 

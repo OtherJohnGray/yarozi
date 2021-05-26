@@ -185,44 +185,32 @@ class TestBootType < Test
 
   def test_efi_512
     mixed_disks do
-      q = RootInstaller::Questions::BootType.new(nil)
-      q.stub(:efi_support?, true) do
-        q.ask
-        assert_equal 1, q.subquestions.length
-        assert_instance_of RootInstaller::Questions::BootType::AskEfi, q.subquestions.first
+      RootInstaller::Questions::BootType.stub(:efi_support?, true) do
+        assert_instance_of RootInstaller::Questions::BootType::AskEfi, RootInstaller::Questions::BootType.generate(nil)
       end
     end
   end
 
   def test_efi_4k
     largesector_disks do
-      q = RootInstaller::Questions::BootType.new(nil)
-      q.stub(:efi_support?, true) do
-        q.ask
-        assert_equal 1, q.subquestions.length
-        assert_instance_of RootInstaller::Questions::BootType::AdviseEfi, q.subquestions.first
+      RootInstaller::Questions::BootType.stub(:efi_support?, true) do
+        assert_instance_of RootInstaller::Questions::BootType::AdviseEfi, RootInstaller::Questions::BootType.generate(nil)
       end
     end
   end
 
   def test_legacy_512
     mixed_disks do
-      q = RootInstaller::Questions::BootType.new(nil)
-      q.stub(:efi_support?, false) do
-        q.ask
-        assert_equal 1, q.subquestions.length
-        assert_instance_of RootInstaller::Questions::BootType::AdviseMbr, q.subquestions.first
+      RootInstaller::Questions::BootType.stub(:efi_support?, false) do
+        assert_instance_of RootInstaller::Questions::BootType::AdviseMbr, RootInstaller::Questions::BootType.generate(nil)
       end
     end
   end
 
   def test_legacy_4k
     largesector_disks do
-      q = RootInstaller::Questions::BootType.new(nil)
-      q.stub(:efi_support?, false) do
-        q.ask
-        assert_equal 1, q.subquestions.length
-        assert_instance_of RootInstaller::Questions::BootType::AdviseError, q.subquestions.first
+      RootInstaller::Questions::BootType.stub(:efi_support?, false) do
+        assert_instance_of RootInstaller::Questions::BootType::AdviseError, RootInstaller::Questions::BootType.generate(nil)
       end
     end
   end

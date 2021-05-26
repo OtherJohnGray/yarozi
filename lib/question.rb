@@ -25,11 +25,11 @@ class Question
   end
 
   def wizard
-    @wizard ||= new_wizard
+    @wizard ||= configure_wizard
   end
 
-  def new_wizard
-    new_dialog.tap do |d|
+  def configure_wizard
+    dialog.tap do |d|
       d.extra_button = true
       d.extra_label = "next"
       d.ok_label = "back"
@@ -54,14 +54,8 @@ class Question
   end
 
   def clicked
-    case wizard.selected_button
-    when "ok", "yes"
-      "back"
-    when "cancel", "no"
-      "cancel"
-    else
-      "next"
-    end
+    log.info "dialog.selected_button is [#{dialog.selected_button}]"    
+    dialog.selected_button
   end
 
 end
