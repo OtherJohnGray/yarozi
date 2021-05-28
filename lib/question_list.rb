@@ -19,8 +19,7 @@ class QuestionList
 
   # ask each question in turn, while responding to back, next, and exit requests.
   # return true if user selects "next" from last question, or false if user selects
-  # "back" from first question. Assume question dialog is of type that has ok and
-  # cancel buttons rather than yes/no
+  # "back" from first question. 
   def ask(i = 0)
     while i < @questions.length do
       log.info "resetting question #{i}"
@@ -33,6 +32,7 @@ class QuestionList
           log.info "going back..."
           i -= 1
           if @questions[i].subquestions.length > 0
+            log.info "...to subquestions"
             i += 1 if @questions[i].subquestions.ask(@questions[i].subquestions.length - 1)
           end
         else

@@ -1,6 +1,6 @@
 class Dialog < MRDialog
 
-  attr_accessor :default_button
+  attr_accessor :default_button, :default_item
   attr_reader :selected_button
 
   VPAD = 5
@@ -47,6 +47,9 @@ class Dialog < MRDialog
     ostring = super
     if @default_button
       ostring += "--default-button #{@default_button} "
+    end
+    if @default_item
+      ostring += "--default-item #{@default_item} "
     end
     ostring
   end

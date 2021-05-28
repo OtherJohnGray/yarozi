@@ -2,6 +2,7 @@ class RootInstaller::Questions::Encryption < Question
 
     def ask
       wizard.title = "Root Dataset Encryption"
+      wizard.default_item = task.root_encryption_type if task.respond_to? :root_encryption_type
       text = <<~TEXT
         This installer can set up encryption for your root dataset in three different ways.
 

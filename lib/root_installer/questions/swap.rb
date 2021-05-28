@@ -16,6 +16,7 @@ class RootInstaller::Questions::Swap < Question
 
   def ask
     wizard.title = "SWAP"
+    wizard.default_item = task.configure_swap if task.respond_to? :configure_swap
     items = [
       ["none", "Do NOT create swap"],
       ["luks", "Create encrypted LUKS swap"]

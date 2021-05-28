@@ -29,6 +29,7 @@ class RootInstaller::Questions::BootType
 
     def ask
       wizard.title = "Boot Type"
+      wizard.default_item = task.boot_type if task.respond_to? :boot_type
       items = [
         ["efi", "EFI Boot"],
         ["mbr", "Legacy MBR Boot"]
@@ -92,6 +93,7 @@ class RootInstaller::Questions::BootType
 
     def ask
       wizard.title = "Create EFI Partition for future use?"
+      wizard.default_item = task.efi_partition if task.respond_to? :efi_partition
       items = [
         ["no", "Do not create EFI partition"],
         ["yes", "Create an un-used EFI partition in case it's needed in future"]
