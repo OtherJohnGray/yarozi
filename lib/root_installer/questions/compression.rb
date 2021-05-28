@@ -12,6 +12,7 @@ class RootInstaller::Questions::Compression < Question
 
   def ask
     wizard.title = "Root Dataset Compression"
+    wizard.notags = false
     wizard.default_item = task.root_compression_type if task.respond_to? :root_compression_type
     items = [
       ["off", "Do not encrypt the root dataset"],
@@ -25,7 +26,7 @@ class RootInstaller::Questions::Compression < Question
 
     height = 19
     width = 76
-    menu_height = 6
+    menu_height = 7
       
     @choice = wizard.ask(text, items, height, width, menu_height)
   end
