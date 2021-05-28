@@ -1,7 +1,43 @@
 require 'test'
 
-class TestCompression < Test
+class TestGzipLevel < Test
+  def test_ask_gzip_level
+    mixed_disks do
+      result = nil
+      task = Task.new
+      with_screen 46, 200 do
+        with_dialog :menu, Proc.new{|*args| result = args; "5"} do
+          q = RootInstaller::Questions::Compression::GzipLevel.new(task)
+          q.ask
+          assert_instance_of Dialog, q.wizard
+          assert_equal "GZip Compression Level", q.wizard.title
+          assert_equal "YAROZI - Yet Another Root On ZFS installer", q.wizard.backtitle
+          assert_equal fetch_or_save(result.to_s), result.to_s
+          assert_equal "5", q.instance_variable_get(:@choice)
+        end
+      end  
+    end  
+  end
 
+  def test_respond
+    q = RootInstaller::Questions::Compression::GzipLevel.new(Task.new)
+    q.instance_variable_set :@choice, "7"
+    q.respond
+    assert_equal 7, q.task.gzip_compression_level
+  end
+
+  def test_ask_default_item
+    q = RootInstaller::Questions::Compression::GzipLevel.new(Task.new)
+    q.task.define_singleton_method :gzip_compression_level, Proc.new{8}
+    with_dialog :menu  do
+      q.ask
+    end
+    assert_equal "8", q.wizard.default_item
+  end
+end
+
+
+class TestCompression < Test
   def test_ask
     mixed_disks do
       result = nil
@@ -63,7 +99,5 @@ class TestCompression < Test
     end
     assert_equal "zstd-fast", q.wizard.default_item
   end
-
-
 end
   
