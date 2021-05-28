@@ -55,5 +55,15 @@ class TestCompression < Test
     assert_instance_of RootInstaller::Questions::Compression::ZstdFastLevel, q.subquestions.first
   end
 
+  def test_ask_default_item
+    q = RootInstaller::Questions::Compression.new(Task.new)
+    q.task.define_singleton_method :root_compression_type, Proc.new{"zstd-fast"}
+    with_dialog :menu  do
+      q.ask
+    end
+    assert_equal "zstd-fast", q.wizard.default_item
+  end
+
+
 end
   

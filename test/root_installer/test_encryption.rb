@@ -31,5 +31,15 @@ class TestEncryption < Test
     end  
   end
 
+  def test_ask_default_item
+    q = RootInstaller::Questions::Encryption.new(Task.new)
+    q.task.define_singleton_method :root_encryption_type, Proc.new{"ZFS"}
+    with_dialog :menu  do
+      q.ask
+    end
+    assert_equal "ZFS", q.wizard.default_item
+  end
+
+
 end
   

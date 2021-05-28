@@ -28,5 +28,15 @@ class TestSwap < Test
     assert_equal 0, q.subquestions.length
   end
 
+  def test_ask_default_item
+    q = RootInstaller::Questions::Swap.new(Task.new)
+    q.task.define_singleton_method :configure_swap, Proc.new{"luks"}
+    with_dialog :menu  do
+      q.ask
+    end
+    assert_equal "luks", q.wizard.default_item
+  end
+
+
 end
   

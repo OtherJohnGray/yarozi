@@ -52,6 +52,15 @@ class TestAskEfi < Test
     assert_instance_of RootInstaller::Questions::BootType::AskEfiPartition, q.subquestions.first
   end
 
+  def test_ask_default_item
+    q = RootInstaller::Questions::BootType::AskEfi.new(Task.new)
+    q.task.define_singleton_method :boot_type, Proc.new{"mbr"}
+    with_dialog :menu  do
+      q.ask
+    end
+    assert_equal "mbr", q.wizard.default_item
+  end
+
 end
 
 
@@ -149,10 +158,10 @@ class TestAskEfiPartition < Test
   end
 
   def test_respond_selected
-    q = RootInstaller::Questions::BootType::AskEfi.new(Task.new)
+    q = RootInstaller::Questions::BootType::AskEfiPartition.new(Task.new)
     q.instance_variable_set :@choice, "yes"
     q.respond
-    assert_equal "yes", q.task.boot_type
+    assert_equal "yes", q.task.efi_partition
   end
 
   def test_ask_efi_partition_not_selected
@@ -172,10 +181,19 @@ class TestAskEfiPartition < Test
   end
 
   def test_respond_not_selected
-    q = RootInstaller::Questions::BootType::AskEfi.new(Task.new)
+    q = RootInstaller::Questions::BootType::AskEfiPartition.new(Task.new)
     q.instance_variable_set :@choice, "no"
     q.respond
-    assert_equal "no", q.task.boot_type
+    assert_equal "no", q.task.efi_partition
+  end
+
+  def test_ask_default_item
+    q = RootInstaller::Questions::BootType::AskEfiPartition.new(Task.new)
+    q.task.define_singleton_method :efi_partition, Proc.new{"yes"}
+    with_dialog :menu  do
+      q.ask
+    end
+    assert_equal "yes", q.wizard.default_item
   end
 
 end
