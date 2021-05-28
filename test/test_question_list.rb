@@ -84,11 +84,11 @@ class TestQuestionList < Test
   end
 
 
-  def test_f_sub_f_f_super_b_f_sub_f_f_super_f
+  def test_f_sub_f_f_super_b_sub_f_super_f
     l = QuestionList.new
-    l.append TestQuestion.new( "next", "next" )
+    l.append TestQuestion.new( "next" )
     l.append TestQuestion.new( "back", "next" )
-    l.questions[0].define_singleton_method(:ask){ subquestions.append TestQuestion.new("next"); subquestions.append TestQuestion.new("next"); @asks += 1 }
+    l.questions[0].define_singleton_method(:ask){ subquestions.append TestQuestion.new("next"); subquestions.append TestQuestion.new("next", "next"); @asks += 1 }
     assert l.ask
     l.questions.each do |q|
       assert_equal 0, q.clicks.length
@@ -96,14 +96,14 @@ class TestQuestionList < Test
         assert_equal 0, s.clicks.length
       end
     end
-    assert_equal 2, l.questions[0].asks
-    assert_equal 2, l.questions[0].responds
+    assert_equal 1, l.questions[0].asks
+    assert_equal 1, l.questions[0].responds
     assert_equal 2, l.questions[1].asks
     assert_equal 1, l.questions[1].responds
     assert_equal 1, l.questions[0].subquestions[0].asks
     assert_equal 1, l.questions[0].subquestions[0].responds
-    assert_equal 1, l.questions[0].subquestions[1].asks
-    assert_equal 1, l.questions[0].subquestions[1].responds
+    assert_equal 2, l.questions[0].subquestions[1].asks
+    assert_equal 2, l.questions[0].subquestions[1].responds
   end
 
   def test_f_sub_f_b_b_super_f_sub_f_f_super_f
