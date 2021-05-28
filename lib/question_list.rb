@@ -21,8 +21,7 @@ class QuestionList
   # return true if user selects "next" from last question, or false if user selects
   # "back" from first question. Assume question dialog is of type that has ok and
   # cancel buttons rather than yes/no
-  def ask
-    i = 0
+  def ask(i = 0)
     while i < @questions.length do
       log.info "resetting question #{i}"
       @questions[i].reset
@@ -33,6 +32,9 @@ class QuestionList
         if i > 0
           log.info "going back..."
           i -= 1
+          if @questions[i].subquestions.length > 0
+            i += 1 if @questions[i].subquestions.ask(@questions[i].subquestions.length - 1)
+          end
         else
           log.info "returning false from question list"
           return false
