@@ -102,9 +102,10 @@ class RootInstaller::Questions::Partitions < Question
             @input = wizard.input(text, items, height, width, formheight)[name]
     
             if form_filled? || clicked != "next"
-              puts "Resulting data: #{@input}"
               break
             else
+
+UP TO HERE 
               show_warning
             end
         end
@@ -116,7 +117,7 @@ class RootInstaller::Questions::Partitions < Question
       end
     
       def respond
-        task.set :root_encryption_type, @choice
+        task.set task_variable, @input
       end
     
     end

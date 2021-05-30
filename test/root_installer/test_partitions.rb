@@ -5,7 +5,7 @@ class TestBoot < Test
     mixed_disks do
       result = nil
       with_screen 46, 200 do
-        with_dialog :form, Proc.new{|*args| result = args} do
+        with_dialog :form, Proc.new{|*args| result = args; {"Boot pool" => "M:100G[1,2]"} } do
           q = RootInstaller::Questions::Partitions::Boot.new(Task.new)
           q.task.define_singleton_method :boot_type, Proc.new{"efi"}
           q.task.define_singleton_method :boot_pool_yvn, Proc.new{"M:100G[1,2]"}
@@ -14,6 +14,7 @@ class TestBoot < Test
           assert_equal "Boot pool", q.wizard.title
           assert_equal "YAROZI - Yet Another Root On ZFS installer", q.wizard.backtitle
           assert_equal fetch_or_save(result.to_s), result.to_s
+          assert_equal "M:100G[1,2]", q.instance_variable_get(:@input)
         end
       end  
     end  
@@ -23,7 +24,7 @@ class TestBoot < Test
     mixed_disks do
       result = nil
       with_screen 46, 200 do
-        with_dialog :form, Proc.new{|*args| result = args} do
+        with_dialog :form, Proc.new{|*args| result = args; {"Boot pool" => "M:100G[1,2]"} } do
           q = RootInstaller::Questions::Partitions::Boot.new(Task.new)
           q.task.define_singleton_method :boot_type, Proc.new{"mbr"}
           q.task.define_singleton_method :efi_partition, Proc.new{"no"}
@@ -33,6 +34,7 @@ class TestBoot < Test
           assert_equal "Boot pool", q.wizard.title
           assert_equal "YAROZI - Yet Another Root On ZFS installer", q.wizard.backtitle
           assert_equal fetch_or_save(result.to_s), result.to_s
+          assert_equal "M:100G[1,2]", q.instance_variable_get(:@input)
         end
       end  
     end  
@@ -42,7 +44,7 @@ class TestBoot < Test
     mixed_disks do
       result = nil
       with_screen 46, 200 do
-        with_dialog :form, Proc.new{|*args| result = args} do
+        with_dialog :form, Proc.new{|*args| result = args; {"Boot pool" => "M:100G[1,2]"} } do
           q = RootInstaller::Questions::Partitions::Boot.new(Task.new)
           q.task.define_singleton_method :boot_type, Proc.new{"mbr"}
           q.task.define_singleton_method :efi_partition, Proc.new{"yes"}
@@ -52,6 +54,7 @@ class TestBoot < Test
           assert_equal "Boot pool", q.wizard.title
           assert_equal "YAROZI - Yet Another Root On ZFS installer", q.wizard.backtitle
           assert_equal fetch_or_save(result.to_s), result.to_s
+          assert_equal "M:100G[1,2]", q.instance_variable_get(:@input)
         end
       end  
     end  
