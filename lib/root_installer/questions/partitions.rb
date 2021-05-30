@@ -64,9 +64,18 @@ class RootInstaller::Questions::Partitions < Question
         wizard.default_button = false
         text = <<~TEXT
 
-          Please enter the YVN definition that you want for your Boot pool.
-          #{task.boot_type == "efi" ? "EFI partitions" : "Master Boot Records #{ task.efi_partition ? "and future-use EFI partitions " : "" }"} will also be created on the disks that you select.
-        
+          #{preamble}        
+
+          YVN Syntax reminder: <type>:<partition size>[Disk#....]
+
+          e.g. Single disk: S:100G[1]
+          
+          e.g. 2 disk mirror: M:100G[1,2]
+          
+          e.g. 6 disk RAIDZ2: R2:100G[1-6]
+          
+          e.g. 2 disks striped: S:50G[1] S:50G[2]
+
         TEXT
     
         form_data = Struct.new(:label, :ly, :lx, :item, :iy, :ix, :flen, :ilen)
@@ -80,18 +89,17 @@ class RootInstaller::Questions::Partitions < Question
             data.label = name
             data.ly = 1
             data.lx = 1
-            data.item = task.respond_to?(task_variable) ? task.task_variable : ""
+            data.item = task.respond_to?(task_variable) ? task.send(task_variable) : ""
             data.iy = 1
             data.ix = name.length + 2
             data.flen = 67 - name.length
             data.ilen = 9999
             items.push(data.to_a)
     
-            height = 10
             width = 76
-            formheight = 0
+            formheight = 1
       
-            @input = wizard.input(text, items, height, width, formheight)
+            @input = wizard.input(text, items, height, width, formheight)[name]
     
             if form_filled? || clicked != "next"
               puts "Resulting data: #{@input}"
@@ -100,6 +108,7 @@ class RootInstaller::Questions::Partitions < Question
               show_warning
             end
         end
+
       end
 
       def form_filled?
@@ -119,6 +128,17 @@ class RootInstaller::Questions::Partitions < Question
 
       def task_variable
         :boot_pool_yvn
+      end
+
+      def preamble
+        <<~TEXT
+          Please enter the YVN definition that you want for your Boot pool.
+          #{task.boot_type == "efi" ? "EFI partitions" : "Master Boot Records #{ task.efi_partition == "yes" ? "and future-use EFI partitions " : "" }"} will also be created on the disks that you select.
+        TEXT
+      end
+
+      def height
+          task.boot_type == "mbr" && task.efi_partition == "yes" ? 22 : 20
       end
     end
     
