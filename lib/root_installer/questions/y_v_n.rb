@@ -31,15 +31,20 @@ class RootInstaller::Questions::YVN < Question
 
         M:100G[1,2] M:100G[3,4]
 
-        To define a RAIDZ1 ZPool consisting of a single 5-partition VDEV, made out of 200GiB partitions on disks 1 thru 5:
+        To define a RAIDZ2 ZPool consisting of a single 5-partition VDEV, made out of 200GiB partitions on disks 1 thru 6:
 
-        R1:100G[1-5]
+        R1:100G[1-6]
+
+        To achieve bit-rot resistance in a space efficient way if you only have a single drive, you can create a RAIDZ1 setup out of multiple partitons on the same drive (instead of using copies=2). for example, this definition allocates 160GiB of usable space and only 20GiB of parity:
+
+        R1:20G[1,1,1,1,1,1,1,1,1]
+
 
         The disk numbers for your disks are as follows:
 
         #{Disk.to_numbered_list}
 
-        Please get a piece of paper of paper or open a notepad app, and write down now the YVN definitions that you want to use for your #{task.configure_swap ? "Root pool, Boot pool, and Swap" : "Root and Boot pools"}, and then click next to continue to the pool definition screens. You can use the Back button at any time to come back to this screen for reference.
+        Please get a piece of paper of paper or open a notepad app, and write down now the YVN definitions that you want to use for your #{task.configure_swap ? "Root pool, Boot pool, and MDRAID Swap" : "Root and Boot pools"}, and then choose next to continue to the pool definition screens. You can use the back button at any time to come back to this screen for reference.
 
       TEXT
 
