@@ -7,18 +7,23 @@ class Dialog < MRDialog
   HPAD = 10
 
   def alert(text="Text Goes Here", height=0, width=0, vpad=VPAD, hpad=HPAD)
-    log.debug "Dialog.msgbox: calling msgbox with height of #{height}, width of #{width}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
+    log.debug "Dialog.alert: calling msgbox with height of #{height}, width of #{width}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
     msgbox(text, drows( height, vpad ), dcols( width, hpad ))
   end
 
   def advise(text="Text Goes Here", height=0, width=0, vpad=VPAD, hpad=HPAD)
-    log.debug "Dialog.yesno: calling yesno with height of #{height}, width of #{width}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
+    log.debug "Dialog.advise: calling yesno with height of #{height}, width of #{width}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
     yesno(text, drows( height, vpad ), dcols( width, hpad ))
   end
 
   def ask(text="Text Goes Here", items=[], height=0, width=0, menu_height=0, vpad=VPAD, hpad=HPAD)
-    log.debug "Dialog.menu: calling yesno with height of #{height}, width of #{width}, menu_height of #{menu_height}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
+    log.debug "Dialog.ask: calling menu with height of #{height}, width of #{width}, menu_height of #{menu_height}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
     menu(text, items, drows( height, vpad ), dcols( width, hpad ), menu_height)
+  end
+
+  def input(text="Text Goes Here", items=[], height=0, width=0, formheight=0, vpad=VPAD, hpad=HPAD)
+    log.debug "Dialog.input: calling form with height of #{height}, width of #{width}, formheight of #{formheight}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
+    form(text, items, drows( height, vpad ), dcols( width, hpad ), formheight)
   end
 
   
@@ -120,5 +125,94 @@ class Dialog < MRDialog
       false
     end
   end
+
+  def form(text, items, height=0, width=0, formheight=0)
+    res_hash = {}
+    tmp = Tempfile.new('dialog') 
+    itemlist = ''
+    mixed_form = false
+    item_size = items[0].size
+    log_debug "Item size:#{item_size}"
+    # if there are 9 elements, it's a mixedform
+    if item_size == 9
+        mixed_form = true
+    end
+    items.each do |item|
+      itemlist << '"'
+      itemlist << item[0].to_s
+      itemlist << '"'
+      itemlist << " "
+      itemlist << item[1].to_s
+      itemlist << " "
+      itemlist << item[2].to_s
+      itemlist << " "
+      itemlist << '"'
+      itemlist << item[3].to_s
+      itemlist << '"'
+      itemlist << " "
+      itemlist << item[4].to_s
+      itemlist << " "
+      itemlist << item[5].to_s
+      itemlist << " "
+      itemlist << item[6].to_s
+      itemlist << " "
+      itemlist << item[7].to_s
+      itemlist << " "
+      if mixed_form
+          itemlist << item[8].to_s
+          itemlist << " "
+      end
+    end
+    itemlist << " "
+    itemlist << "2>"
+    itemlist << tmp.path
+
+    cmd = ""
+    cmd << option_string()
+    cmd << " "
+    if mixed_form
+      cmd << "--mixedform"
+    else
+      if @password_form
+        cmd << "--passwordform"
+      else
+        cmd << "--form"
+      end
+    end
+    cmd << " "
+    cmd << '"'
+    cmd << text
+    cmd << '"'
+    cmd << " "
+    cmd << height.to_s
+    cmd << " "
+    cmd << width.to_s
+    cmd << " "
+    cmd << formheight.to_s
+    cmd << " "
+    cmd << itemlist
+
+    log_debug("Number of items: #{items.size}")
+    log_debug("Command:\n#{cmd}")
+    system(cmd)
+    @exit_code = $?.exitstatus
+    log_debug "Exit code: #{exit_code}"
+
+    if @exit_code != 0
+      @selected_button = ( @exit_code == 0 ? "back" : "next" ) 
+      lines = tmp.readlines
+      lines.each_with_index do |val, idx|
+          key = items[idx][0]
+          res_hash[key] = val.chomp
+      end
+    else
+      @selected_button = "cancel"
+    end
+
+    tmp.close!
+    return res_hash
+
+  end
+
 
 end

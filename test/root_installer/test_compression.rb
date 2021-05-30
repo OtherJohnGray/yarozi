@@ -100,4 +100,5 @@ class TestCompression < Test
     assert_equal "zstd-fast", q.wizard.default_item
   end
 end
+
   

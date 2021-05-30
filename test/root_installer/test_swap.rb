@@ -5,10 +5,9 @@ class TestSwap < Test
   def test_ask
     mixed_disks do
       result = nil
-      task = Task.new
       with_screen 46, 200 do
         with_dialog :menu, Proc.new{|*args| result = args; "none"} do
-          q = RootInstaller::Questions::Swap.new(task)
+          q = RootInstaller::Questions::Swap.new(Task.new)
           q.ask
           assert_instance_of Dialog, q.wizard
           assert_equal "SWAP", q.wizard.title

@@ -11,6 +11,10 @@ class Disk
     all.sort_by{|d| d.type_sort_order * 100000000 + d.connection_sort_order * 10000000 + d.capacity_gb}.map(&:to_s)
   end
 
+  def self.to_numbered_list
+    to_strings.map.with_index{|s,i| "#{i+1}. #{s}\n"}.join("\n")
+  end
+
   def self.to_string_list
     to_strings.join("\n")
   end
