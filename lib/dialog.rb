@@ -198,7 +198,7 @@ class Dialog < MRDialog
     @exit_code = $?.exitstatus
     log_debug "Exit code: #{exit_code}"
 
-    if @exit_code != 0
+    if @exit_code != 1
       @selected_button = ( @exit_code == 0 ? "back" : "next" ) 
       lines = tmp.readlines
       lines.each_with_index do |val, idx|
