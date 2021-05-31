@@ -11,7 +11,7 @@ class RootInstaller::Questions::Partitions < Question
 
         <VdevType>:<PartitionSize>[Disk#,...]
 
-        VdevType is one of S (for Single partition VDEV), M (for mirror), or R1, R2, or R3 (for RAIDZ 1 through 3 respectively).
+        VdevType is one of S (for Single partition VDEV), M (for mirror), or Z1, Z2, or Z3 (for RAIDZ 1 through 3 respectively).
         
         PartitionSize is the size of each SINGLE partition to create, as <size>M (for MiB), <size>G (for GiB), <size>T (for TiB), or * (for the remaining space on the disk) - for example, 200G means that each individual partition for the VDEV will be 200 GiB. If this was a 5-disk RAIDZ-2 VDEV, then total usable size would be 600 GiB (5 - 2 multiplied by 200).
         
@@ -31,24 +31,37 @@ class RootInstaller::Questions::Partitions < Question
 
         M:100G[1,2] M:100G[3,4]
 
-        To define a RAIDZ2 ZPool consisting of a single 5-partition VDEV, made out of 200GiB partitions on disks 1 thru 6:
+        To define a RAIDZ2 ZPool consisting of a single 6-partition VDEV, made out of 200GiB partitions on disks 1 thru 6:
 
-        R1:100G[1-6]
+        Z2:100G[1-6]
 
         To achieve bit-rot resistance in a space efficient way if you only have a single drive, you can create a RAIDZ1 setup out of multiple partitons on the same drive (instead of using copies=2). for example, this definition allocates 160GiB of usable space and only 20GiB of parity:
 
         R1:20G[1,1,1,1,1,1,1,1,1]
-
-
+        #{task.configure_swap ? swap_examples : ""}
         The disk numbers for your disks are as follows:
 
         #{Disk.to_numbered_list}
 
-        Please get a piece of paper of paper or open a notepad app, and write down now the YVN definitions that you want to use for your #{task.configure_swap ? "Root pool, Boot pool, and MDRAID Swap" : "Root and Boot pools"}, and then choose next to continue to the pool definition screens. You can use the back button at any time to come back to this screen for reference.
+        Please get a piece of paper of paper or open a notepad app, and write down now the YVN definitions that you want to use for your #{task.configure_swap ? "Root pool, Boot pool, and Swap" : "Root and Boot pools"}, and then choose next to continue to the pool definition screens. You can use the back button at any time to come back to this screen for reference.
 
       TEXT
 
       wizard.advise(text, 100, 150)
+    end
+
+    def swap_examples
+      <<~TEXT
+
+        For swap, YVN is interperated as defining either raw partitions or MDRAID volumes. Use one or more S: definitions to stripe swap across raw partitions, or use one or more R1 (RAID1), R5 (RAID5), or R6 (RAID6) definitions to place swap on MDRAID volumes.
+
+        e.g. single 240 GiB swap partition on disk 1 without redundancy: S:240G[1]
+
+        e.g. stripe swap across two separate RAID1 "mirrors": R1:120G[1,2] R1:120G[3,4]
+
+        e.g. use a 6-partition RAID6 volume for swap: R6:60G[1-6]
+
+      TEXT
     end
 
     def respond
@@ -99,13 +112,13 @@ class RootInstaller::Questions::Partitions < Question
             width = 76
             formheight = 1
       
-            @input = wizard.input(text, items, height, width, formheight)[name]
+            input = wizard.input(text, items, height, width, formheight)[name]
     
-            if form_filled? || clicked != "next"
+            break unless clicked == "next"
+
+            if @input = YVN.new(input).valid_zpool?
               break
             else
-
-UP TO HERE 
               show_warning
             end
         end
