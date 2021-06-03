@@ -1,0 +1,1 @@
+["VDEV 2: disk number of 3, in position 1 is greater than the number of disks available (2)", "VDEV 2: disk number of 4 in position 2 is greater than the number of disks available (2)", "(  for your reference, VDEV 2 was parsed as being M:20G[3,4]  )"]

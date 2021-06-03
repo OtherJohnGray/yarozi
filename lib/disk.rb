@@ -19,6 +19,10 @@ class Disk
     to_strings.join("\n")
   end
 
+  def self.count
+    @count ||= all.length
+  end
+
   def self.all
     @disks ||= load
   end
