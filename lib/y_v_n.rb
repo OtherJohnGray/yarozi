@@ -24,37 +24,32 @@ class YVN
       TYPE_PATTERN  = /^(S|M|Z1|Z2|Z3|R1|R5|R6)/
       SIZE_PATTERN  = /(\d+)/
       UNITS_PATTERN = /(T|G|M)/
-      LIST_PATTERN  = /(\d+,)*(\d+)/
-      RANGE_PATTERN = /(\d+)-(\d+)/
-      DISK_PATTERN  = /\[(?:#{LIST_PATTERN}|#{RANGE_PATTERN})\]$/
-      VDEV_PATTERN  = /#{TYPE_PATTERN}:\d+#{UNITS_PATTERN}#{DISK_PATTERN}/ 
+      NUM_PATTERN   = /(\d+,?)|(\d+)-(\d+),?/
+      DISKS_PATTERN = /\[(?:#{NUM_PATTERN}+)\]$/
+      VDEV_PATTERN  = /#{TYPE_PATTERN}:\d+#{UNITS_PATTERN}#{DISKS_PATTERN}/ 
 
       def initialize(vdev_string)
         @vdev_string = vdev_string
-        @disks       = []
         @errors      = []
+        @disks       = []
 
         if m = VDEV_PATTERN.match( vdev_string )
-          @type  = m[1]
-          @size  = m[2]
-          @units = m[3]
-          @disks = m[4]
-
-UP TO HERE - NEED TO ALLOW MULTIPLE RANGES MIXED WITH NUMBERS, and disambiguate @disks from @disks_string
-
+          @type        = m[1]
+          @size        = m[2]
+          @units       = m[3]
+          @disk_string = m[4]
+          @disk
           if r = RANGE_PATTERN.match(@disks)
             parse_range_match r
           else
             parse_list_match LIST_PATTERN.match(@disks)
           end
-          @errors << "must start with S, M, Z1, Z2, or Z3 for ZFS" unless swap || %w{ S, M, Z1, Z2, Z3 }.include?(@type)
-          @errors << "must start with S, R1, R5, or R6 for Swap" if swap && !%w{ S, R1, R5, R6 }.include?(@type)
         else
-          @errors << "must start with S, M, Z1, Z2, or Z3 for a ZFS VDEV, or S, R1, R5, or R6 for Swap" unless TYPE_PATTERN =~ vdev_string
+          @errors << "must start with type identifier of S, M, Z1, Z2, Z3, R1, R5, or R6" unless TYPE_PATTERN =~ vdev_string
           @errors << "must have : as the 2nd or 3rd character" unless [1,2].include?(v.index(":"))
-          @errors << "must include partition size immediately following the type and : characters" unless /#{TYPE_PATTERN}:\d+/ =~ vdev_string
-          @errors << "must include size units of M, G, or T immediately following the partition size value" unless /#{TYPE_PATTERN}:\d+#{UNITS_PATTERN}/ =~ vdev_string
-          @errors << "must contain a list of disk numbers, comma separated and inside square brackets, or alternatively a range of disk numbers in format first-last" unless /#{TYPE_PATTERN}:\d+#{UNITS_PATTERN}#{DISK_PATTERN}/ =~ vdev_string
+          @errors << "must include partition size immediately following the type and : characters" unless /:\d+/ =~ vdev_string
+          @errors << "must include size units of M, G, or T immediately following the partition size value" unless /\d+#{UNITS_PATTERN}/ =~ vdev_string
+          @errors << "must contain a list of disk numbers, comma separated and inside square brackets, or alternatively a range of disk numbers in format first-last" unless DISKS_PATTERN =~ vdev_string
         end
       end
     end

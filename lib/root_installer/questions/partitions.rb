@@ -15,7 +15,7 @@ class RootInstaller::Questions::Partitions < Question
         
         PartitionSize is the size of each SINGLE partition to create, as <size>M (for MiB), <size>G (for GiB), <size>T (for TiB), or * (for the remaining space on the disk) - for example, 200G means that each individual partition for the VDEV will be 200 GiB. If this was a 5-disk RAIDZ-2 VDEV, then total usable size would be 600 GiB (5 - 2 multiplied by 200).
         
-        Disk# is the number of the disk shown in the numbered list below. An inclusive range of disk numbers can be specified using a dash, e.g. disks 1 thru 4 can be specified as 1,2,3,4 or as 1-4.
+        Disk# is the number of the disk shown in the numbered list below. An inclusive range of disk numbers can be specified using a dash, e.g. disks 1 thru 4 can be specified as 1,2,3,4 or as 1-4. You can also mix and match these notations as needed to describe non-contiguous ranges, e.g. [1,4-6,11-15,22]
 
         Examples:
 
@@ -31,9 +31,13 @@ class RootInstaller::Questions::Partitions < Question
 
         M:100G[1,2] M:100G[3,4]
 
-        To define a RAIDZ2 ZPool consisting of a single 6-partition VDEV, made out of 200GiB partitions on disks 1 thru 6:
+        To define a RAIDZ2 ZPool consisting of a single 6-partition VDEV, made out of 100GiB partitions on disks 1 thru 6:
 
         Z2:100G[1-6]
+
+        To define a twin RAIDZ1 ZPool consisting of two 8-partition VDEVs, made out of 100GiB partitions on non-adjacent disks:
+
+        Z1:100G[1-3,6,11-14] Z1:100G[30-36,42]
 
         To achieve bit-rot resistance in a space efficient way if you only have a single drive, you can create a RAIDZ1 setup out of multiple partitons on the same drive (instead of using copies=2). for example, this definition allocates 160GiB of usable space and only 20GiB of parity:
 
