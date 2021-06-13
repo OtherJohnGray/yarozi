@@ -2,11 +2,14 @@ require 'test'
 
 class TestYVN < Test
 
-  # def test_simple_mirror
-  #   hdd_disks do
-  #     assert YVN.new('M:20G[1,2]').valid_zpool?
-  #   end
-  # end
+  def test_simple_mirror
+    YVN.new('M:20G[1,2]').tap do |y|
+      assert y.valid?
+      assert y.errors.empty?
+      assert_equal 1, y.vdevs.size
+      assert_equal [1,2], y.vdevs.first.disks
+    end
+  end
 
   # def test_striped_mirror
   #   mixed_disks do
@@ -14,12 +17,12 @@ class TestYVN < Test
   #   end
   # end
 
-  def test_z
-    mixed_disks do
-      assert YVN.new('Z1:200G[1-6]').valid_zpool?
-      assert YVN.new('Z1:200G[1,2]').valid_zpool?
-    end
-  end
+  # def test_
+  #   mixed_disks do
+  #     assert YVN.new('Z1:200G[1-6]').valid_zpool?
+  #     assert YVN.new('Z1:200G[1,2]').valid_zpool?
+  #   end
+  # end
 
   # def test_too_many
   #   hdd_disks do
