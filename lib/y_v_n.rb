@@ -41,7 +41,7 @@ class YVN
         @disks_string = m[4]
         @disks_string.split(',').each do |s|
           if RANGE_PATTERN =~ s
-            @disks.append Range.new(s.split("-").map(&:to_i)).to_a
+            @disks.concat Range.new( *s.split("-").map(&:to_i) ).to_a
           else
             @disks.append s.to_i
           end

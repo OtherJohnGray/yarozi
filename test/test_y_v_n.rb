@@ -11,6 +11,15 @@ class TestYVN < Test
     end
   end
 
+  def test_simple_raidz
+    YVN.new('Z1:20G[1-5]').tap do |y|
+      assert y.valid?
+      assert y.errors.empty?
+      assert_equal 1, y.vdevs.size
+      assert_equal [1,2,3,4,5], y.vdevs.first.disks
+    end
+  end
+
   # def test_striped_mirror
   #   mixed_disks do
   #     assert YVN.new('M:20G[1,2] M:20G[3,4]').valid_zpool?
