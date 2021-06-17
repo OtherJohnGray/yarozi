@@ -36,7 +36,7 @@ class YVN
 
       if m = VDEV_PATTERN.match( vdev_string )
         @type        = m[1]
-        @size        = m[2]
+        @size        = m[2].to_i
         @units       = m[3]
         @disks_string = m[4]
         @disks_string.split(',').each do |s|
@@ -45,6 +45,9 @@ class YVN
           else
             @disks.append s.to_i
           end
+        end
+        if @type == 'S' and @disks.size != 1
+          @errors << "must have exactly one disk if type is S"
         end
       else
         @errors << "must start with type identifier of S, M, Z1, Z2, Z3, R1, R5, or R6" unless TYPE_PATTERN =~ vdev_string
