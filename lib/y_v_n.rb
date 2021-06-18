@@ -1,12 +1,13 @@
 class YVN
-  attr_accessor :yvn_string, :vdevs, :errors
+  attr_accessor :yvn_string, :segments, :errors, :zpool
 
   def initialize(yvn_string)
     @yvn_string = yvn_string
     if @yvn_string && @yvn_string.length > 0
       @vdev_strings = @yvn_string.gsub(/\s+/m, ' ').strip.split(" ")
-      @vdevs = @vdev_strings.map {|vdev_string| VDEV.new vdev_string }
-      @errors = @vdevs.map{|v| v.errors}.flatten
+      @segments = @vdev_strings.map {|vdev_string| Segment.new(vdev_string) }
+      @errors = @segments.map(&:errors).flatten
+      @zpool = ZPool.new @segments.map(&:vdev) if valid? 
     else
       @errors ["yvn_string was empty"]
     end
@@ -17,8 +18,8 @@ class YVN
   end
 
 
-  class VDEV
-    attr_accessor :vdev_string, :type, :size, :units, :disks, :errors
+  class Segment
+    attr_accessor :vdev_string, :vdev, :errors
 
     TYPE_PATTERN     = /^(S|M|Z1|Z2|Z3|R1|R5|R6)/
     SIZE_PATTERN     = /(\d+)/
@@ -32,21 +33,21 @@ class YVN
     def initialize(vdev_string)
       @vdev_string = vdev_string
       @errors      = []
-      @disks       = []
-
       if m = VDEV_PATTERN.match( vdev_string )
-        @type        = m[1]
-        @size        = m[2].to_i
-        @units       = m[3]
-        @disks_string = m[4]
-        @disks_string.split(',').each do |s|
-          if RANGE_PATTERN =~ s
-            @disks.concat Range.new( *s.split("-").map(&:to_i) ).to_a
-          else
-            @disks.append s.to_i
+        @vdev = VDEV.new
+        @vdev.type        = m[1]
+        @vdev.size        = m[2].to_i
+        @vdev.units       = m[3]
+        @vdev.disks = Array.new.tap do |d|
+          m[4].split(',').each do |s|
+            if RANGE_PATTERN =~ s
+              d.concat Range.new( *s.split("-").map(&:to_i) ).to_a
+            else
+              d.append s.to_i
+            end
           end
         end
-        if @type == 'S' and @disks.size != 1
+        if @vdev.type == 'S' and @vdev.disks.size != 1
           @errors << "must have exactly one disk if type is S"
         end
       else

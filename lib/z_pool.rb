@@ -1,0 +1,2 @@
+class ZPool < Array
+end
