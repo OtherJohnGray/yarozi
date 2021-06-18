@@ -9,8 +9,7 @@ class TestYVN < Test
       assert_equal 1, y.zpool.size
       assert_equal [1], y.zpool.first.disks
       assert_equal 'S', y.zpool.first.type
-      assert_equal 20, y.zpool.first.size
-      assert_equal 'G', y.zpool.first.units
+      assert_equal '20G', y.zpool.first.partition_size
     end
   end
 
@@ -21,8 +20,7 @@ class TestYVN < Test
       assert_equal 1, y.zpool.size
       assert_equal [1,2], y.zpool.first.disks
       assert_equal 'M', y.zpool.first.type
-      assert_equal 20, y.zpool.first.size
-      assert_equal 'G', y.zpool.first.units
+      assert_equal '20G', y.zpool.first.partition_size
     end
   end
 
@@ -33,8 +31,7 @@ class TestYVN < Test
       assert_equal 1, y.zpool.size
       assert_equal [1,2,3,4,5], y.zpool.first.disks
       assert_equal 'Z1', y.zpool.first.type
-      assert_equal 20, y.zpool.first.size
-      assert_equal 'G', y.zpool.first.units
+      assert_equal '20G', y.zpool.first.partition_size
     end
   end
 
@@ -45,12 +42,10 @@ class TestYVN < Test
       assert_equal 2, y.zpool.size
       assert_equal [1,2,3,6,11,12,13,14], y.zpool.first.disks
       assert_equal 'Z1', y.zpool.first.type
-      assert_equal 100, y.zpool.first.size
-      assert_equal 'G', y.zpool.first.units
+      assert_equal '100G', y.zpool.first.partition_size
       assert_equal [30,31,32,33,34,35,36,42], y.zpool.last.disks
       assert_equal 'Z1', y.zpool.last.type
-      assert_equal 100, y.zpool.last.size
-      assert_equal 'G', y.zpool.last.units
+      assert_equal '100G', y.zpool.last.partition_size
     end
   end
 
@@ -66,18 +61,20 @@ class TestYVN < Test
   end
 
   def test_units
-    assert_equal 'T', YVN.new('M:20T[1,2]').zpool.first.units
-    assert_equal 'G', YVN.new('M:20G[1,2]').zpool.first.units
-    assert_equal 'M', YVN.new('M:20M[1,2]').zpool.first.units
+    assert_equal '20T', YVN.new('M:20T[1,2]').zpool.first.partition_size
+    assert_equal '20G', YVN.new('M:20G[1,2]').zpool.first.partition_size
+    assert_equal '20M', YVN.new('M:20M[1,2]').zpool.first.partition_size
+    assert_equal '20K', YVN.new('M:20K[1,2]').zpool.first.partition_size
+    assert_equal '20B', YVN.new('M:20B[1,2]').zpool.first.partition_size
+    assert_equal '*', YVN.new('M:*[1,2]').zpool.first.partition_size
   end
 
   def test_errors
     msg = [
       "must have exactly one disk if type is S",
       "must start with type identifier of S, M, Z1, Z2, Z3, R1, R5, or R6",
-      "must have : as the 2nd or 3rd character",
-      "must include partition size immediately following the type and : characters",
-      "must include size units of M, G, or T immediately following the partition size value",
+      "must have : immediately following the type identifier",
+      "must include partition size (either * or numbers followed by one of T,G,M,K or B ) immediately following the type and : characters",
       "must contain a list of disk numbers and/or dashed ranges, comma separated and inside square brackets"
     ]
     assert_equal msg[0], YVN.new('S:20G[1,2]' ).errors.first
@@ -85,8 +82,8 @@ class TestYVN < Test
     assert_equal msg[1], YVN.new('A:20G[1,2]' ).errors.first
     assert_equal msg[2], YVN.new('M-20G[1,2]' ).errors.first
     assert_equal msg[3], YVN.new('M:G100[1,2]').errors.first
-    assert_equal msg[4], YVN.new('M:20[1,2]'  ).errors.first
-    assert_equal msg[5], YVN.new('M:20G,1,2'  ).errors.first
+    assert_equal msg[3], YVN.new('M:20[1,2]'  ).errors.first
+    assert_equal msg[4], YVN.new('M:20G,1,2'  ).errors.first
   end
 
 end

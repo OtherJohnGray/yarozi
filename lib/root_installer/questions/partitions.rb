@@ -13,7 +13,7 @@ class RootInstaller::Questions::Partitions < Question
 
         VdevType is one of S (for Single partition VDEV), M (for mirror), or Z1, Z2, or Z3 (for RAIDZ 1 through 3 respectively).
         
-        PartitionSize is the size of each SINGLE partition to create, as <size>M (for MiB), <size>G (for GiB), <size>T (for TiB), or * (for the remaining space on the disk) - for example, 200G means that each individual partition for the VDEV will be 200 GiB. If this was a 5-disk RAIDZ-2 VDEV, then total usable size would be 600 GiB (5 - 2 multiplied by 200).
+        PartitionSize is the size of each SINGLE partition to create, as <size>T (for TiB), <size>G (for GiB), <size>M (for MiB), <size>K (for KiB), <size>B (for Bytes) or * (for the remaining space on the disk) - for example, 200G means that each individual partition for the VDEV will be 200 GiB. If this was a 5-disk RAIDZ-2 VDEV, then total usable size would be 600 GiB (5 - 2 multiplied by 200).
         
         Disk# is the number of the disk shown in the numbered list below. An inclusive range of disk numbers can be specified using a dash, e.g. disks 1 thru 4 can be specified as 1,2,3,4 or as 1-4. You can also mix and match these notations as needed to describe non-contiguous ranges, e.g. [1,4-6,11-15,22]
 
