@@ -26,6 +26,7 @@ class TestLayout < Test
 
   def test_invalid_size
     hdd_disks do
+      # oversized boot
       Layout.new.tap do |layout|
         layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', '1.5T', [1,2])}
         assert layout.valid?
@@ -35,6 +36,7 @@ class TestLayout < Test
         assert_equal "The total space allocated to disk 1 exceeds it's capacity", layout.errors.first
         assert_equal "The total space allocated to disk 2 exceeds it's capacity", layout.errors.last
       end
+      # oversized root
       Layout.new.tap do |layout|
         layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('M', '1.5T', [1,2])}
         assert layout.valid?
@@ -44,12 +46,34 @@ class TestLayout < Test
         assert_equal "The total space allocated to disk 1 exceeds it's capacity", layout.errors.first
         assert_equal "The total space allocated to disk 2 exceeds it's capacity", layout.errors.last
       end
+      # combined oversized
       Layout.new.tap do |layout|
         layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', '0.5T', [1,2])}
         layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('M', '0.5T', [1,2])}
         assert layout.valid?
         layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', '1.5T', [1,2])}
         layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('M', '1.5T', [1,2])}
+        refute layout.valid?
+        assert_equal 2, layout.errors.size
+        assert_equal "The total space allocated to disk 1 exceeds it's capacity", layout.errors.first
+        assert_equal "The total space allocated to disk 2 exceeds it's capacity", layout.errors.last
+      end
+      # mbr exceeds 
+      Layout.new.tap do |layout|
+        layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', "#{Disk.all.first.capacity_bytes}B", [1,2])}
+        assert layout.valid?
+        layout.legacy_boot = true
+        refute layout.valid?
+        assert_equal 2, layout.errors.size
+        assert_equal "The total space allocated to disk 1 exceeds it's capacity", layout.errors.first
+        assert_equal "The total space allocated to disk 2 exceeds it's capacity", layout.errors.last
+      end
+      # efi exceeds 
+      Layout.new.tap do |layout|
+        layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', "#{Disk.all.first.capacity_bytes - 2**20}B", [1,2])}
+        layout.legacy_boot = true
+        assert layout.valid?
+        layout.efi_partition = true
         refute layout.valid?
         assert_equal 2, layout.errors.size
         assert_equal "The total space allocated to disk 1 exceeds it's capacity", layout.errors.first
