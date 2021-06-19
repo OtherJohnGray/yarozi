@@ -14,13 +14,13 @@ class TestYVN < Test
   end
 
   def test_simple_mirror
-    YVN.new('M:20G[1,2]').tap do |y|
+    YVN.new('M:0.5T[1,2]').tap do |y|
       assert y.valid?
       assert y.errors.empty?
       assert_equal 1, y.zpool.size
       assert_equal [1,2], y.zpool.first.disks
       assert_equal 'M', y.zpool.first.type
-      assert_equal '20G', y.zpool.first.partition_size
+      assert_equal '0.5T', y.zpool.first.partition_size
     end
   end
 

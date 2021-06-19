@@ -22,7 +22,7 @@ class YVN
     attr_accessor :vdev_string, :vdev, :errors
 
     TYPE_PATTERN     = /^(S|M|Z1|Z2|Z3|R1|R5|R6)/
-    SIZE_PATTERN     = /(\d+[TGMKB]|\*)/
+    SIZE_PATTERN     = /(\d+(?:\.\d+)?[TGMKB]|\*)/
     DISKNUM_PATTERN  = /\d+/
     RANGE_PATTERN    = /\d+-\d+/
     DISK_PATTERN     = /(?:#{DISKNUM_PATTERN}|#{RANGE_PATTERN}),?/
