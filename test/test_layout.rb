@@ -46,13 +46,25 @@ class TestLayout < Test
         assert_equal "The total space allocated to disk 1 exceeds it's capacity", layout.errors.first
         assert_equal "The total space allocated to disk 2 exceeds it's capacity", layout.errors.last
       end
+      # oversized swap
+      Layout.new.tap do |layout|
+        layout.swap = ZPool.new.tap{|b| b << VDEV.new('M', '1.5T', [1,2])}
+        assert layout.valid?
+        layout.swap = ZPool.new.tap{|b| b << VDEV.new('M', '4T', [1,2])}
+        refute layout.valid?
+        assert_equal 2, layout.errors.size
+        assert_equal "The total space allocated to disk 1 exceeds it's capacity", layout.errors.first
+        assert_equal "The total space allocated to disk 2 exceeds it's capacity", layout.errors.last
+      end
       # combined oversized
       Layout.new.tap do |layout|
         layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', '0.5T', [1,2])}
         layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('M', '0.5T', [1,2])}
+        layout.swap = ZPool.new.tap{|b| b << VDEV.new('M', '0.5T', [1,2])}
         assert layout.valid?
-        layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', '1.5T', [1,2])}
-        layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('M', '1.5T', [1,2])}
+        layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', '1T', [1,2])}
+        layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('M', '1T', [1,2])}
+        layout.swap = ZPool.new.tap{|b| b << VDEV.new('M', '1T', [1,2])}
         refute layout.valid?
         assert_equal 2, layout.errors.size
         assert_equal "The total space allocated to disk 1 exceeds it's capacity", layout.errors.first

@@ -1,5 +1,5 @@
 # This class owns the responsibility of mapping a YVN vdev map to actual disk partitions
-class Layout < Struct.new :boot_pool, :root_pool, :legacy_boot, :efi_partition
+class Layout < Struct.new :boot_pool, :root_pool, :legacy_boot, :efi_partition, :swap
 
   MBR_SIZE = 2**20
   EFI_SIZE = 2**29
@@ -26,6 +26,15 @@ class Layout < Struct.new :boot_pool, :root_pool, :legacy_boot, :efi_partition
               disks[vdev_disk] = (disks[vdev_disk] || 0) + vdev.partition_bytes
             else
               errors << "root pool vdev #{index} specifies a disk number #{vdev_disk}, but there are only #{Disk.all.size} disks in the system"
+            end
+          end
+        end
+        swap && swap.each_with_index do |vdev, index|
+          vdev.disks.each do |vdev_disk|
+            if vdev_disk <= Disk.all.size
+              disks[vdev_disk] = (disks[vdev_disk] || 0) + vdev.partition_bytes
+            else
+              errors << "swap device #{index} specifies a disk number #{vdev_disk}, but there are only #{Disk.all.size} disks in the system"
             end
           end
         end
