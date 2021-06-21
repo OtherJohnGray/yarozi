@@ -75,7 +75,7 @@ class RootInstaller::Questions::Partitions < Question
     end
 
 
-    class AskYVN < Question
+    class YVNQuestion < Question
       def ask
         wizard.title = name
         wizard.default_button = false
@@ -139,7 +139,7 @@ class RootInstaller::Questions::Partitions < Question
     
     end
     
-    class Boot < AskYVN
+    class Boot < YVNQuestion
       def name
         "Boot pool"
       end
@@ -160,7 +160,7 @@ class RootInstaller::Questions::Partitions < Question
       end
     end
     
-    class Root < AskYVN
+    class Root < YVNQuestion
       def name
         "Root pool"
       end
@@ -171,7 +171,7 @@ class RootInstaller::Questions::Partitions < Question
     end
     
     
-    class Swap < AskYVN
+    class Swap < YVNQuestion
       def name
         "Swap"
       end

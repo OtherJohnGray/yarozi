@@ -61,7 +61,9 @@ class TestBoot < Test
   end
 end
 
-class TestPartitiosn < Test
+class TestPartition < Test
+
+#UP TO HERE - doing what exactly???
 
   def test_ask_yvn_with_swap
     mixed_disks do
