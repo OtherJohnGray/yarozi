@@ -7,6 +7,7 @@ class VDEV < Struct.new(:type, :partition_size, :disks)
   T = G * 1024
 
   def partition_bytes
+    return '*' if '*' == partition_size
     /(?<digits>\d+(?:\.\d+)?)(?<unit>[TGMKB])/ =~ partition_size
     (digits.to_f * self.class.const_get(unit.to_sym)).to_i
   end
