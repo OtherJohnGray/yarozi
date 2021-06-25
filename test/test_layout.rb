@@ -94,4 +94,39 @@ class TestLayout < Test
     end
   end
 
+  def test_wildcard
+    hdd_disks do
+      # valid boot
+      Layout.new.tap do |layout|
+        layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', '*', [1,2])}
+        layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('M', '0.8T', [1,2])}
+        layout.swap = ZPool.new.tap{|b| b << VDEV.new('M', '0.8T', [1,2])}
+        assert layout.valid?
+      end
+      # valid root
+      Layout.new.tap do |layout|
+        layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', '0.8T', [1,2])}
+        layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('M', '*', [1,2])}
+        layout.swap = ZPool.new.tap{|b| b << VDEV.new('M', '0.8T', [1,2])}
+        assert layout.valid?
+      end
+      # valid swap
+      Layout.new.tap do |layout|
+        layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', '0.8T', [1,2])}
+        layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('M', '0.8T', [1,2])}
+        layout.swap = ZPool.new.tap{|b| b << VDEV.new('M', '*', [1,2])}
+        assert layout.valid?
+      end
+      # invalid
+      Layout.new.tap do |layout|
+        layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('M', '*', [1,2])}
+        layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('M', '*', [1,2,1,1])}
+        layout.swap = ZPool.new.tap{|b| b << VDEV.new('M', '*', [1,2])}
+        refute layout.valid?
+        assert_equal "More than one size wildcard (*) specified for disk 1: 1 from boot vdev 1, 3 from root vdev 1, and 1 from swap device 1", layout.errors[0]
+        assert_equal "More than one size wildcard (*) specified for disk 2: 1 from boot vdev 1, 1 from root vdev 1, and 1 from swap device 1", layout.errors[1]
+      end
+    end
+  end
+
 end
