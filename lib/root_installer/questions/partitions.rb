@@ -2,7 +2,6 @@ class RootInstaller::Questions::Partitions < Question
 
     def ask
       wizard.title = "YAROZI VDEV Notation"
-      wizard.default_item = task.root_encryption_type if task.respond_to? :root_encryption_type
       text = <<~TEXT
 
         (This screen is very long. Use UP and DOWN arrow keys to scroll - PAGEUP and PAGEDOWN keys work also....)
