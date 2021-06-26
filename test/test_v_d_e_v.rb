@@ -20,7 +20,7 @@ class TestVDEV < Test
     assert VDEV.new('Z3', '20K', [1,2,3,4]).valid?
     assert VDEV.new('R1', '20K', [1,2]).valid?
     assert VDEV.new('R5', '20K', [1,2]).valid?
-    assert VDEV.new('R6', '20K', [1,2,3]).valid?
+    assert VDEV.new('R6', '20K', [1,2,3             ]).valid?
     VDEV.new(nil, '20K', [1]).tap do |vdev|
       refute vdev.valid?
       assert_equal 1, vdev.errors.size
@@ -64,42 +64,42 @@ class TestVDEV < Test
     VDEV.new('S', '20G', [1,2]).tap do |vdev|
       refute vdev.valid?
       assert_equal 1, vdev.errors.size
-      assert_equal "'single' device must have exactly 1 disk", vdev.errors.first
+      assert_equal "is a 'single' device and should have exactly 1 disk, but it has 2 instead", vdev.errors.first
     end
     VDEV.new('M', '20G', [1]).tap do |vdev|
       refute vdev.valid?
       assert_equal 1, vdev.errors.size
-      assert_equal "mirror vdev must have at least 2 disks", vdev.errors.first
+      assert_equal "is a mirror and should have at least 2 disks, but it only has 1", vdev.errors.first
     end
     VDEV.new('Z1', '20G', [1]).tap do |vdev|
       refute vdev.valid?
       assert_equal 1, vdev.errors.size
-      assert_equal "RAIDZ1 vdev must have at least 2 disks", vdev.errors.first
+      assert_equal "is RAIDZ1 and should have at least 2 disks, but it only has 1", vdev.errors.first
     end
     VDEV.new('Z2', '20G', [1,2]).tap do |vdev|
       refute vdev.valid?
       assert_equal 1, vdev.errors.size
-      assert_equal "RAIDZ2 vdev must have at least 3 disks", vdev.errors.first
+      assert_equal "is RAIDZ2 and should have at least 3 disks, but it only has 2", vdev.errors.first
     end
     VDEV.new('Z3', '20G', [1,2,3]).tap do |vdev|
       refute vdev.valid?
       assert_equal 1, vdev.errors.size
-      assert_equal "RAIDZ3 vdev must have at least 4 disks", vdev.errors.first
+      assert_equal "is RAIDZ3 and should have at least 4 disks, but it only has 3", vdev.errors.first
     end
     VDEV.new('R1', '20G', [1]).tap do |vdev|
       refute vdev.valid?
       assert_equal 1, vdev.errors.size
-      assert_equal "RAID1 volume must have at least 2 disks", vdev.errors.first
+      assert_equal "is RAID1 volume and should have at least 2 disks, but it only has 1", vdev.errors.first
     end
     VDEV.new('R5', '20G', [1]).tap do |vdev|
       refute vdev.valid?
       assert_equal 1, vdev.errors.size
-      assert_equal "RAID5 volume must have at least 2 disks", vdev.errors.first
+      assert_equal "is RAID5 volume and should have at least 2 disks, but it only has 1", vdev.errors.first
     end
     VDEV.new('R6', '20G', [1,2]).tap do |vdev|
       refute vdev.valid?
       assert_equal 1, vdev.errors.size
-      assert_equal "RAID6 volume must have at least 3 disks", vdev.errors.first
+      assert_equal "is RAID6 volume and should have at least 3 disks, but it only has 2", vdev.errors.first
     end
   end
 

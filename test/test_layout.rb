@@ -211,4 +211,14 @@ class TestLayout < Test
       end      
     end
   end
+
+  def test_vdev_errors
+    usb_disks do
+      Layout.new.tap do |layout|
+        layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('S', '10G', [1,2])}
+        refute layout.valid?
+        assert_equal [], layout.errors
+      end
+    end
+  end
 end

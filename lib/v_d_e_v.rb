@@ -21,14 +21,14 @@ class VDEV < Struct.new(:type, :partition_size, :disks)
       err << "type must be one of S, M, Z1, Z2, Z3, R1, R5 or R6" unless /S|M|Z1|Z2|Z3|R1|R5|R6/ =~ type
       err << "partition size must be either a number followed by T, G, M, K or B, or else a *" unless /\*|\d+[TGMKB]/ =~ partition_size
       if disks && disks.is_a?(Array) && disks.length > 0 && disks.all?{|d| d.is_a? Integer}
-        err << "is a 'single' device so must have exactly 1 disk" if type == 'S' && disks.size != 1
-        err << "is a mirror so must have at least 2 disks" if type == 'M' && disks.size < 2
-        err << "is RAIDZ1 so must have at least 2 disks" if type == 'Z1' && disks.size < 2
-        err << "is RAIDZ2 so must have at least 3 disks" if type == 'Z2' && disks.size < 3
-        err << "is RAIDZ3 so must have at least 4 disks" if type == 'Z3' && disks.size < 4
-        err << "is RAID1 volume so must have at least 2 disks" if type == 'R1' && disks.size < 2
-        err << "is RAID5 volume so must have at least 2 disks" if type == 'R5' && disks.size < 2
-        err << "is RAID6 volume so must have at least 3 disks" if type == 'R6' && disks.size < 3
+        err << "is a 'single' device and should have exactly 1 disk, but it has #{disks.size} instead" if type == 'S' && disks.size != 1
+        err << "is a mirror and should have at least 2 disks, but it only has 1" if type == 'M' && disks.size < 2
+        err << "is RAIDZ1 and should have at least 2 disks, but it only has 1" if type == 'Z1' && disks.size < 2
+        err << "is RAIDZ2 and should have at least 3 disks, but it only has #{disks.size}" if type == 'Z2' && disks.size < 3
+        err << "is RAIDZ3 and should have at least 4 disks, but it only has #{disks.size}" if type == 'Z3' && disks.size < 4
+        err << "is RAID1 volume and should have at least 2 disks, but it only has 1" if type == 'R1' && disks.size < 2
+        err << "is RAID5 volume and should have at least 2 disks, but it only has 1" if type == 'R5' && disks.size < 2
+        err << "is RAID6 volume and should have at least 3 disks, but it only has #{disks.size}" if type == 'R6' && disks.size < 3
       else
         err << "disks must be an array of integers"
       end
