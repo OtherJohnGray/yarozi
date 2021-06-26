@@ -203,10 +203,11 @@ class TestLayout < Test
         refute layout.valid?
         assert_equal 1, layout.errors.size
         assert_equal "swap device 1 has type Z2 which is not valid for swap", layout.errors[0]
-        layout.swap = ZPool.new.tap{|b| b << VDEV.new('Z3', '1T', [3,4,5,6])}
+        layout.swap = ZPool.new.tap{|b| b << VDEV.new('Z3', '0.5T', [3,4,5,6]); b << VDEV.new('Z3', '0.5T', [3,4,5,6])}
         refute layout.valid?
-        assert_equal 1, layout.errors.size
+        assert_equal 2, layout.errors.size
         assert_equal "swap device 1 has type Z3 which is not valid for swap", layout.errors[0]
+        assert_equal "swap device 2 has type Z3 which is not valid for swap", layout.errors[1]
       end      
     end
   end
