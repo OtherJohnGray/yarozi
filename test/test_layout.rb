@@ -216,8 +216,14 @@ class TestLayout < Test
     usb_disks do
       Layout.new.tap do |layout|
         layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('S', '10G', [1,2])}
+        layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('M', '10G', [1]); b << VDEV.new('Z2', '10G', [1,2]);}
+        layout.swap = ZPool.new.tap{|b| b << VDEV.new('R6', '10G', [1,2])}
         refute layout.valid?
-        assert_equal [], layout.errors
+        assert_equal 4, layout.errors.size
+        assert_equal "boot pool vdev 1 is a 'single' device and should have exactly 1 disk, but it has 2 instead", layout.errors[0]
+        assert_equal "root pool vdev 1 is a mirror and should have at least 2 disks, but it only has 1", layout.errors[1]
+        assert_equal "root pool vdev 2 is RAIDZ2 and should have at least 3 disks, but it only has 2", layout.errors[2]
+        assert_equal "swap device 1 is RAID6 volume and should have at least 3 disks, but it only has 2", layout.errors[3]
       end
     end
   end
