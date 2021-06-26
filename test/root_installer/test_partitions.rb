@@ -1,5 +1,7 @@
 require 'test'
 
+NOT DOING THIS YET - STILL REFACTORING PARTITIONS.RB
+
 class TestBoot < Test
   def test_ask_boot_with_efi
     mixed_disks do
@@ -62,8 +64,6 @@ class TestBoot < Test
 end
 
 class TestPartition < Test
-
-#UP TO HERE - doing what exactly???
 
   def test_ask_yvn_with_swap
     mixed_disks do

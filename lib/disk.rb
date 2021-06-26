@@ -8,7 +8,7 @@ class Disk
   end
 
   def self.to_strings
-    all.sort_by{|d| d.type_sort_order * 100000000 + d.connection_sort_order * 10000000 + d.capacity_gb}.map(&:to_s)
+    all.map(&:to_s)
   end
 
   def self.to_numbered_list
@@ -24,11 +24,11 @@ class Disk
   end
 
   def self.all
-    @disks ||= load
+    @disks ||= load.sort_by{|d| d.type_sort_order * 100000000 + d.connection_sort_order * 10000000 + d.capacity_gb}
   end
 
   def self.reload
-    @disks = load
+    @disks = load.sort_by{|d| d.type_sort_order * 100000000 + d.connection_sort_order * 10000000 + d.capacity_gb}
   end
 
   def self.load
