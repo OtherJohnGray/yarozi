@@ -12,6 +12,7 @@ class Layout < Struct.new :boot_pool, :root_pool, :legacy_boot, :efi_partition, 
     Array.new.tap do |errors|
       %w(boot root).each do |pool_name|
         if pool = self.send(pool_name + "_pool")
+          errors.concat pool.errors.map{|e| "#{pool_name} pool vdev #{e}"}
           pool.each_with_index do |vdev, i|
             unless %w(S M Z1 Z2 Z3).include?( vdev.type.upcase )
               errors << "#{pool_name} vdev #{i + 1} has type #{vdev.type.upcase} which is not valid for a #{pool_name} pool"
@@ -19,7 +20,9 @@ class Layout < Struct.new :boot_pool, :root_pool, :legacy_boot, :efi_partition, 
           end
         end
       end
-      if swap && swap.each_with_index do |vdev, i|
+      if swap 
+        errors.concat swap.errors.map{|e| "swap device #{e}"}
+        swap.each_with_index do |vdev, i|
           unless %w(S R1 R5 R6).include?( vdev.type.upcase )
             errors << "swap device #{i + 1} has type #{vdev.type.upcase} which is not valid for swap"
           end
