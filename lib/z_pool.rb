@@ -4,6 +4,10 @@ class ZPool < Array
     errors.empty?
   end
 
+  def invalid?
+    !valid?
+  end
+
   def errors
     [].tap do |err|
       each_with_index do |vdev, i|

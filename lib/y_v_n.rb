@@ -17,6 +17,14 @@ class YVN
     @errors.empty?
   end
 
+  def invalid?
+    !valid?
+  end
+
+  def to_s
+    @yvn_string
+  end
+
 
   class Segment
     attr_accessor :vdev_string, :vdev, :errors
@@ -56,42 +64,5 @@ class YVN
       end
     end
   end
-
-  # def parse_range_match(match_data)
-  #   first, last = match_data[1..-1].map{|m| m.to_i }
-  #   if first < 0
-  #     @errors << "first disk number of #{first} was less than 1"
-  #   elsif first > Disk.count
-  #     @errors << "first disk number of #{first} was greater than the number of disks available (#{Disk.count})"
-  #   end
-  #   if last < 0
-  #     @errors << "last disk number of #{last} was less than 1"
-  #   elsif first > Disk.count
-  #     @errors << "last disk number of #{last} was greater than the number of disks available (#{Disk.count})"
-  #   end
-  #   if first > last
-  #     @disks.concat Range.new(first, last).to_a
-  #   else
-  #     "last disk number of #{last} must be greater than the first disk number of #{first}"
-  #   end
-  # end
-
-  # def parse_list_match(match_data)
-  #   match_data[1..-1].each_with_index do |m, i|
-  #     n = m.to_i
-  #     if if n > Disk.count
-  #       @errors << "disk number of #{m} in position #{i+1} is greater than the number of disks available (#{Disk.count})" 
-  #     elsif n < 1
-  #       @errors << "disk number of #{m} in position #{i+1} is less than 1" 
-  #     else
-  #       @disks << n
-  #     end
-      
-  #   end
-  # end
-
-
-
-
 end
 

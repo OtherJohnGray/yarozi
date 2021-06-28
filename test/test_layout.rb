@@ -146,15 +146,15 @@ class TestLayout < Test
         layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('R1', '1T', [3,4,5,6])}
         refute layout.valid?
         assert_equal 1, layout.errors.size
-        assert_equal "boot vdev 1 has type R1 which is not valid for a boot pool", layout.errors[0]
+        assert_equal "boot pool vdev 1 has type R1 which is not valid for a boot pool", layout.errors[0]
         layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('R5', '1T', [3,4,5,6])}
         refute layout.valid?
         assert_equal 1, layout.errors.size
-        assert_equal "boot vdev 1 has type R5 which is not valid for a boot pool", layout.errors[0]
+        assert_equal "boot pool vdev 1 has type R5 which is not valid for a boot pool", layout.errors[0]
         layout.boot_pool = ZPool.new.tap{|b| b << VDEV.new('R6', '1T', [3,4,5,6])}
         refute layout.valid?
         assert_equal 1, layout.errors.size
-        assert_equal "boot vdev 1 has type R6 which is not valid for a boot pool", layout.errors[0]
+        assert_equal "boot pool vdev 1 has type R6 which is not valid for a boot pool", layout.errors[0]
       end
       # root type
       Layout.new.tap do |layout|
@@ -171,15 +171,15 @@ class TestLayout < Test
         layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('R1', '1T', [3,4,5,6])}
         refute layout.valid?
         assert_equal 1, layout.errors.size
-        assert_equal "root vdev 1 has type R1 which is not valid for a root pool", layout.errors[0]
+        assert_equal "root pool vdev 1 has type R1 which is not valid for a root pool", layout.errors[0]
         layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('R5', '1T', [3,4,5,6])}
         refute layout.valid?
         assert_equal 1, layout.errors.size
-        assert_equal "root vdev 1 has type R5 which is not valid for a root pool", layout.errors[0]
+        assert_equal "root pool vdev 1 has type R5 which is not valid for a root pool", layout.errors[0]
         layout.root_pool = ZPool.new.tap{|b| b << VDEV.new('R6', '1T', [3,4,5,6])}
         refute layout.valid?
         assert_equal 1, layout.errors.size
-        assert_equal "root vdev 1 has type R6 which is not valid for a root pool", layout.errors[0]
+        assert_equal "root pool vdev 1 has type R6 which is not valid for a root pool", layout.errors[0]
       end
       # swap type
       Layout.new.tap do |layout|

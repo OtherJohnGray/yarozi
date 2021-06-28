@@ -68,6 +68,7 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def respond
+      task.set :layout, Layout.new
       subquestions.append Boot.new(task)
       subquestions.append Root.new(task)
       subquestions.append Swap.new(task) if task.configure_swap
@@ -78,73 +79,71 @@ class RootInstaller::Questions::Partitions < Question
       def ask
         wizard.title = name
         wizard.default_button = false
-        text = <<~TEXT
-
-          #{preamble}        
-
-          YVN Syntax reminder: <type>:<partition size>[Disk#....]
-
-          e.g. Single disk: S:100G[1]
-          
-          e.g. 2 disk mirror: M:100G[1,2]
-          
-          e.g. 6 disk RAIDZ2: R2:100G[1-6]
-          
-          e.g. 2 disks striped: S:50G[1] S:50G[2]
-
-        TEXT
-    
         form_data = Struct.new(:label, :ly, :lx, :item, :iy, :ix, :flen, :ilen)
     
-        # infinite loop. break out 
-        # - if all the values of the form are filled in when OK button is pressed
-        # - if Esc button is pressed twice
         loop do
-            items = []
-            data = form_data.new
-            data.label = name
-            data.ly = 1
-            data.lx = 1
-            data.item = task.respond_to?(task_variable) ? task.send(task_variable) : ""
-            data.iy = 1
-            data.ix = name.length + 2
-            data.flen = 67 - name.length
-            data.ilen = 9999
-            items.push(data.to_a)
-    
-            width = 76
-            formheight = 1
-      
-            input = wizard.input(text, items, height, width, formheight)[name]
-    
-            break unless clicked == "next"
+          text = <<~TEXT
+            #{preamble}        
+            YVN Syntax reminder: <type>:<partition size>[Disk#....]
 
-            if @input = YVN.new(input).valid_zpool?
-              break
+            e.g. Single disk: S:100G[1]
+            
+            e.g. 2 disk mirror: M:100G[1,2]
+            
+            e.g. 6 disk RAIDZ2: R2:100G[1-6]
+            
+            e.g. 2 disks striped: S:50G[1] S:50G[2]
+
+          TEXT
+          items = []
+          data = form_data.new
+          data.label = name
+          data.ly = 1
+          data.lx = 1
+          data.item = @yvn ? @yvn : ""
+          data.iy = 1
+          data.ix = name.length + 2
+          data.flen = 67 - name.length
+          data.ilen = 9999
+          items.push(data.to_a)
+          width = 76
+          formheight = 1
+          input = wizard.input(text, items, height, width, formheight)[name]
+
+          break unless clicked == "next"
+
+          if (@yvn = YVN.new(input)).invalid?
+            show_errors @yvn.errors.map{|e| "YVN segments " + e}
+          else
+            task.layout.send assign_layout, @yvn.zpool
+            if task.layout.invalid?
+              show_errors @task.layout.errors
             else
-              show_warning
+              break
             end
+          end
         end
-
       end
 
-      def form_filled?
-        true
+      def show_errors(errors)
+        text = <<~TEXT
+          
+          Please correct the following errors:
+
+          #{errors.join "\n"}
+        TEXT
+        new_dialog.alert text, 100, 200
       end
-    
-      def respond
-        task.set task_variable, @input
-      end
-    
     end
-    
+
+
     class Boot < YVNQuestion
       def name
         "Boot pool"
       end
 
-      def task_variable
-        :boot_pool_yvn
+      def assign_layout
+        :boot_pool=
       end
 
       def preamble
@@ -164,8 +163,18 @@ class RootInstaller::Questions::Partitions < Question
         "Root pool"
       end
 
-      def task_variable
-        :root_pool_yvn
+      def assign_layout
+        :boot_pool=
+      end
+
+      def preamble
+        <<~TEXT
+          Please enter the YVN definition that you want for your Root pool.
+        TEXT
+      end
+
+      def height
+          20
       end
     end
     
@@ -175,8 +184,18 @@ class RootInstaller::Questions::Partitions < Question
         "Swap"
       end
 
-      def task_variable
-        :swap_yvn
+      def assign_layout
+        :swap=
+      end
+
+      def preamble
+        <<~TEXT
+          Please enter the YVN definition that you want for your Swap devices.
+        TEXT
+      end
+
+      def height
+          20
       end
     end
     

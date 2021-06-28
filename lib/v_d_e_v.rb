@@ -16,6 +16,11 @@ class VDEV < Struct.new(:type, :partition_size, :disks)
     errors.empty?
   end
 
+  def invalid?
+    !valid?
+  end
+
+
   def errors(vdev_number = "")
     [].tap do |err|
       err << "type must be one of S, M, Z1, Z2, Z3, R1, R5 or R6" unless /S|M|Z1|Z2|Z3|R1|R5|R6/ =~ type

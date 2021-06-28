@@ -9,7 +9,7 @@ class RootInstaller::Installer < Task
     questions.append RootInstaller::Questions::Encryption.new(self)
     questions.append RootInstaller::Questions::Swap.new(self)
     questions.append RootInstaller::Questions::Compression.new(self)
-    # questions.append RootInstaller::Questions::Partitions.new(self)
+    questions.append RootInstaller::Questions::Partitions.new(self)
     # questions.append RootInstaller::Questions::InstallDetails.new(self)
   end
 
