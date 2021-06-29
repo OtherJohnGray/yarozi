@@ -71,7 +71,7 @@ class RootInstaller::Questions::PartitionsYVN < Question
       task.set :layout, Layout.new
       subquestions.append Boot.new(task)
       subquestions.append Root.new(task)
-      subquestions.append Swap.new(task) if task.configure_swap
+      subquestions.append Swap.new(task) unless task.configure_swap == 'none'
     end
 
 
