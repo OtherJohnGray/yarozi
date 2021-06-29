@@ -5,7 +5,7 @@ class Question
 
   def initialize(task=nil) 
     @task = task
-    reset
+    @subquestions = QuestionList.new(self)
   end
 
   def reset 

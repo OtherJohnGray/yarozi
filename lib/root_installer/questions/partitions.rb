@@ -1,5 +1,9 @@
 class RootInstaller::Questions::Partitions < Question
 
+    def reset
+      subquestions.reject!{|s| s.instance_of? RootInstaller::Questions::PartitionsYVN::Swap} unless task.configure_swap?
+    end
+
     def ask
       loop do
         wizard.title = "Disk Partitions"
@@ -33,11 +37,18 @@ class RootInstaller::Questions::Partitions < Question
 
 
     def respond
+      task.set :layout, Layout.new
       case @partitions_type
       when "yvn"
-        subquestions.append RootInstaller::Questions::PartitionsYVN.new(task)
+        subquestions.reject!{|s| s.instance_of? RootInstaller::Questions::PartitionsChecklist}
+        subquestions.append RootInstaller::Questions::PartitionsYVN.new(task) unless subquestions.any?{|s| s.instance_of? RootInstaller::Questions::PartitionsYVN}
+        subquestions.append RootInstaller::Questions::PartitionsYVN::Boot.new(task) unless subquestions.any?{|s| s.instance_of? RootInstaller::Questions::PartitionsYVN::Boot}
+        subquestions.append RootInstaller::Questions::PartitionsYVN::Root.new(task) unless subquestions.any?{|s| s.instance_of? RootInstaller::Questions::PartitionsYVN::Root}
+        subquestions.append RootInstaller::Questions::PartitionsYVN::Swap.new(task) if task.configure_swap? && ! subquestions.any?{|s| s.instance_of? RootInstaller::Questions::PartitionsYVN::Swap}
       else
-        subquestions.append RootInstaller::Questions::PartitionsCheckbox.new(task)
+        subquestions.reject!{|s| s.instance_of? RootInstaller::Questions::PartitionsYVN}
+        subquestions.reject!{|s| s.kind_of? RootInstaller::Questions::PartitionsYVN::YVNQuestion}
+        subquestions.append RootInstaller::Questions::PartitionsChecklist.new(task)
       end
     end
 

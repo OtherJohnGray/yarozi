@@ -67,14 +67,6 @@ class RootInstaller::Questions::PartitionsYVN < Question
       TEXT
     end
 
-    def respond
-      task.set :layout, Layout.new
-      subquestions.append Boot.new(task)
-      subquestions.append Root.new(task)
-      subquestions.append Swap.new(task) if task.configure_swap?
-    end
-
-
     class YVNQuestion < Question
       def ask
         wizard.title = name

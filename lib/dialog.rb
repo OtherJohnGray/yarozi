@@ -26,6 +26,11 @@ class Dialog < MRDialog
     form(text, items, drows( height, vpad ), dcols( width, hpad ), formheight)
   end
 
+  def list(text="Text Goes Here", items=[], height=0, width=0, listheight=0, vpad=VPAD, hpad=HPAD)
+    log.debug "Dialog.input: calling list with height of #{height}, width of #{width}, listheight of #{listheight}, vpad of #{vpad}, hpad of #{hpad}, and text of #{text}"
+    checklist(text, items, drows( height, vpad ), dcols( width, hpad ), listheight)
+  end
+
   
   def self.rows
     @rows ||= `tput lines`.to_i
@@ -211,8 +216,55 @@ class Dialog < MRDialog
 
     tmp.close!
     return res_hash
-
   end
 
+
+  def checklist(text, items, height=0, width=0, listheight=0)
+    
+    tmp = Tempfile.new('tmp')
+
+    itemlist = String.new
+
+    for item in items
+      if item[2]
+        item[2] = "on"
+      else
+        item[2] = "off"
+      end
+      itemlist += "\"" + item[0].to_s + "\" \"" + item[1].to_s + 
+      "\" " + item[2] + " "
+
+      if @itemhelp
+        itemlist += "\"" + item[3].to_s + "\" "
+      end
+    end
+
+    sep = "|"
+    command = option_string() + "--checklist \"" + text.to_s +
+                        "\" " + height.to_i.to_s + " " + width.to_i.to_s +
+      " " + listheight.to_i.to_s + " " + itemlist + "2> " +
+      tmp.path 
+      log_debug "Command:\n#{command}"
+    success = system(command)
+    @exit_code = $?.exitstatus
+    selected_array = []
+    if success
+      selected_string = tmp.readline
+      tmp.close!
+      log_debug "Separator: #{@separator}"
+
+      sep = Shellwords.escape(@separator)
+      # a = selected_string.split(/#{sep}/)
+      a = selected_string.split(" ")
+      a.each do |item|
+        log_debug ">> #{item}"
+        selected_array << item if item && item.to_s.length > 0
+      end
+      return selected_array
+    else
+      tmp.close!
+      return success
+    end
+  end
 
 end
