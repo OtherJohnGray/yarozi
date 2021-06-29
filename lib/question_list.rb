@@ -27,7 +27,7 @@ class QuestionList
       log.info "asking question #{i}"
       @questions[i].ask
       case @questions[i].clicked
-      when "back"
+      when "previous"
         if i > 0
           log.info "going back..."
           i -= 1

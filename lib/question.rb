@@ -31,11 +31,11 @@ class Question
   def configure_wizard
     dialog.tap do |d|
       d.extra_button = true
-      d.extra_label = "next"
-      d.ok_label = "back"
-      d.yes_label = "back"
+      d.extra_label = "previous"
+      d.ok_label = "next"
+      d.yes_label = "next"
       d.no_label = "cancel"
-      d.default_button = "extra"
+      # d.default_button = "next"
       d.notags = true
     end
   end

@@ -82,7 +82,7 @@ class Dialog < MRDialog
     @exit_code = $?.exitstatus
 
     if @exit_code != 1
-      @selected_button = ( @exit_code == 0 ? "back" : "next" ) 
+      @selected_button = ( @exit_code == 0 ? "next" : "previous" ) 
       selected_string = tmp.readline
       tmp.close!
       return selected_string
@@ -118,7 +118,7 @@ class Dialog < MRDialog
     @success = system(command)
     @exit_code = $?.exitstatus
     if @exit_code != 1
-      @selected_button = ( @exit_code == 0 ? "back" : "next" ) 
+      @selected_button = ( @exit_code == 0 ? "next" : "previous" ) 
       true
     else
       @selected_button = "cancel"
@@ -199,7 +199,7 @@ class Dialog < MRDialog
     log_debug "Exit code: #{exit_code}"
 
     if @exit_code != 1
-      @selected_button = ( @exit_code == 0 ? "back" : "next" ) 
+      @selected_button = ( @exit_code == 0 ? "next" : "previous" ) 
       lines = tmp.readlines
       lines.each_with_index do |val, idx|
           key = items[idx][0]
