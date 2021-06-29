@@ -9,7 +9,7 @@ class YVN
       @errors = @segments.map(&:errors).flatten
       @zpool = ZPool.new @segments.map(&:vdev) if valid? 
     else
-      @errors ["yvn_string was empty"]
+      @errors = ["was empty"]
     end
   end
 

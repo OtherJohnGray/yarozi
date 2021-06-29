@@ -6,7 +6,7 @@ class RootInstaller::Questions::PartitionsYVN < Question
 
         (This screen is very long. Use UP and DOWN arrow keys to scroll - PAGEUP and PAGEDOWN keys work also....)
 
-        The following #{task.configure_swap == 'none' ? "two" : "three"} sceens specify the disk partitions for the VDEVs of your ZPools#{task.configure_swap != 'none' ? " and swap" : ""}. For maximum flexibility, this is done using Yarozi Vdev Notation (YVN). YVN specifies a ZPool as a series of white-space separated VDEV definitions. A VDEV definition is a string in the format:
+        The following #{task.configure_swap? ? "three" : "two"} sceens specify the disk partitions for the VDEVs of your ZPools#{task.configure_swap? ? " and swap" : ""}. For maximum flexibility, this is done using Yarozi Vdev Notation (YVN). YVN specifies a ZPool as a series of white-space separated VDEV definitions. A VDEV definition is a string in the format:
 
         <VdevType>:<PartitionSize>[Disk#,...]
 
@@ -41,12 +41,12 @@ class RootInstaller::Questions::PartitionsYVN < Question
         To achieve bit-rot resistance in a space efficient way if you only have a single drive, you can create a RAIDZ1 setup out of multiple partitions on the same drive (instead of using copies=2). for example, this definition allocates 160GiB of usable space and only 20GiB of parity:
 
         R1:20G[1,1,1,1,1,1,1,1,1]
-        #{task.configure_swap != 'none' ? swap_examples : ""}
+        #{task.configure_swap? ? swap_examples : ""}
         The disk numbers for your disks are as follows:
 
         #{Disk.to_numbered_list}
 
-        Please get a piece of paper of paper or open a notepad app, and write down now the YVN definitions that you want to use for your #{task.configure_swap ? "Root pool, Boot pool, and Swap" : "Root and Boot pools"}, and then choose next to continue to the pool definition screens. You can use the back button at any time to come back to this screen for reference.
+        Please get a piece of paper of paper or open a notepad app, and write down now the YVN definitions that you want to use for your #{task.configure_swap? ? "Root pool, Boot pool, and Swap" : "Root and Boot pools"}, and then choose next to continue to the pool definition screens. You can use the back button at any time to come back to this screen for reference.
 
       TEXT
 
@@ -71,7 +71,7 @@ class RootInstaller::Questions::PartitionsYVN < Question
       task.set :layout, Layout.new
       subquestions.append Boot.new(task)
       subquestions.append Root.new(task)
-      subquestions.append Swap.new(task) unless task.configure_swap == 'none'
+      subquestions.append Swap.new(task) if task.configure_swap?
     end
 
 
@@ -83,17 +83,7 @@ class RootInstaller::Questions::PartitionsYVN < Question
     
         loop do
           text = <<~TEXT
-            #{preamble}        
-            YVN Syntax reminder: <type>:<partition size>[Disk#....]
-
-            e.g. Single disk: S:100G[1]
-            
-            e.g. 2 disk mirror: M:100G[1,2]
-            
-            e.g. 6 disk RAIDZ2: R2:100G[1-6]
-            
-            e.g. 2 disks striped: S:50G[1] S:50G[2]
-
+            #{preamble}
           TEXT
           items = []
           data = form_data.new
@@ -134,6 +124,34 @@ class RootInstaller::Questions::PartitionsYVN < Question
         TEXT
         new_dialog.alert text, 100, 200
       end
+
+      def vdev_syntax
+        <<~TEXT
+          YVN VDEV Syntax reminder: <type>:<partition size>[Disk#....]
+
+          e.g. Single disk: S:100G[1]
+          
+          e.g. 2 disk mirror: M:100G[1,2]
+          
+          e.g. 6 disk RAIDZ2: Z2:100G[1-6]
+          
+          e.g. 2 disks striped: S:50G[1] S:50G[2]
+        TEXT
+      end      
+
+      def swap_syntax
+        <<~TEXT
+          YVN Swap Syntax reminder: <type>:<partition size>[Disk#....]
+
+          e.g. Single disk: S:100G[1]
+          
+          e.g. 2 disks striped: S:100G[1] S:100G[2]
+          
+          e.g. 2 disks mirrored with RAID5: R5:100G[1,2]
+
+          e.g. 6 disk RAID6: R6:100G[1-6]
+        TEXT
+      end      
     end
 
 
@@ -149,7 +167,9 @@ class RootInstaller::Questions::PartitionsYVN < Question
       def preamble
         <<~TEXT
           Please enter the YVN definition that you want for your Boot pool.
-          #{task.boot_type == "efi" ? "EFI partitions" : "Master Boot Records #{ task.efi_partition == "yes" ? "and future-use EFI partitions " : "" }"} will also be created on the disks that you select.
+          #{task.boot_type == "efi" ? "EFI partitions" : "Master Boot Records #{ task.efi_partition == "yes" ? "and future-use EFI partitions " : "" }"} will also be created on the disks that you select, and will use.
+
+          #{vdev_syntax}
         TEXT
       end
 
@@ -170,11 +190,13 @@ class RootInstaller::Questions::PartitionsYVN < Question
       def preamble
         <<~TEXT
           Please enter the YVN definition that you want for your Root pool.
+
+          #{vdev_syntax}
         TEXT
       end
 
       def height
-          20
+        18
       end
     end
     
@@ -191,11 +213,13 @@ class RootInstaller::Questions::PartitionsYVN < Question
       def preamble
         <<~TEXT
           Please enter the YVN definition that you want for your Swap devices.
+
+          #{swap_syntax}
         TEXT
       end
 
       def height
-          20
+        18
       end
     end
     

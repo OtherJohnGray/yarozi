@@ -29,7 +29,7 @@ class RootInstaller::Questions::Swap < Question
   end
 
   def respond
-    task.set :configure_swap, @choice
+    task.set :configure_swap?, @choice == 'luks'
   end
 
 
