@@ -6,7 +6,8 @@ class RootInstaller::Questions::Partitions < Question
         wizard.default_item = @partitions_type if @partitions_type
         text = <<~TEXT
 
-          You can specify on which disks the installer should place your boot pool, root pool, and swap partitions in two different ways.
+          You can specify on which disks the installer should place your 
+          boot pool, root pool, and swap partitions in two different ways.
 
           The first is to select the drives from a list. This is good for simple setups, e.g. a single drive, a mirror or striped mirror, or a single small RAIDZ VDEV. 
 
@@ -20,7 +21,7 @@ class RootInstaller::Questions::Partitions < Question
           ["yvn", "Use Yarozi VDEV Notation"],
         ]
 
-        height = 25
+        height = 21
         width = 76
         menu_height = 2
         

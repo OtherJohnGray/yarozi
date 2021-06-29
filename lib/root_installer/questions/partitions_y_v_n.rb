@@ -6,7 +6,7 @@ class RootInstaller::Questions::PartitionsYVN < Question
 
         (This screen is very long. Use UP and DOWN arrow keys to scroll - PAGEUP and PAGEDOWN keys work also....)
 
-        The following #{task.configure_swap ? "three" : "two"} sceens specify the disk partitions for the VDEVs of your ZPools#{task.configure_swap ? " and swap" : ""}. For maximum flexibility, this is done using Yarozi Vdev Notation (YVN). YVN specifies a ZPool as a series of white-space separated VDEV definitions. A VDEV definition is a string in the format:
+        The following #{task.configure_swap == 'none' ? "two" : "three"} sceens specify the disk partitions for the VDEVs of your ZPools#{task.configure_swap != 'none' ? " and swap" : ""}. For maximum flexibility, this is done using Yarozi Vdev Notation (YVN). YVN specifies a ZPool as a series of white-space separated VDEV definitions. A VDEV definition is a string in the format:
 
         <VdevType>:<PartitionSize>[Disk#,...]
 
@@ -38,10 +38,10 @@ class RootInstaller::Questions::PartitionsYVN < Question
 
         Z1:100G[1-3,6,11-14] Z1:100G[30-36,42]
 
-        To achieve bit-rot resistance in a space efficient way if you only have a single drive, you can create a RAIDZ1 setup out of multiple partitons on the same drive (instead of using copies=2). for example, this definition allocates 160GiB of usable space and only 20GiB of parity:
+        To achieve bit-rot resistance in a space efficient way if you only have a single drive, you can create a RAIDZ1 setup out of multiple partitions on the same drive (instead of using copies=2). for example, this definition allocates 160GiB of usable space and only 20GiB of parity:
 
         R1:20G[1,1,1,1,1,1,1,1,1]
-        #{task.configure_swap ? swap_examples : ""}
+        #{task.configure_swap != 'none' ? swap_examples : ""}
         The disk numbers for your disks are as follows:
 
         #{Disk.to_numbered_list}
@@ -112,7 +112,7 @@ class RootInstaller::Questions::PartitionsYVN < Question
 
           break unless clicked == "next"
 
-          if (@yvn = YVN.new(input)).invalid?
+          if (@yvn = YVN.new(input.upcase)).invalid?
             show_errors @yvn.errors.map{|e| "YVN segments " + e}
           else
             task.layout.send assign_layout, @yvn.zpool
