@@ -1,7 +1,7 @@
 class RootInstaller::Questions::Partitions < Question
 
   def reset
-    subquestions.reject!{|s| s.instance_of? YVNSwap} unless task.configure_swap?
+    subquestions.reject!{|s| [swap_type, swap_disks, swap_size, swap_yvn].include? s } unless task.configure_swap?
   end
 
   def ask
@@ -35,51 +35,123 @@ class RootInstaller::Questions::Partitions < Question
     end
   end
 
-
   def respond
     task.set :layout, Layout.new
     case @partitions_type
     when "yvn"
-      subquestions.reject!{|q| [partitions_checklist].include? q }
-      [yvn_manual, yvn_boot, yvn_root].concat(task.configure_swap? ? [yvn_swap] : []).each{|q| subquestions.append q unless subquestions.include? q }
+      subquestions.reject!{|q| [ boot_type, boot_disks, boot_size, root_type, root_disks, root_size, swap_type, swap_disks, swap_size ].include? q }
+      [yvn_manual, boot_yvn, root_yvn].concat(task.configure_swap? ? [swap_yvn] : []).each{|q| subquestions.append q unless subquestions.include? q }
     else
-      subquestions.reject!{|q| [yvn_manual, yvn_boot, yvn_root, yvn_swap].include? q }
-      subquestions.append partitions_checklist
+      subquestions.reject!{|q| [yvn_manual, boot_yvn, root_yvn, swap_yvn].include? q }
+      [boot_type, boot_disks, boot_size, root_type, root_disks, root_size].concat(task.configure_swap? ? [swap_type, swap_disks, swap_size] : []).each{|q| subquestions.append q unless subquestions.include? q }
     end
   end
 
 
 # Subquestions ###############################################################
 
-  def partitions_checklist
+  def boot_type
+    @boot_type ||= BootType.new(task)
+  end
+
+  def boot_disks
+    @boot_disks ||= BootDisks.new(task)
+  end
+
+  def boot_size
+    @boot_size ||= BootSize.new(task)
+  end
+
+  def root_type
+    @root_type ||= RootType.new(task)
+  end
+
+  def root_disks
+    @root_disks ||= RootDisks.new(task)
+  end
+
+  def root_size
+    @root_size ||= RootSize.new(task)
+  end
+
+  def swap_type
+    @swap_type ||= SwapType.new(task)
+  end
+
+  def swap_disks
+    @swap_disks ||= SwapDisks.new(task)
+  end
+
+  def swap_size
+    @swap_size ||= SwapSize.new(task)
+  end
+
+  def root_type
     @partitions_checklist ||= PartitionsChecklist.new(task)
   end
 
   def yvn_manual
     @yvn_manual ||= YVNManual.new(task)
   end
-  def yvn_boot
-    @yvn_boot ||= YVNBoot.new(task)
+  def boot_yvn
+    @boot_yvn ||= BootYVN.new(task)
   end
 
-  def yvn_root
-    @yvn_root ||= YVNRoot.new(task)
+  def root_yvn
+    @root_yvn ||= RootYVN.new(task)
   end
 
-  def yvn_swap
-    @yvn_swap ||= YVNSwap.new(task)
+  def swap_yvn
+    @swap_yvn ||= SwapYVN.new(task)
   end
 
 
 # Inner Classes ##############################################################
 
-  class PartitionsChecklist < Question
+  class TypeQuestion < Question
+
+    def ask
+      wizard.title = "Partitions"
+      text = <<~TEXT
+        #{class.name}
+      TEXT
+
+      items = [
+        ["A", "option 1"],
+        ["B", "option 2"],
+      ]
+
+      height = 34
+      width = 76
+      menu_height = 3
+      
+      @choice = wizard.ask(text, items, height, width, menu_height)
+    end
+
+    def respond
+
+    end
+
+  end
+
+
+  class BootType < TypeQuestion
+  end
+
+  class RootType < TypeQuestion
+  end
+
+  class SwapType < TypeQuestion
+  end
+
+
+  class DisksQuestion < Question
 
     def ask
       wizard.title = "Partitions"
       wizard.default_item = task.root_encryption_type if task.respond_to? :root_encryption_type
       text = <<~TEXT
-        partition checklist....
+        type question
       TEXT
 
       items = [
@@ -100,6 +172,57 @@ class RootInstaller::Questions::Partitions < Question
     end
 
   end
+
+
+  class BootDisks < DisksQuestion
+  end
+
+  class RootDisks < DisksQuestion
+  end
+
+  class SwapDisks < DisksQuestion
+  end
+
+
+  class SizeQuestion < Question
+
+    def ask
+      wizard.title = "Partitions"
+      wizard.default_item = task.root_encryption_type if task.respond_to? :root_encryption_type
+      text = <<~TEXT
+        type question
+      TEXT
+
+      items = [
+        ["None", "Do not encrypt root dataset"],
+        ["ZFS", "Encrypt root dataset with ZFS native encryption"],
+        ["LUKS", "Encrypt root dataset with LUKS"]
+      ]
+
+      height = 34
+      width = 76
+      menu_height = 3
+      
+      @choice = wizard.ask(text, items, height, width, menu_height)
+    end
+
+    def respond
+      task.set :root_encryption_type, @choice
+    end
+
+  end
+
+
+  class BootSize < TypeQuestion
+  end
+
+  class RootSize < TypeQuestion
+  end
+
+  class SwapSize < TypeQuestion
+  end
+
+
 
 
 
@@ -256,7 +379,7 @@ class RootInstaller::Questions::Partitions < Question
   end
 
 
-  class YVNBoot < YVNQuestion
+  class BootYVN < YVNQuestion
     def name
       "Boot pool"
     end
@@ -279,7 +402,7 @@ class RootInstaller::Questions::Partitions < Question
     end
   end
   
-  class YVNRoot < YVNQuestion
+  class RootYVN < YVNQuestion
     def name
       "Root pool"
     end
@@ -302,7 +425,7 @@ class RootInstaller::Questions::Partitions < Question
   end
   
   
-  class YVNSwap < YVNQuestion
+  class SwapYVN < YVNQuestion
     def name
       "Swap"
     end
