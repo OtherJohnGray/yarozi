@@ -1,7 +1,7 @@
 class RootInstaller::Questions::Partitions < Question
 
   def reset
-    subquestions.reject!{|s| [swap_type, swap_disks, swap_size, swap_yvn].include? s } unless task.configure_swap?
+    subquestions.reject!{|s| [swap_type, swap_disks, swap_size, swap_add, swap_yvn].include? s } unless task.configure_swap?
   end
 
   def ask
@@ -39,116 +39,147 @@ class RootInstaller::Questions::Partitions < Question
     task.set :layout, Layout.new
     case @partitions_type
     when "yvn"
-      subquestions.reject!{|q| [ boot_type, boot_disks, boot_size, root_type, root_disks, root_size, swap_type, swap_disks, swap_size ].include? q }
+      subquestions.reject!{|q| [ boot_type, boot_disks, boot_size, boot_add, root_type, root_disks, root_size, root_add, swap_type, swap_disks, swap_size, swap_add ].include? q }
       [yvn_manual, boot_yvn, root_yvn].concat(task.configure_swap? ? [swap_yvn] : []).each{|q| subquestions.append q unless subquestions.include? q }
     else
       subquestions.reject!{|q| [yvn_manual, boot_yvn, root_yvn, swap_yvn].include? q }
-      [boot_type, boot_disks, boot_size, root_type, root_disks, root_size].concat(task.configure_swap? ? [swap_type, swap_disks, swap_size] : []).each{|q| subquestions.append q unless subquestions.include? q }
+      [boot_type, boot_disks, boot_size, boot_add, root_type, root_disks, root_size, root_add].concat(task.configure_swap? ? [swap_type, swap_disks, swap_size, swap_add] : []).each{|q| subquestions.append q unless subquestions.include? q }
     end
   end
 
 
 # Subquestions ###############################################################
 
-  def boot_type
-    @boot_type ||= BootType.new(task)
+  # create caching reader methods in the form:
+  #   def boot_type
+  #     @boot_type ||= BootType.new(1, task)
+  #   end 
+  # etc. etc. etc.
+  %w(boot root swap).each do |pool|
+    %w(type disks size add).each do |screen|
+      define_method "#{pool}_#{screen}".to_sym, ->{ instance_variable_get("@#{pool}_#{screen}".to_sym) || instance_variable_set( "@#{pool}_#{screen}".to_sym, const_get( "#{pool.capitalize}#{screen.capitalize}".to_sym ).new(1, task) ) }
+    end
   end
-
-  def boot_disks
-    @boot_disks ||= BootDisks.new(task)
-  end
-
-  def boot_size
-    @boot_size ||= BootSize.new(task)
-  end
-
-  def root_type
-    @root_type ||= RootType.new(task)
-  end
-
-  def root_disks
-    @root_disks ||= RootDisks.new(task)
-  end
-
-  def root_size
-    @root_size ||= RootSize.new(task)
-  end
-
-  def swap_type
-    @swap_type ||= SwapType.new(task)
-  end
-
-  def swap_disks
-    @swap_disks ||= SwapDisks.new(task)
-  end
-
-  def swap_size
-    @swap_size ||= SwapSize.new(task)
-  end
-
-  def root_type
-    @partitions_checklist ||= PartitionsChecklist.new(task)
-  end
-
-  def yvn_manual
-    @yvn_manual ||= YVNManual.new(task)
-  end
-  def boot_yvn
-    @boot_yvn ||= BootYVN.new(task)
-  end
-
-  def root_yvn
-    @root_yvn ||= RootYVN.new(task)
-  end
-
-  def swap_yvn
-    @swap_yvn ||= SwapYVN.new(task)
-  end
-
 
 # Inner Classes ##############################################################
 
-  class TypeQuestion < Question
+  class PartitionQuestion < Question
+    def initialize(vdev_number, task)
+      super(task)
+      @vdev_number = vdev_number
+    end
 
+    def reset
+      #noop
+    end
+  end
+
+
+  class TypeQuestion < PartitionQuestion
     def ask
-      wizard.title = "Partitions"
-      text = <<~TEXT
-        #{class.name}
-      TEXT
-
-      items = [
-        ["A", "option 1"],
-        ["B", "option 2"],
-      ]
-
-      height = 34
-      width = 76
-      menu_height = 3
-      
+      wizard.title = title
+      wizard.default_item = @choice if @choice
       @choice = wizard.ask(text, items, height, width, menu_height)
     end
 
     def respond
+      vdev.type = @choice
+    end
 
+    def vdev
+      raise "out of order question display!" if pool.size < vdev_number - 1 
+      pool[ vdev_number - 1 ] ||= VDEV.new
+    end
+
+    def text
+      "What type of VDEV should VDEV #{vdev_number} be?"
+    end
+
+    def items
+      [
+        ["S", "Single partition VDEV"],
+        ["M", "Mirror VDEV over multiple partitions"],
+        ["Z1", "RAIDZ1 VDEV over multiple partitions"],
+        ["Z2", "RAIDZ2 VDEV over multiple partitions"],
+        ["Z3", "RAIDZ3 VDEV over multiple partitions"]
+      ]
+    end
+
+    def height
+      20
+    end
+
+    def width
+      76
+    end
+
+    def menu_height
+      5      
     end
 
   end
 
 
   class BootType < TypeQuestion
+    def title
+      "Boot Pool VDEV #{vdev_number}"
+    end
+
+    def pool
+      task.layout.boot_pool
+    end
   end
+
 
   class RootType < TypeQuestion
+    def title
+      "Root Pool VDEV #{vdev_number}"
+    end
+
+    def pool
+      task.layout.root_pool
+    end
   end
+
 
   class SwapType < TypeQuestion
+    def title
+      "Swap device #{vdev_number}"
+    end
+
+    def text
+      <<~TEXT
+        What type of device should swap device #{vdev_number} be?
+        (#{vdev_number == 1 ? "If you add more devices after this one, swap will be striped across all of them" : "Swap will be swapped across all the devices you create"})
+      TEXT
+    end
+
+    def items
+      [
+        ["S", "Single raid device on 1 partition"],
+        ["R1", "\"Mirrored\" RAID1 mdraid device on multiple partitions"],
+        ["R5", "RAID5 mdraid device on multiple partitions"],
+        ["R6", "RAID6 mdraid device on multiple partitions"],
+      ]
+    end
+
+    def height
+      20
+    end
+
+    def menu_height
+      4
+    end
+
+    def pool
+      task.layout.swap
+    end
   end
 
 
-  class DisksQuestion < Question
-
+  class DisksQuestion < PartitionQuestion
     def ask
-      wizard.title = "Partitions"
+      wizard.title = title
       wizard.default_item = task.root_encryption_type if task.respond_to? :root_encryption_type
       text = <<~TEXT
         type question
@@ -184,7 +215,7 @@ class RootInstaller::Questions::Partitions < Question
   end
 
 
-  class SizeQuestion < Question
+  class SizeQuestion < PartitionQuestion
 
     def ask
       wizard.title = "Partitions"
@@ -213,16 +244,45 @@ class RootInstaller::Questions::Partitions < Question
   end
 
 
-  class BootSize < TypeQuestion
+  class BootSize < SizeQuestion
   end
 
-  class RootSize < TypeQuestion
+  class RootSize < SizeQuestion
   end
 
-  class SwapSize < TypeQuestion
+  class SwapSize < SizeQuestion
   end
 
 
+  class AddQuestion < PartitionQuestion
+
+    def ask
+      wizard.title = title
+
+      height = 10
+      width = 50
+      menu_height = 2
+      items = [
+        ["yes", "Add another #{device_type} to #{name}"],
+        ["no", "No, #{name} is complete"]
+      ]      
+      @choice = wizard.ask(text, items, height, width, menu_height)
+    end
+
+    def respond
+      task.set :root_encryption_type, @choice
+    end
+
+  end
+
+  class BootAdd < AddQuestion
+  end
+
+  class RootAdd < AddQuestion
+  end
+
+  class SwapAdd < AddQuestion
+  end
 
 
 
