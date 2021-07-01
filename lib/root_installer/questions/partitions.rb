@@ -180,9 +180,8 @@ class RootInstaller::Questions::Partitions < Question
   class DisksQuestion < PartitionQuestion
     def ask
       wizard.title = title
-      wizard.default_item = task.root_encryption_type if task.respond_to? :root_encryption_type
       text = <<~TEXT
-        type question
+        #{class.name}
       TEXT
 
       items = [
@@ -219,7 +218,6 @@ class RootInstaller::Questions::Partitions < Question
 
     def ask
       wizard.title = "Partitions"
-      wizard.default_item = task.root_encryption_type if task.respond_to? :root_encryption_type
       text = <<~TEXT
         type question
       TEXT
@@ -238,7 +236,6 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def respond
-      task.set :root_encryption_type, @choice
     end
 
   end
