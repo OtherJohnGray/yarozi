@@ -49,15 +49,20 @@ class RootInstaller::Questions::Partitions < Question
 
 
 # Subquestions ###############################################################
+# create caching reader methods in the form:
+#   def boot_type
+#     @boot_type ||= BootType.new(1, task)
+#   end 
+# etc. etc. etc.
 
-  # create caching reader methods in the form:
-  #   def boot_type
-  #     @boot_type ||= BootType.new(1, task)
-  #   end 
-  # etc. etc. etc.
+  def yvn_manual
+    @yvn_manual ||= YVNManual.new(task)
+  end
+
   %w(boot root swap).each do |pool|
     %w(type disks size add).each do |screen|
-      define_method "#{pool}_#{screen}".to_sym, ->{ instance_variable_get("@#{pool}_#{screen}".to_sym) || instance_variable_set( "@#{pool}_#{screen}".to_sym, const_get( "#{pool.capitalize}#{screen.capitalize}".to_sym ).new(1, task) ) }
+      define_method "#{pool}_#{screen}".to_sym, ->{ instance_variable_get("@#{pool}_#{screen}".to_sym) || instance_variable_set( "@#{pool}_#{screen}".to_sym, self.class.const_get( "#{pool.capitalize}#{screen.capitalize}".to_sym ).new(1, task) ) }
+      define_method "#{pool}_yvn".to_sym, ->{ instance_variable_get("@#{pool}_yvn".to_sym) || instance_variable_set( "@#{pool}_yvn".to_sym, self.class.const_get( "#{pool.capitalize}YVN".to_sym ).new(task) ) }
     end
   end
 
@@ -87,12 +92,12 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def vdev
-      raise "out of order question display!" if pool.size < vdev_number - 1 
-      pool[ vdev_number - 1 ] ||= VDEV.new
+      raise "out of order question display!" if pool.size < @vdev_number - 1 
+      pool[ @vdev_number - 1 ] ||= VDEV.new
     end
 
     def text
-      "What type of VDEV should VDEV #{vdev_number} be?"
+      "What type of VDEV should #{@title} be?"
     end
 
     def items
@@ -106,7 +111,7 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def height
-      20
+      12
     end
 
     def width
@@ -116,41 +121,56 @@ class RootInstaller::Questions::Partitions < Question
     def menu_height
       5      
     end
-
   end
 
 
-  class BootType < TypeQuestion
+  module BootParams
     def title
-      "Boot Pool VDEV #{vdev_number}"
+      "Boot Pool VDEV #{@vdev_number}"
     end
 
     def pool
-      task.layout.boot_pool
+      task.layout.boot_pool ||= ZPool.new
     end
+  end
+
+  module RootParams
+    def title
+      "Root Pool VDEV #{@vdev_number}"
+    end
+
+    def pool
+      task.layout.root_pool ||= ZPool.new
+    end
+  end
+  
+  module SwapParams
+    def title
+      "Swap device #{@vdev_number}"
+    end
+
+    def pool
+      task.layout.swap ||= ZPool.new
+    end
+  end
+
+  class BootType < TypeQuestion
+    include BootParams
   end
 
 
   class RootType < TypeQuestion
-    def title
-      "Root Pool VDEV #{vdev_number}"
-    end
-
-    def pool
-      task.layout.root_pool
-    end
+  include RootParams
   end
 
 
   class SwapType < TypeQuestion
-    def title
-      "Swap device #{vdev_number}"
-    end
+    include SwapParams
 
     def text
       <<~TEXT
-        What type of device should swap device #{vdev_number} be?
-        (#{vdev_number == 1 ? "If you add more devices after this one, swap will be striped across all of them" : "Swap will be swapped across all the devices you create"})
+        What type of device should swap device #{@vdev_number} be?
+        (#{@vdev_number} == 1 ? "If you add more devices after this one, swap will be striped across all of them" : "Swap will be swapped across all the devices you create"})
       TEXT
     end
 
@@ -170,10 +190,6 @@ class RootInstaller::Questions::Partitions < Question
     def menu_height
       4
     end
-
-    def pool
-      task.layout.swap
-    end
   end
 
 
@@ -181,14 +197,14 @@ class RootInstaller::Questions::Partitions < Question
     def ask
       wizard.title = title
       text = <<~TEXT
-        #{class.name}
+        #{self.class.name}
       TEXT
 
       items = [
         ["None", "Do not encrypt root dataset"],
         ["ZFS", "Encrypt root dataset with ZFS native encryption"],
         ["LUKS", "Encrypt root dataset with LUKS"]
-      ]
+      ] 
 
       height = 34
       width = 76
@@ -198,41 +214,73 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def respond
-      task.set :root_encryption_type, @choice
     end
 
   end
 
 
   class BootDisks < DisksQuestion
+    include BootParams
   end
 
   class RootDisks < DisksQuestion
+    include RootParams
   end
 
   class SwapDisks < DisksQuestion
+    include SwapParams
   end
 
 
   class SizeQuestion < PartitionQuestion
 
     def ask
-      wizard.title = "Partitions"
+      wizard.title = title
+      wizard.default_button = false
+      form_data = Struct.new(:label, :ly, :lx, :item, :iy, :ix, :flen, :ilen)
+
+      loop do
+        text = <<~TEXT
+          #{preamble}
+        TEXT
+        items = []
+        data = form_data.new
+        data.label = name
+        data.ly = 1
+        data.lx = 1
+        data.item = @yvn ? @yvn : ""
+        data.iy = 1
+        data.ix = name.length + 2
+        data.flen = 67 - name.length
+        data.ilen = 9999
+        items.push(data.to_a)
+        width = 76
+        formheight = 1
+        input = wizard.input(text, items, height, width, formheight)[name]
+
+        break unless clicked == "next"
+
+        if (@yvn = YVN.new(input.upcase)).invalid?
+          show_errors @yvn.errors.map{|e| "YVN segments " + e}
+        else
+          task.layout.send assign_layout, @yvn.zpool
+          if task.layout.invalid?
+            show_errors @task.layout.errors
+          else
+            break
+          end
+        end
+      end
+    end
+
+    def show_errors(errors)
       text = <<~TEXT
-        type question
+        
+        Please correct the following errors:
+
+        #{errors.join "\n"}
       TEXT
-
-      items = [
-        ["None", "Do not encrypt root dataset"],
-        ["ZFS", "Encrypt root dataset with ZFS native encryption"],
-        ["LUKS", "Encrypt root dataset with LUKS"]
-      ]
-
-      height = 34
-      width = 76
-      menu_height = 3
-      
-      @choice = wizard.ask(text, items, height, width, menu_height)
+      new_dialog.alert text, 100, 200
     end
 
     def respond
@@ -242,12 +290,15 @@ class RootInstaller::Questions::Partitions < Question
 
 
   class BootSize < SizeQuestion
+    include BootParams
   end
 
   class RootSize < SizeQuestion
+    include RootParams
   end
 
   class SwapSize < SizeQuestion
+    include SwapParams
   end
 
 
@@ -273,12 +324,15 @@ class RootInstaller::Questions::Partitions < Question
   end
 
   class BootAdd < AddQuestion
+    include BootParams
   end
 
   class RootAdd < AddQuestion
+    include RootParams
   end
 
   class SwapAdd < AddQuestion
+    include SwapParams
   end
 
 
