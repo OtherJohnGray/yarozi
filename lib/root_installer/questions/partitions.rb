@@ -5,34 +5,30 @@ class RootInstaller::Questions::Partitions < Question
   end
 
   def ask
-    loop do
-      wizard.title = "Disk Partitions"
-      wizard.default_item = @partitions_type if @partitions_type
-      text = <<~TEXT
+    wizard.title = "Disk Partitions"
+    wizard.default_item = @partitions_type if @partitions_type
+    text = <<~TEXT
 
-        You can specify on which disks the installer should place your 
-        boot pool, root pool, and swap partitions in two different ways.
+      You can specify on which disks the installer should place your 
+      boot pool, root pool, and swap partitions in two different ways.
 
-        The first is to select the drives from a list. This is good for simple setups, e.g. a single drive, a mirror or striped mirror, or a single small RAIDZ VDEV. 
+      The first is to select the drives from a list. This is good for simple setups, e.g. a single drive, a mirror or striped mirror, or a single small RAIDZ VDEV. 
 
-        The second way is using Yarozi VDEV Notation (tm?), which is a Simple Syntax for Complex Configuration. If you choose this option, The YVN manual will be shown on the next screen.
+      The second way is using Yarozi VDEV Notation (tm?), which is a Simple Syntax for Complex Configuration. If you choose this option, The YVN manual will be shown on the next screen.
 
-        How yould you like to choose the disks for your pools?
-      TEXT
+      How yould you like to choose the disks for your pools?
+    TEXT
 
-      items = [
-        ["checkbox", "Select drives from a list"],
-        ["yvn", "Use Yarozi VDEV Notation"],
-      ]
+    items = [
+      ["checkbox", "Select drives from a list"],
+      ["yvn", "Use Yarozi VDEV Notation"],
+    ]
 
-      height = 21
-      width = 76
-      menu_height = 2
-      
-      @partitions_type = wizard.ask(text, items, height, width, menu_height)
-
-      break if %w(yvn checkbox).include? @partitions_type
-    end
+    height = 21
+    width = 76
+    menu_height = 2
+   
+    @partitions_type = wizard.ask(text, items, height, width, menu_height)
   end
 
   def respond
@@ -64,7 +60,7 @@ class RootInstaller::Questions::Partitions < Question
       define_method "#{pool}_#{screen}".to_sym, ->{ instance_variable_get("@#{pool}_#{screen}".to_sym) || instance_variable_set( "@#{pool}_#{screen}".to_sym, self.class.const_get( "#{pool.capitalize}#{screen.capitalize}".to_sym ).new(1, task) ) }
       define_method "#{pool}_yvn".to_sym, ->{ instance_variable_get("@#{pool}_yvn".to_sym) || instance_variable_set( "@#{pool}_yvn".to_sym, self.class.const_get( "#{pool.capitalize}YVN".to_sym ).new(task) ) }
     end
-  end
+  end 
 
 # Inner Classes ##############################################################
 
@@ -72,6 +68,11 @@ class RootInstaller::Questions::Partitions < Question
     def initialize(vdev_number, task)
       super(task)
       @vdev_number = vdev_number
+    end
+
+    def vdev
+      raise "out of order question display!" if pool.size < @vdev_number - 1 
+      pool[ @vdev_number - 1 ] ||= VDEV.new
     end
 
     def reset
@@ -91,13 +92,8 @@ class RootInstaller::Questions::Partitions < Question
       vdev.type = @choice
     end
 
-    def vdev
-      raise "out of order question display!" if pool.size < @vdev_number - 1 
-      pool[ @vdev_number - 1 ] ||= VDEV.new
-    end
-
     def text
-      "What type of VDEV should #{@title} be?"
+      "What type of VDEV should #{title} be?"
     end
 
     def items
@@ -196,25 +192,34 @@ class RootInstaller::Questions::Partitions < Question
   class DisksQuestion < PartitionQuestion
     def ask
       wizard.title = title
-      text = <<~TEXT
-        #{self.class.name}
-      TEXT
-
-      items = [
-        ["None", "Do not encrypt root dataset"],
-        ["ZFS", "Encrypt root dataset with ZFS native encryption"],
-        ["LUKS", "Encrypt root dataset with LUKS"]
-      ] 
-
-      height = 34
-      width = 76
-      menu_height = 3
-      
-      @choice = wizard.ask(text, items, height, width, menu_height)
+      items = [].tap do |disks|
+        Disk.to_strings.each_with_index do |disk_name, idx|
+          disks << [ idx, disk_name, (@selected_disks ||= []).include?(idx) ]
+        end
+      end
+      @selected_disks = wizard.list(text, items, height, width, list_height)
     end
 
     def respond
+      vdev.disks = @selected_disks.map(&:to_i)
     end
+
+    def text
+      "Which disks should be used for #{title} partitions?"
+    end
+
+    def height
+      27
+    end
+
+    def width
+      125
+    end
+
+    def list_height
+      20     
+    end
+
 
   end
 

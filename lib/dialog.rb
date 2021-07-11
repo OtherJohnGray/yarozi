@@ -89,14 +89,13 @@ class Dialog < MRDialog
     if @exit_code != 1
       @selected_button = ( @exit_code == 0 ? "next" : "previous" ) 
       selected_string = tmp.readline
-      tmp.close!
-      return selected_string
+      selected_string
     else
       @selected_button = "cancel"
-      tmp.close!
-      return false
+      false
     end
-    
+  ensure
+    tmp.close!
   end
 
   def yesno(text="Please enter some text", height=0, width=0)
@@ -210,12 +209,13 @@ class Dialog < MRDialog
           key = items[idx][0]
           res_hash[key] = val.chomp
       end
+      res_hash
     else
       @selected_button = "cancel"
+      false
     end
-
+  ensure
     tmp.close!
-    return res_hash
   end
 
 
@@ -239,7 +239,6 @@ class Dialog < MRDialog
       end
     end
 
-    sep = "|"
     command = option_string() + "--checklist \"" + text.to_s +
                         "\" " + height.to_i.to_s + " " + width.to_i.to_s +
       " " + listheight.to_i.to_s + " " + itemlist + "2> " +
@@ -248,23 +247,23 @@ class Dialog < MRDialog
     success = system(command)
     @exit_code = $?.exitstatus
     selected_array = []
-    if success
-      selected_string = tmp.readline
-      tmp.close!
-      log_debug "Separator: #{@separator}"
 
-      sep = Shellwords.escape(@separator)
-      # a = selected_string.split(/#{sep}/)
-      a = selected_string.split(" ")
-      a.each do |item|
-        log_debug ">> #{item}"
-        selected_array << item if item && item.to_s.length > 0
+    if @exit_code != 1
+      @selected_button = ( @exit_code == 0 ? "next" : "previous" ) 
+      if tmp.size > 0
+        selected_string = tmp.readline
+        a = selected_string.split(" ")
+        a.each do |item|
+          log_debug ">> #{item}"
+          selected_array << item if item && item.to_s.length > 0
+        end
       end
-      return selected_array
+      selected_array
     else
-      tmp.close!
-      return success
+      @selected_button = "cancel"
+      false
     end
+  ensure
+    tmp.close!
   end
-
 end
