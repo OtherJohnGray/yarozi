@@ -354,13 +354,10 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def respond
-puts "choice was #{@choice}"      
       if @choice == "yes"
         subquestions.concat another
       else
-puts "resettng subquestions"      
-        subquestions = QuestionList.new
-puts "subquestions is now #{subquestions.inspect}"      
+        subquestions.clear
       end
     end
 

@@ -5,7 +5,7 @@ class QuestionList
   extend Forwardable
 
   attr_reader :questions
-  def_delegators :@questions, :length, :first, :last, :each, :[], :any?, :include?, :reject!
+  def_delegators :@questions, :length, :first, :last, :each, :[], :any?, :include?, :reject!, :clear
 
   def initialize(superquestion=nil)
     @superquestion = superquestion
