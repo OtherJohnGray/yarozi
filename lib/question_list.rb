@@ -17,6 +17,13 @@ class QuestionList
     @questions << question
   end
 
+  def concat(questions)
+    questions.each do |question|
+      question.list = self
+      @questions << question
+    end
+  end
+
   # ask each question in turn, while responding to back, next, and exit requests.
   # return true if user selects "next" from last question, or false if user selects
   # "back" from first question. 

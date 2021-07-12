@@ -93,7 +93,7 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def text
-      "What type of VDEV should #{title} be?"
+      "\nWhat type of VDEV should #{title} be?"
     end
 
     def items
@@ -107,7 +107,7 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def height
-      12
+      13
     end
 
     def width
@@ -180,7 +180,7 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def height
-      20
+      21
     end
 
     def menu_height
@@ -194,10 +194,18 @@ class RootInstaller::Questions::Partitions < Question
       wizard.title = title
       items = [].tap do |disks|
         Disk.to_strings.each_with_index do |disk_name, idx|
-          disks << [ idx, disk_name, (@selected_disks ||= []).include?(idx) ]
+          disks << [ idx + 1, disk_name, (@selected_disks ||= []).include?((idx + 1).to_s) ]
         end
       end
-      @selected_disks = wizard.list(text, items, height, width, list_height)
+      loop do
+        @selected_disks = wizard.list(text, items, height, width, list_height)
+
+        if clicked == "next" && @selected_disks.empty?
+          new_dialog.alert "No disks were selected", 5, 26
+        else
+          break
+        end
+      end
     end
 
     def respond
@@ -205,19 +213,22 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def text
-      "Which disks should be used for #{title} partitions?"
+      <<~TEXT
+
+      Which disks should be used for #{title} partitions?
+      TEXT
     end
 
     def height
-      27
+      22
     end
 
     def width
-      125
+      120
     end
 
     def list_height
-      20     
+      15     
     end
 
 
@@ -243,17 +254,13 @@ class RootInstaller::Questions::Partitions < Question
       wizard.title = title
       wizard.default_button = false
       form_data = Struct.new(:label, :ly, :lx, :item, :iy, :ix, :flen, :ilen)
-
       loop do
-        text = <<~TEXT
-          #{preamble}
-        TEXT
         items = []
         data = form_data.new
         data.label = name
         data.ly = 1
         data.lx = 1
-        data.item = @yvn ? @yvn : ""
+        data.item = @size ? @size : ""
         data.iy = 1
         data.ix = name.length + 2
         data.flen = 67 - name.length
@@ -261,18 +268,26 @@ class RootInstaller::Questions::Partitions < Question
         items.push(data.to_a)
         width = 76
         formheight = 1
-        input = wizard.input(text, items, height, width, formheight)[name]
+        @size = wizard.input(text, items, height, width, formheight)[name].upcase.strip
 
         break unless clicked == "next"
 
-        if (@yvn = YVN.new(input.upcase)).invalid?
-          show_errors @yvn.errors.map{|e| "YVN segments " + e}
-        else
-          task.layout.send assign_layout, @yvn.zpool
-          if task.layout.invalid?
-            show_errors @task.layout.errors
+        if /^\d+[TGMKB*]|\*$/ =~ @size
+          vdev.partition_size = @size
+          if vdev.valid?
+            if task.layout.valid?
+              break
+            else
+              show_errors @task.layout.errors
+            end
           else
-            break
+            show_errors vdev.errors.map{|e| "#{title} #{e}"}
+          end
+        else
+          if /\d+/ =~ input
+            new_dialog.alert "input value #{@size} did not include a unit type\n(T,G,M,K, or B)", 7, 64
+          else
+            new_dialog.alert "Input value #{@size} is not a valid partiton size", 7, 60
           end
         end
       end
@@ -288,9 +303,33 @@ class RootInstaller::Questions::Partitions < Question
       new_dialog.alert text, 100, 200
     end
 
+    def name
+      "Partition Size:"
+    end
+
     def respond
     end
 
+    def text
+      <<~TEXT
+
+      How large should each #{title} partition be? 
+      
+      You can specify partition size entering a number followed by the letter T (for TiB), G (for GiB), M (for MiB), K (for KiB), or B (for bytes).
+      
+      Alternatively, you can enter * to use all remaining space on each disk.
+      TEXT
+    end
+
+    def height
+      14
+    end
+
+    def width
+      78
+    end
+
+    
   end
 
 
@@ -310,34 +349,104 @@ class RootInstaller::Questions::Partitions < Question
   class AddQuestion < PartitionQuestion
 
     def ask
-      wizard.title = title
-
-      height = 10
-      width = 50
-      menu_height = 2
-      items = [
-        ["yes", "Add another #{device_type} to #{name}"],
-        ["no", "No, #{name} is complete"]
-      ]      
+      wizard.title = pool_name
       @choice = wizard.ask(text, items, height, width, menu_height)
     end
 
     def respond
-      task.set :root_encryption_type, @choice
+puts "choice was #{@choice}"      
+      if @choice == "yes"
+        subquestions.concat another
+      else
+puts "resettng subquestions"      
+        subquestions = QuestionList.new
+puts "subquestions is now #{subquestions.inspect}"      
+      end
     end
 
+    def device_type
+      "VDEV"
+    end
+
+    def text
+      "\nWould you like to add a #{device_type} #{@vdev_number + 1} to #{pool_name}?"
+    end
+  
+    def height
+      10
+    end
+    
+    def width
+      64
+    end
+    
+    def menu_height
+      2
+    end
+    
+    def items
+      [
+        ["yes", "Add another #{device_type} to #{pool_name}"],
+        ["no", "No, #{pool_name} is complete"]
+      ]      
+    end
   end
+
+
 
   class BootAdd < AddQuestion
     include BootParams
+
+    def pool_name
+      "Boot Pool"
+    end
+
+    def another
+      [ 
+        BootType.new(@vdev_number + 1, task), 
+        BootDisks.new(@vdev_number + 1, task), 
+        BootSize.new(@vdev_number + 1, task), 
+        BootAdd.new(@vdev_number + 1, task) 
+      ]
+    end
   end
 
   class RootAdd < AddQuestion
     include RootParams
+
+    def pool_name
+      "Root Pool"
+    end
+
+    def another
+      [ 
+        RootType.new(@vdev_number + 1, task), 
+        RootDisks.new(@vdev_number + 1, task), 
+        RootSize.new(@vdev_number + 1, task), 
+        RootAdd.new(@vdev_number + 1, task) 
+      ]
+    end
   end
 
   class SwapAdd < AddQuestion
     include SwapParams
+
+    def pool_name
+      "swap"
+    end
+
+    def device_type
+      "device"
+    end
+
+    def another
+      [ 
+        SwapType.new(@vdev_number + 1, task), 
+        SwapDisks.new(@vdev_number + 1, task), 
+        SwapSize.new(@vdev_number + 1, task), 
+        SwapAdd.new(@vdev_number + 1, task) 
+      ]
+    end
   end
 
 
