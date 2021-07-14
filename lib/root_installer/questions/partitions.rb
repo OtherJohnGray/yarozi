@@ -192,16 +192,33 @@ class RootInstaller::Questions::Partitions < Question
   class DisksQuestion < PartitionQuestion
     def ask
       wizard.title = title
-      items = [].tap do |disks|
-        Disk.to_strings.each_with_index do |disk_name, idx|
-          disks << [ idx + 1, disk_name, (@selected_disks ||= []).include?((idx + 1).to_s) ]
-        end
-      end
       loop do
+        items = [].tap do |disks|
+          Disk.to_strings.each_with_index do |disk_name, idx|
+            disks << [ idx + 1, disk_name, (@selected_disks ||= []).include?((idx + 1).to_s) ]
+          end
+        end
         @selected_disks = wizard.list(text, items, height, width, list_height)
 
-        if clicked == "next" && @selected_disks.empty?
+        break unless clicked == "next"
+        if @selected_disks.empty?
           new_dialog.alert "No disks were selected", 5, 26
+        elsif vdev.type == 'S' && @selected_disks.size != 1
+          new_dialog.alert "#{title} is a 'single' device and should have exactly 1 disk, but it has #{@selected_disks.size} instead", 6, 78
+        elsif vdev.type == 'M' && @selected_disks.size < 2
+          new_dialog.alert "#{title} is a mirror and should have at least 2 disks, but it only has 1", 6, 78
+        elsif vdev.type == 'Z1' && @selected_disks.size < 2
+          new_dialog.alert "#{title} is RAIDZ1 and should have at least 2 disks, but it only has 1", 6, 78
+        elsif vdev.type == 'Z2' && @selected_disks.size < 3
+          new_dialog.alert "#{title} is RAIDZ2 and should have at least 3 disks, but it only has #{@selected_disks.size}", 6, 78
+        elsif vdev.type == 'Z3' && @selected_disks.size < 4
+          new_dialog.alert "#{title} is RAIDZ3 and should have at least 4 disks, but it only has #{@selected_disks.size}", 6, 78
+        elsif vdev.type == 'R1' && @selected_disks.size < 2
+          new_dialog.alert "#{title} is RAID1 volume and should have at least 2 disks, but it only has 1", 6, 78
+        elsif vdev.type == 'R5' && @selected_disks.size < 2
+          new_dialog.alert "#{title} is RAID5 volume and should have at least 2 disks, but it only has 1", 6, 78
+        elsif vdev.type == 'R6' && @selected_disks.size < 3
+          new_dialog.alert "#{title} is RAID6 volume and should have at least 3 disks, but it only has #{@selected_disks.size}", 5, 65
         else
           break
         end
