@@ -76,7 +76,9 @@ class Layout < Struct.new :boot_pool, :root_pool, :legacy_boot, :efi_partition, 
         end
         disks.keys.each do |disk_number|
           if Disk.all[disk_number - 1].capacity_bytes < disks[disk_number][:allocated]
-            errors << "The total space allocated to disk #{disk_number} exceeds it's capacity"
+            a = disks[disk_number][:allocated]
+            c = Disk.all[disk_number - 1].capacity_bytes
+            errors << "The total space allocated to disk #{disk_number} of #{a} bytes ( #{a.to_f/2**10} KiB / #{a.to_f/2**20} MiB / #{a.to_f/2**30} GiB / #{a.to_f/2**40} TiB ) exceeds it's capacity of #{c} bytes ( #{c.to_f/2**10} KiB / #{c.to_f/2**20} MiB / #{c.to_f/2**30} GiB / #{c.to_f/2**40} TiB )"
           end
           if disks[disk_number][:wildcards].length > 1
             descriptions = disks[disk_number][:wildcards].uniq.map {|description| "#{disks[disk_number][:wildcards].count(description)} from #{description}"}

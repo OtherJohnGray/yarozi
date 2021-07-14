@@ -71,8 +71,8 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def vdev
-      raise "out of order question display!" if pool.size < @vdev_number - 1 
-      pool[ @vdev_number - 1 ] ||= VDEV.new
+      raise "out of order question display" unless pool.size == @vdev_number
+      pool[ @vdev_number - 1 ]
     end
 
     def reset
@@ -82,6 +82,10 @@ class RootInstaller::Questions::Partitions < Question
 
 
   class TypeQuestion < PartitionQuestion
+    def reset
+      pool.delete_at @vdev_number - 1
+    end
+    
     def ask
       wizard.title = title
       wizard.default_item = @choice if @choice
@@ -89,6 +93,8 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def respond
+      raise "out of order question display" unless pool.size == @vdev_number - 1
+      pool << VDEV.new
       vdev.type = @choice
     end
 
