@@ -172,7 +172,7 @@ class RootInstaller::Questions::Partitions < Question
     def text
       <<~TEXT
         What type of device should swap device #{@vdev_number} be?
-        (#{@vdev_number} == 1 ? "If you add more devices after this one, swap will be striped across all of them" : "Swap will be swapped across all the devices you create"})
+        (#{@vdev_number == 1 ? "If you add more devices after this one, swap will be striped across all of them" : "Swap will be swapped across all the devices you create"})
       TEXT
     end
 
@@ -224,7 +224,7 @@ class RootInstaller::Questions::Partitions < Question
         elsif vdev.type == 'R5' && @selected_disks.size < 2
           new_dialog.alert "#{title} is RAID5 volume and should have at least 2 disks, but it only has 1", 6, 78
         elsif vdev.type == 'R6' && @selected_disks.size < 3
-          new_dialog.alert "#{title} is RAID6 volume and should have at least 3 disks, but it only has #{@selected_disks.size}", 5, 65
+          new_dialog.alert "#{title} is RAID6 volume and should have at least 3 disks, but it only has #{@selected_disks.size}", 6, 78
         else
           break
         end

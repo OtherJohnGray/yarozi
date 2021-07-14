@@ -15,7 +15,7 @@ class RootInstaller::Questions::Compression < Question
     wizard.notags = false
     wizard.default_item = task.root_compression_type if task.respond_to? :root_compression_type
     items = [
-      ["off", "Do not encrypt the root dataset"],
+      ["off", "Do not compress the root dataset"],
       ["gzip", "low speed and high compression"],
       ["lz4", "high speed and good compression"],
       ["lzjb", "good performance and compression"],
