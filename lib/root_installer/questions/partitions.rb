@@ -284,7 +284,9 @@ class RootInstaller::Questions::Partitions < Question
             show_errors vdev.errors.map{|e| "#{title} #{e}"}
           end
         else
-          if /\d+/ =~ input
+          if @size.length == 0
+            new_dialog.alert "Please provide a partition size, e.g. 1TB, 200G etc, or * for rest of disk", 7, 78
+          elsif /\d+/ =~ @size
             new_dialog.alert "input value #{@size} did not include a unit type\n(T,G,M,K, or B)", 7, 64
           else
             new_dialog.alert "Input value #{@size} is not a valid partiton size", 7, 60
@@ -399,7 +401,7 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def another
-      [ 
+      @another ||= [ 
         BootType.new(@vdev_number + 1, task), 
         BootDisks.new(@vdev_number + 1, task), 
         BootSize.new(@vdev_number + 1, task), 
@@ -416,7 +418,7 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def another
-      [ 
+      @another ||= [ 
         RootType.new(@vdev_number + 1, task), 
         RootDisks.new(@vdev_number + 1, task), 
         RootSize.new(@vdev_number + 1, task), 
@@ -437,7 +439,7 @@ class RootInstaller::Questions::Partitions < Question
     end
 
     def another
-      [ 
+      @another ||= [ 
         SwapType.new(@vdev_number + 1, task), 
         SwapDisks.new(@vdev_number + 1, task), 
         SwapSize.new(@vdev_number + 1, task), 

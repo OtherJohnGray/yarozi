@@ -227,12 +227,12 @@ class Dialog < MRDialog
 
     for item in items
       if item[2]
-        item[2] = "on"
+        status = "on"
       else
-        item[2] = "off"
+        status = "off"
       end
       itemlist += "\"" + item[0].to_s + "\" \"" + item[1].to_s + 
-      "\" " + item[2] + " "
+      "\" " + status + " "
 
       if @itemhelp
         itemlist += "\"" + item[3].to_s + "\" "
