@@ -57,7 +57,7 @@ class Layout < Struct.new :boot_pool, :root_pool, :legacy_boot, :efi_partition, 
                 disks[vdev_disk][:allocated] += vdev.partition_bytes
               end
             else
-              errors << "root pool vdev #{index} specifies a disk number #{vdev_disk}, but there are only #{Disk.all.size} disks in the system"
+              errors << "root pool vdev #{index + 1} specifies a disk number #{vdev_disk}, but there are only #{Disk.all.size} disks in the system"
             end
           end
         end
@@ -70,7 +70,7 @@ class Layout < Struct.new :boot_pool, :root_pool, :legacy_boot, :efi_partition, 
                 disks[vdev_disk][:allocated] += vdev.partition_bytes
               end
             else
-              errors << "swap device #{index} specifies a disk number #{vdev_disk}, but there are only #{Disk.all.size} disks in the system"
+              errors << "swap device #{index + 1} specifies a disk number #{vdev_disk}, but there are only #{Disk.all.size} disks in the system"
             end
           end
         end
@@ -83,7 +83,7 @@ class Layout < Struct.new :boot_pool, :root_pool, :legacy_boot, :efi_partition, 
           if disks[disk_number][:wildcards].length > 1
             descriptions = disks[disk_number][:wildcards].uniq.map {|description| "#{disks[disk_number][:wildcards].count(description)} from #{description}"}
             descriptions[-1].prepend("and ")
-            errors.append "More than one size wildcard (*) specified for disk #{disk_number}: #{descriptions.join ", "}"
+            errors.append "More than one size wildcard (*) specified for disk #{disk_number}: #{descriptions.join descriptions.length > 2 ? ", ", " "}"
           end
         end
       end

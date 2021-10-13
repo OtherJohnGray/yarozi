@@ -178,7 +178,7 @@ class RootInstaller::Questions::Partitions < Question
 
     def items
       [
-        ["S", "Single raid device on 1 partition"],
+        ["S", "Single swap device on 1 partition"],
         ["R1", "\"Mirrored\" RAID1 mdraid device on multiple partitions"],
         ["R5", "RAID5 mdraid device on multiple partitions"],
         ["R6", "RAID6 mdraid device on multiple partitions"],
