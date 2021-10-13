@@ -5,7 +5,7 @@
 # information that will be used to build the system, look at layout.rb.
 # Layout is used from within root_installer/questions/partitions.rb to 
 # store generated VDEV and Pool specifications, and provides validation
-# of the layout of VDEVs across the various disks of the system.
+# of the layout of VDEVs and Swap partitions across the various disks of the system.
 class ZPool < Array
 
   def valid?
